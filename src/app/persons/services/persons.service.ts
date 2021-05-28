@@ -9,26 +9,30 @@ import { PersonsQuery } from "../person-query";
   })
   
 export class PersonsService {
+    //todo find a better way to have an address
+    baseUrl = "https://localhost:44338";
+
     constructor(
         private http: HttpClient,
         //@Inject('BASE_URL') private baseUrl: string
         ){
 
         }
-    
         // get<Person>(id : number): Observable<Person>{
         //     // var url = this.baseUrl + "api/Persons/" + id;
         //     return this.http.get<Person>(url);
         // }
 
         getList(query: PersonsQuery): Observable<Person[]>{
-            var url = "https://localhost:44338/Persons/List";
+            var url = this.baseUrl + "/Persons/List";
 
             let params = new HttpParams();
             query.personFilters.forEach(function(value){
                 params = params.append('personFilters', JSON.stringify(value));
             });
             params = params.append("selectControlFlags", query.selectControlFlags);
+            params = params.append("currentPage", query.currentPage);
+            params = params.append("pageSize", query.pageSize);
 
             return this.http.get<Person[]>(url, {
                 params: params,

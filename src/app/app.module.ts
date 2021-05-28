@@ -8,6 +8,9 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { PersonsComponent } from './persons/persons.component';
 import { PersonsService } from './persons/services/persons.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,9 @@ import { PersonsService } from './persons/services/persons.service';
       { path: '', component: PersonsComponent, pathMatch: 'full' },
       { path: 'persons', component: PersonsComponent }
     ]),
+    BrowserAnimationsModule,
+    MatPaginatorModule,
+    MatTableModule
   ],
   providers: [
     PersonsService

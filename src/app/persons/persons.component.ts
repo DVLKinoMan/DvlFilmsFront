@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FilterOperator, IdFilter, NameFilter, PersonFilter, PersonsQuery } from './person-query';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Person } from './person';
+import { AgeFilter, FilterOperator, IdFilter, NameFilter, PersonFilter, PersonSelectControlFlags, PersonsQuery } from './person-query';
 import { PersonsService } from './services/persons.service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-persons',
@@ -8,20 +11,49 @@ import { PersonsService } from './services/persons.service';
   styleUrls: ['./persons.component.css']
 })
 export class PersonsComponent implements OnInit {
-some: number = 1;
-
+  public dataSource = new MatTableDataSource<Person>();
+  persons: Person[];
+  public pageEvent: PageEvent;
+  defaultPageIndex: number = 0;
+  defaultPageSize: number = 10;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  public displayedColumns: string[] = ['id', 'photo', 'name', 'birthDate', 'birthPlace', 
+  'heightInMeters', 'awardsInformationString'];
+  
   constructor(private service: PersonsService) { }
 
   ngOnInit(): void {
-    
+    this.loadData();
+    this.dataSource.data = this.persons;
   } 
 
-  GetPersons(){ 
-    this.some++;  
-    var filters: PersonFilter[] = [new IdFilter(12), new NameFilter("", "keira", FilterOperator.Or)];
-    var query: PersonsQuery = new PersonsQuery(1, filters);
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  loadData() {
+    var pageEvent = new PageEvent();
+    pageEvent.pageIndex = this.defaultPageIndex;
+    pageEvent.pageSize = this.defaultPageSize;
+    this.GetPersons(pageEvent);
+}
+
+  GetPersons(event: PageEvent){ 
+    var filters: PersonFilter[] = [new AgeFilter(undefined, 23, 26)];
+    var query: PersonsQuery = new PersonsQuery(filters, event.pageIndex + 1, event.pageSize,  
+      PersonSelectControlFlags.WithPhoto);
+
     this.service.getList(query).subscribe(result => {
-      var persons = result;
+      result.forEach(function(value){
+        if(value.photo != undefined)
+          value.photo.image =  'data:image/png;base64,' + value.photo.image;
+      });
+      this.persons = result;
+      // this.paginator.pageSize = 10;
+      // this.paginator.pageIndex++;
+      this.paginator.length = 1000;
   }, error => console.error(error));
+
+  return event;
   }
 }

@@ -1,13 +1,26 @@
-export class PersonsQuery{
+export class Query{
+    currentPage: number;
+    pageSize: number;
+    constructor(currPage: number = 1, pageSize: number = 10){
+        this.currentPage = currPage;
+        this.pageSize = pageSize;
+    }
+}
+
+export class PersonsQuery extends Query{
   selectControlFlags: PersonSelectControlFlags;
   personFilters: PersonFilter[];
-  constructor(controlFlags: PersonSelectControlFlags, filters: PersonFilter[]){
+  constructor(filters: PersonFilter[], 
+    currPage: number = 1,
+    pageSize: number = 10,
+    controlFlags: PersonSelectControlFlags = PersonSelectControlFlags.Basic){
+      super(currPage, pageSize);
       this.selectControlFlags = controlFlags;
       this.personFilters = filters;
   }
 }
 
-enum PersonSelectControlFlags
+export enum PersonSelectControlFlags
     {
         Basic = 1,
         WithPhoto = 2,
@@ -78,5 +91,21 @@ export class NameFilter extends PersonFilter{
         super(PersonFilterType.Name, filterOperator);
         this.value = value;
         this.pattern = pattern;
+    }
+}
+
+export class AgeFilter extends PersonFilter{
+    value?: number;
+    start?: number;
+    end?: number;
+    includingEnds: boolean = true;
+    constructor( value?:number, start?: number, end?: number,
+        includingEnds: boolean = true,
+        filterOperator: FilterOperator = FilterOperator.None){
+        super(PersonFilterType.Age, filterOperator);
+        this.value = value;
+        this.start = start;
+        this.end = end;
+        this.includingEnds = includingEnds;
     }
 }
