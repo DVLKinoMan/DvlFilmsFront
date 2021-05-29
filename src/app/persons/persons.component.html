@@ -9,49 +9,32 @@
 <!-- <mat-form-field [hidden]="!persons">
     <input matInput (keyup)="loadData($event.target.value)" placeholder="Filter by name (or part of it)...">
 </mat-form-field> -->
-<table mat-table [dataSource]="persons" matSort  class="mat-elevation-z8">
-    <!-- Id Column -->
-    <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header = "id">ID</th>
-        <td mat-cell *matCellDef="let person"> {{person.id}} </td>
-    </ng-container>
-    <!-- Name Column -->
-    <ng-container matColumnDef="photo">
-        <th mat-header-cell *matHeaderCellDef>Photo</th>
-        <td mat-cell *matCellDef="let person">
+<table matSort (matSortChange)="sortChanged($event)">
+    <tr>
+        <th mat-sort-header = "id">ID</th>
+        <th>Photo</th>
+        <th mat-sort-header = "name">Name</th>
+        <th  mat-sort-header="birthDate">BirthDate</th>
+        <th>BirthPlace</th>
+        <th mat-sort-header="heightInMeters">HeightInMeters</th>
+        <th>AwardsInformationString</th>
+    </tr>
+    <tr *ngFor="let person of persons">
+        <td>{{person.id}}</td>
+        <td>
             <img [src]="person.photo.image" *ngIf="person.photo" [alt]="person.photo.title" style="width: 20%;">
-            </td>
-    </ng-container>
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header = "name">Name</th>
-        <td mat-cell *matCellDef="let person">
+        </td>
+        <td>
             <a [routerLink]="['/person', person.id]">{{person.name}}</a>
-            </td>
-    </ng-container>
-    <!-- BirthDate Column -->
-    <ng-container matColumnDef="birthDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="birthDate">BirthDate</th>
-        <td mat-cell *matCellDef="let person"> {{person.birthDate}} </td>
-    </ng-container>
-    <!-- BirthPlace Column -->
-    <ng-container matColumnDef="birthPlace">
-        <th mat-header-cell *matHeaderCellDef>BirthPlace</th>
-        <td mat-cell *matCellDef="let person"> {{person.birthPlace}} </td>
-    </ng-container>
-    <!-- HeightInMeters Column -->
-    <ng-container matColumnDef="heightInMeters">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="heightInMeters">HeightInMeters</th>
-        <td mat-cell *matCellDef="let person"> {{person.heightInMeters}} </td>
-    </ng-container>
-    <!-- AwardsInformationString Column -->
-    <ng-container matColumnDef="awardsInformationString">
-        <th mat-header-cell *matHeaderCellDef>AwardsInformationString</th>
-        <td mat-cell *matCellDef="let person"> {{person.awardsInformationString}} </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </td> 
+        <td>{{person.birthDate}}</td>
+        <td>{{person.birthPlace}}</td>
+        <td>{{person.heightInMeters}}</td>
+        <td>{{person.awardsInformationString}}</td>
+    </tr>  
 </table>
+<!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
 <!-- Pagination directive -->
-<mat-paginator [hidden]="!persons" [pageSize]="10" (page)="pageEvent = loadData($event)"
+<mat-paginator [hidden]="!persons" [pageSize]="10" (page)="pageEvent = pageChanged($event)"
     [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>

@@ -12,34 +12,33 @@ import { MatSort, Sort } from '@angular/material/sort';
   styleUrls: ['./persons.component.css']
 })
 export class PersonsComponent implements OnInit {
-  public dataSource = new MatTableDataSource<Person>();
-  persons: Person[];
-  public pageEvent: PageEvent;
+  // public dataSource = new MatTableDataSource<Person>();
+  public persons: Person[];
   defaultPageIndex: number = 0;
   defaultPageSize: number = 10;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  public displayedColumns: string[] = ['id', 'photo', 'name', 'birthDate', 'birthPlace', 
-  'heightInMeters', 'awardsInformationString'];
+  pageEvent: PageEvent;
+  personOrderBy: PersonOrderBy = PersonOrderBy.Id;
+  orderAscending: boolean = true;
   
   constructor(private service: PersonsService) { }
 
   ngOnInit(): void {
     this.loadDefaultData();
     this.setPageLength();
-    this.dataSource = new MatTableDataSource<Person>(this.persons);
+    // this.dataSource = new MatTableDataSource<Person>(this.persons);
   } 
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
   }
 
   loadDefaultData() {
-    var pageEvent = new PageEvent();
-    pageEvent.pageIndex = this.defaultPageIndex;
-    pageEvent.pageSize = this.defaultPageSize;
-    this.loadData(pageEvent);
+    this.pageEvent = new PageEvent();
+    this.pageEvent.pageIndex = this.defaultPageIndex;
+    this.pageEvent.pageSize = this.defaultPageSize;
+    this.loadData();
 }
 
  setPageLength(){
@@ -64,39 +63,32 @@ getOrderBy<PersonOrderBy>(sort: Sort){
     }
 }
 
-getPersons(sort: Sort){
-  var orderBy: PersonOrderBy = this.getOrderBy(sort);
-
-  var filters: PersonFilter[] = [new AgeFilter(undefined, 23, 26)];
-  var query: PersonsQuery = new PersonsQuery(filters, this.paginator.pageIndex, this.paginator.pageSize, 
-    orderBy, sort.direction === 'asc', 
-    PersonSelectControlFlags.WithPhoto);
-
-    this.service.getList(query).subscribe(result => {
-      result.forEach(function(value){
-        if(value.photo != undefined)
-          value.photo.image =  'data:image/png;base64,' + value.photo.image;
-      });
-      this.persons = result;
-      // this.setPageLength();
-  }, error => console.error(error));
+sortChanged(sort: Sort){
+  this.personOrderBy = this.getOrderBy(sort);
+  this.orderAscending = sort.direction == 'asc';
+  this.loadData();
 }
 
-loadData(event: PageEvent){ 
-    var filters: PersonFilter[] = [new AgeFilter(undefined, 23, 26)];
-    var query: PersonsQuery = new PersonsQuery(filters, event.pageIndex + 1, event.pageSize, 
-      PersonOrderBy.Name, true, 
-      PersonSelectControlFlags.WithPhoto);
-
-    this.service.getList(query).subscribe(result => {
-      result.forEach(function(value){
-        if(value.photo != undefined)
-          value.photo.image =  'data:image/png;base64,' + value.photo.image;
-      });
-      this.persons = result;
-      // this.setPageLength();
-  }, error => console.error(error));
-
+pageChanged(event: PageEvent){ 
+  this.pageEvent = event;  
+  this.loadData();
   return event;
+}
+
+  loadData(){
+    var filters: PersonFilter[] = [new AgeFilter(undefined, 23, 26)];
+      var query: PersonsQuery = new PersonsQuery(
+        filters, this.pageEvent.pageIndex + 1, this.pageEvent.pageSize, 
+        this.personOrderBy, this.orderAscending, 
+        PersonSelectControlFlags.WithPhoto);
+
+      this.service.getList(query).subscribe(result => {
+        result.forEach(function(value){
+          if(value.photo != undefined)
+            value.photo.image =  'data:image/png;base64,' + value.photo.image;
+        });
+        this.persons = result;
+        // this.setPageLength();
+    }, error => console.error(error));
   }
 }
