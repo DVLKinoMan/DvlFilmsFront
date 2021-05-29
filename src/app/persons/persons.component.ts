@@ -5,6 +5,8 @@ import { PersonsService } from './services/persons.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-persons',
@@ -20,12 +22,29 @@ export class PersonsComponent implements OnInit {
   pageEvent: PageEvent;
   personOrderBy: PersonOrderBy = PersonOrderBy.Id;
   orderAscending: boolean = true;
-  
-  constructor(private service: PersonsService) { }
+
+  filterNames: string[] = [
+    'Id', 'Name', 'Age'
+  ];
+  filterOperators: string[] = ['And', 'Or'];
+  selectedFilter: string;
+  idFilterForm: FormGroup;
+  nameFilterForm: FormGroup;
+  filters: PersonFilter[] = [];
+
+  constructor(private service: PersonsService,
+    private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.loadDefaultData();
     this.setPageLength();
+    this.idFilterForm = this.formBuilder.group({
+      id: ''
+    });
+    this.nameFilterForm = this.formBuilder.group({
+      value: '',
+      pattern: ''
+    });
     // this.dataSource = new MatTableDataSource<Person>(this.persons);
   } 
 
@@ -42,15 +61,11 @@ export class PersonsComponent implements OnInit {
 }
 
  setPageLength(){
-   //todo change this condition
-  //  if(this.paginator.length <= this.defaultPageSize){
-        var filters: PersonFilter[] = [new AgeFilter(undefined, 23, 26)];
-        var query: PersonsQuery = new PersonsQuery(filters);
+        var query: PersonsQuery = new PersonsQuery(this.filters);
 
         this.service.getCount(query).subscribe(result => {
             this.paginator.length = result;
         }, error => console.error(error));
-    // }
 }
 
 getOrderBy<PersonOrderBy>(sort: Sort){
@@ -61,6 +76,39 @@ getOrderBy<PersonOrderBy>(sort: Sort){
       case 'heightInMeters': return PersonOrderBy.HeightInMeters;
       default: return PersonOrderBy.Id;
     }
+}
+
+filterChanged(filterName: string){
+    if(this.filters.length != 0){
+      var form = this.getFilterForm(filterName);
+      form.addControl('filterOperator', new FormControl());
+    }
+}
+
+getFilterForm<FormGroup>(filterName: string){
+  switch(filterName){
+    case 'Id': return this.idFilterForm;
+    case 'Name': return this.nameFilterForm;
+    default: throw new Error('filterName not implemented');
+  }
+}
+
+getFilter<PersonFilter>(filterName: string){
+    switch(filterName){
+      case 'Id': return new IdFilter(this.idFilterForm.controls['id'].value, 
+      this.idFilterForm.controls["filterOperator"]?.value);
+      case 'Name': return new NameFilter(this.nameFilterForm.controls['value'].value,
+                  this.nameFilterForm.controls['pattern'].value,
+                  this.nameFilterForm.controls['filterOperator']?.value);
+      default: return new IdFilter(1);
+    }
+}
+
+clearForm(filterName: string){
+  var form = this.getFilterForm(filterName);
+  form.reset();
+  if(form.controls['filterOperator'])
+    form.removeControl('filterOperator');
 }
 
 sortChanged(sort: Sort){
@@ -75,10 +123,27 @@ pageChanged(event: PageEvent){
   return event;
 }
 
+addFilter(){
+  if(!this.selectedFilter)
+    return;
+
+  this.filters.push(this.getFilter(this.selectedFilter));
+  this.clearForm(this.selectedFilter);
+  this.selectedFilter = 'none';
+}
+
+clearFilters(){
+  this.filters = [];
+}
+
+searchButtonClick(){
+  this.loadData();
+  this.setPageLength();
+}
+
   loadData(){
-    var filters: PersonFilter[] = [new AgeFilter(undefined, 23, 26)];
       var query: PersonsQuery = new PersonsQuery(
-        filters, this.pageEvent.pageIndex + 1, this.pageEvent.pageSize, 
+        this.filters, this.pageEvent.pageIndex + 1, this.pageEvent.pageSize, 
         this.personOrderBy, this.orderAscending, 
         PersonSelectControlFlags.WithPhoto);
 
@@ -88,7 +153,6 @@ pageChanged(event: PageEvent){
             value.photo.image =  'data:image/png;base64,' + value.photo.image;
         });
         this.persons = result;
-        // this.setPageLength();
     }, error => console.error(error));
   }
 }

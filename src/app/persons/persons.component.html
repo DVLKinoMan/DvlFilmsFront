@@ -1,14 +1,59 @@
 <h1>Persons</h1>
 <p>Here's a list of persons: feel free to play with it.</p>
 <p *ngIf="!persons"><em>Loading...</em></p>
-<!-- <div class="commands text-right" *ngIf="countries">
-    <button type="submit" [routerLink]="['/country']" class="btn btn-success">
-        Add a new Country
-    </button>
-</div> -->
-<!-- <mat-form-field [hidden]="!persons">
-    <input matInput (keyup)="loadData($event.target.value)" placeholder="Filter by name (or part of it)...">
-</mat-form-field> -->
+<h4>Filter</h4>
+<table>
+    <tr>
+        <td style="width: 200px;">
+            <mat-form-field appearance="fill" class="mat-form">
+                <mat-label>Filter</mat-label><br>
+                <mat-select [(value)]="selectedFilter" 
+                    (selectionChange)="filterChanged($event.value)" panelClass="example-panel-black">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let filter of filterNames" [value]="filter">{{filter}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </td>
+        <td>
+            <form [formGroup]="idFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Id'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="id">Id:</mat-label>
+                    <input id="id" formControlName="id" type="number" matInput placeholder="Id Value Here">
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
+            <form [formGroup]="nameFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Name'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="value">Exact Name:</mat-label>
+                    <input id="value" formControlName="value" matInput>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="pattern">Name Contains:</mat-label>
+                    <input id="pattern" formControlName="pattern" matInput>
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
+        </td>
+        <td style="float: right;">
+            <button mat-flat-button color="primary" (click)="searchButtonClick()">Search</button><br><br>
+            <button mat-flat-button color="warn" (click)="clearFilters()" [disabled]="filters.length==0 ? 'disabled' : null">Clear All Filters</button>
+        </td>
+    </tr>
+</table>
 <table matSort (matSortChange)="sortChanged($event)">
     <tr>
         <th mat-sort-header = "id">ID</th>
