@@ -23,6 +23,17 @@ export class PersonsService {
         //     return this.http.get<Person>(url);
         // }
 
+        getCount(query: PersonsQuery): Observable<number>{
+            var url = this.baseUrl + "/Persons/Count";
+
+            let params = new HttpParams();
+            query.personFilters.forEach(function(value){
+                params = params.append('personFilters', JSON.stringify(value));
+            });
+
+            return this.http.get<number>(url, {params: params});
+        }
+
         getList(query: PersonsQuery): Observable<Person[]>{
             var url = this.baseUrl + "/Persons/List";
 
@@ -33,6 +44,8 @@ export class PersonsService {
             params = params.append("selectControlFlags", query.selectControlFlags);
             params = params.append("currentPage", query.currentPage);
             params = params.append("pageSize", query.pageSize);
+            params = params.append("orderBy", query.orderBy);
+            params = params.append("orderByAscending", query.orderByAscending);
 
             return this.http.get<Person[]>(url, {
                 params: params,

@@ -10,9 +10,12 @@ export class Query{
 export class PersonsQuery extends Query{
   selectControlFlags: PersonSelectControlFlags;
   personFilters: PersonFilter[];
+
   constructor(filters: PersonFilter[], 
     currPage: number = 1,
     pageSize: number = 10,
+    public orderBy: PersonOrderBy = PersonOrderBy.Id,
+    public orderByAscending: boolean = true,
     controlFlags: PersonSelectControlFlags = PersonSelectControlFlags.Basic){
       super(currPage, pageSize);
       this.selectControlFlags = controlFlags;
@@ -32,6 +35,14 @@ export enum PersonSelectControlFlags
         WithOtherWorks = 128,
         WithRelatedNews = 256
     }
+
+export enum PersonOrderBy
+{ 
+    Id,
+    Name,
+    BirthDate,
+    HeightInMeters,
+}
 
 export class Filter{
     filterOperator: FilterOperator;
