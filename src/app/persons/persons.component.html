@@ -47,6 +47,28 @@
                 </mat-form-field>
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
+            <form [formGroup]="ageFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Age'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="value">Exact Age:</mat-label>
+                    <input id="value" formControlName="value" type="number" matInput placeholder="Age Value Here">
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="start">Start Age:</mat-label>
+                    <input id="start" formControlName="start" type="number" matInput placeholder="Age Value Here">
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="end">End Age:</mat-label>
+                    <input id="end" formControlName="end" type="number" matInput placeholder="Age Value Here">
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
         </td>
         <td style="float: right;">
             <button mat-flat-button color="primary" (click)="searchButtonClick()">Search</button><br><br>

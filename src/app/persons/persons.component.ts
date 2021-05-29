@@ -30,6 +30,7 @@ export class PersonsComponent implements OnInit {
   selectedFilter: string;
   idFilterForm: FormGroup;
   nameFilterForm: FormGroup;
+  ageFilterForm: FormGroup;
   filters: PersonFilter[] = [];
 
   constructor(private service: PersonsService,
@@ -44,6 +45,11 @@ export class PersonsComponent implements OnInit {
     this.nameFilterForm = this.formBuilder.group({
       value: '',
       pattern: ''
+    });
+    this.ageFilterForm = this.formBuilder.group({
+      value: '',
+      start: '',
+      end: ''
     });
     // this.dataSource = new MatTableDataSource<Person>(this.persons);
   } 
@@ -89,6 +95,7 @@ getFilterForm<FormGroup>(filterName: string){
   switch(filterName){
     case 'Id': return this.idFilterForm;
     case 'Name': return this.nameFilterForm;
+    case 'Age': return this.ageFilterForm;
     default: throw new Error('filterName not implemented');
   }
 }
@@ -97,9 +104,14 @@ getFilter<PersonFilter>(filterName: string){
     switch(filterName){
       case 'Id': return new IdFilter(this.idFilterForm.controls['id'].value, 
       this.idFilterForm.controls["filterOperator"]?.value);
-      case 'Name': return new NameFilter(this.nameFilterForm.controls['value'].value,
-                  this.nameFilterForm.controls['pattern'].value,
+      case 'Name': return new NameFilter(this.nameFilterForm.controls['value']?.value,
+                  this.nameFilterForm.controls['pattern']?.value,
                   this.nameFilterForm.controls['filterOperator']?.value);
+      case 'Age': return new AgeFilter(this.ageFilterForm.controls['value']?.value,
+                  this.ageFilterForm.controls['start']?.value,
+                  this.ageFilterForm.controls['end']?.value,
+                  true,//todo implement includingends
+                  this.ageFilterForm.controls['filterOperator']?.value);
       default: return new IdFilter(1);
     }
 }
@@ -137,6 +149,8 @@ clearFilters(){
 }
 
 searchButtonClick(){
+  this.pageEvent.pageIndex = 0;
+  this.paginator.pageIndex = 0;
   this.loadData();
   this.setPageLength();
 }

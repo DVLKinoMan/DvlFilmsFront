@@ -28,7 +28,11 @@ export class PersonsService {
 
             let params = new HttpParams();
             query.personFilters.forEach(function(value){
-                params = params.append('personFilters', JSON.stringify(value));
+                params = params.append('personFilters',  JSON.stringify(value, (key, val) => {
+                    if (val === null || (typeof val === 'string' && val ===''))
+                        return undefined;
+                      return val;
+                  }));
             });
 
             return this.http.get<number>(url, {params: params});
@@ -39,7 +43,11 @@ export class PersonsService {
 
             let params = new HttpParams();
             query.personFilters.forEach(function(value){
-                params = params.append('personFilters', JSON.stringify(value));
+                params = params.append('personFilters',  JSON.stringify(value, (key, val) => {
+                    if (val === null || (typeof val === 'string' && val ===''))
+                        return undefined;
+                      return val;
+                  }));
             });
             params = params.append("selectControlFlags", query.selectControlFlags);
             params = params.append("currentPage", query.currentPage);
