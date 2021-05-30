@@ -81,7 +81,7 @@
                     <mat-label>Gender:</mat-label><br>
                     <mat-select formControlName="gender" panelClass="example-panel-black">
                         <mat-option *ngFor="let gender of genders; let i=index" 
-                        [value]="i+1">{{gender}}</mat-option>
+                        [value]="i">{{gender}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <button mat-button color="primary" type="submit">Add Filter</button>

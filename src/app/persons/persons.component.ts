@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Person } from './person';
-import { AgeFilter, Filter, FilterOperator, GenderFilter, IdFilter, NameFilter,
+import { AgeFilter, Filter, FilterOperator, Gender, GenderFilter, IdFilter, NameFilter,
    PersonFilter, PersonOrderBy, PersonSelectControlFlags, PersonsQuery,
     ZodiacSign, ZodiacSignFilter } from './person-query';
 import { PersonsService } from './services/persons.service';
@@ -28,7 +28,7 @@ export class PersonsComponent implements OnInit {
     'Id', 'Name', 'Age', 'Gender', 'ZodiacSign'
   ];
   filterOperators: string[] = ['And', 'Or'];
-  genders: string[] = ['Male', 'Female'];
+  genders: string[] = Object.keys(Gender).filter(val => isNaN(Number(val)));
   zodiacSigns: string[] = Object.keys(ZodiacSign).filter(val => isNaN(Number(val)));
   selectedFilter: string;
   idFilterForm: FormGroup;

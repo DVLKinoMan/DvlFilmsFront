@@ -20,6 +20,7 @@ export interface Person{
     imdbpageMoreAwardsUrl: string;
     imdbpageMoreOtherWorksUrl: string; 
     imdbpageMorePublicityListingsUrl: string; 
+    sex: number;
 }
 
 export interface Photo{

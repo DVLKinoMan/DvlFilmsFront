@@ -84,7 +84,7 @@ export enum FilterOperator
 
 export enum Gender
 {
-    None,
+    Unknown,
     Male,
     Female
 }
