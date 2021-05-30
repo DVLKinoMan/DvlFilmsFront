@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Person } from './person';
-import { AgeFilter, FilterOperator, GenderFilter, IdFilter, NameFilter, PersonFilter, PersonOrderBy, PersonSelectControlFlags, PersonsQuery, ZodiacSign, ZodiacSignFilter } from './person-query';
+import { AgeFilter, Filter, FilterOperator, GenderFilter, IdFilter, NameFilter,
+   PersonFilter, PersonOrderBy, PersonSelectControlFlags, PersonsQuery,
+    ZodiacSign, ZodiacSignFilter } from './person-query';
 import { PersonsService } from './services/persons.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatFormFieldControl } from '@angular/material/form-field';
+import { Sort } from '@angular/material/sort';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-persons',
@@ -14,7 +16,6 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./persons.component.css']
 })
 export class PersonsComponent implements OnInit {
-  // public dataSource = new MatTableDataSource<Person>();
   public persons: Person[];
   defaultPageIndex: number = 0;
   defaultPageSize: number = 10;
@@ -37,12 +38,24 @@ export class PersonsComponent implements OnInit {
   zodiacSignFilterForm: FormGroup;
   filters: PersonFilter[] = [];
 
+  queryParams: Params;
+
   constructor(private service: PersonsService,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
-    this.loadDefaultData();
-    this.setPageLength();
+    this.pageEvent = new PageEvent();
+    this.pageEvent.pageIndex = this.defaultPageIndex;
+    this.pageEvent.pageSize = this.defaultPageSize;
+    this.route.queryParams.subscribe(
+      params => {
+        this.queryParams = params;
+        this.loadData();
+        this.setPageLength();
+      }
+    );
     this.idFilterForm = this.formBuilder.group({
       id: ''
     });
@@ -61,20 +74,11 @@ export class PersonsComponent implements OnInit {
     this.zodiacSignFilterForm = this.formBuilder.group({
       sign: ''
     });
-    // this.dataSource = new MatTableDataSource<Person>(this.persons);
   } 
 
   ngAfterViewInit() {
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
+    
   }
-
-  loadDefaultData() {
-    this.pageEvent = new PageEvent();
-    this.pageEvent.pageIndex = this.defaultPageIndex;
-    this.pageEvent.pageSize = this.defaultPageSize;
-    this.loadData();
-}
 
  setPageLength(){
         var query: PersonsQuery = new PersonsQuery(this.filters);
@@ -142,12 +146,12 @@ clearForm(filterName: string){
 sortChanged(sort: Sort){
   this.personOrderBy = this.getOrderBy(sort);
   this.orderAscending = sort.direction == 'asc';
-  this.loadData();
+  this.loadData(true);
 }
 
 pageChanged(event: PageEvent){ 
   this.pageEvent = event;  
-  this.loadData();
+  this.loadData(true);
   return event;
 }
 
@@ -173,15 +177,94 @@ deleteFilter(index: number){
 searchButtonClick(){
   this.pageEvent.pageIndex = 0;
   this.paginator.pageIndex = 0;
-  this.loadData();
+  this.loadData(true);
   this.setPageLength();
 }
 
-  loadData(){
-      var query: PersonsQuery = new PersonsQuery(
-        this.filters, this.pageEvent.pageIndex + 1, this.pageEvent.pageSize, 
-        this.personOrderBy, this.orderAscending, 
-        PersonSelectControlFlags.WithPhoto);
+getPersonsQuery(notFromRoute: boolean = false) : [PersonsQuery, boolean]{
+  if(!notFromRoute)
+  {
+      var filtersString = this.queryParams['personFilters'];
+
+      var controlFlags = this.queryParams['selectControlFlags'];
+      var currPage = this.queryParams['currentPage'];
+      var pageSize = this.queryParams['pageSize'];
+      var orderBy = this.queryParams['orderBy'];
+      var orderByAscending = this.queryParams['orderByAscending'];
+
+      if(controlFlags && currPage && pageSize && orderBy && orderByAscending)
+        return [new PersonsQuery(
+          filtersString ? this.getPersonFilters(filtersString) : this.filters, 
+          currPage, 
+          pageSize, 
+          orderBy, 
+          orderByAscending, 
+          controlFlags), true];
+   }
+
+    return [new PersonsQuery(
+      this.filters, 
+      this.pageEvent.pageIndex + 1, 
+      this.pageEvent.pageSize, 
+      this.personOrderBy, 
+      this.orderAscending, 
+      PersonSelectControlFlags.WithPhoto), false];
+}
+
+getPersonFilters(obj: any) : PersonFilter[]{
+  let array: PersonFilter[] = [];
+  if(typeof obj == 'string')
+    array.push(this.getPersonFilter(obj));
+  else
+    for(var i = 0; i<obj.length; i++)
+      array.push(this.getPersonFilter(obj[i]));
+
+  return array;
+}
+
+getPersonFilter(str: string) : PersonFilter{
+     var json =  JSON.parse(str);
+     for(var propName in json){
+        if(propName == 'filterType')
+          switch(json[propName]){
+            case 0: return new IdFilter(json['id'], json['filterOperator']);
+            case 1: return new NameFilter(json['value'], json['pattern'],
+            json['filterOperator']);
+            case 4: return new ZodiacSignFilter(json['sign'], json['filterOperator']);
+            case 7: return new AgeFilter(json['value'],json['start'],
+            json['end'],json['includingEnds'],json['filterOperator']);
+            case 8: return new GenderFilter(json['gender'], json['filterOperator']);
+            default: throw console.error('not implemented');
+          }
+      }
+      throw console.error('not implemented');
+}
+
+loadData(notFromRoute: boolean = false){
+      var [query, fromRoute] = this.getPersonsQuery(notFromRoute);
+      if(!fromRoute){
+          var params = new HttpParams();
+        query.personFilters.forEach(function(value){
+          params = params.append('personFilters',  JSON.stringify(value, (key, val) => {
+              if (val === null || (typeof val === 'string' && val ===''))
+                  return undefined;
+                return val;
+            }));
+          }); 
+          this.router.navigate(['/persons'], 
+          {
+            queryParams: {
+              personFilters: params.getAll('personFilters'), 
+              currentPage: query.currentPage,
+              orderBy: query.orderBy,
+              orderByAscending: query.orderByAscending,
+              pageSize: query.pageSize,
+              selectControlFlags: query.selectControlFlags
+            }
+          });
+          return;
+      }
+      this.filters = query.personFilters;
 
       this.service.getList(query).subscribe(result => {
         result.forEach(function(value){

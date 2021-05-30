@@ -49,6 +49,9 @@ export class PersonsService {
                       return val;
                   }));
             });
+            // var str = typeof query.personFilters == "string" ? query.personFilters : JSON.stringify(query.personFilters);
+            
+            // params = params.append("personFilters", str);
             params = params.append("selectControlFlags", query.selectControlFlags);
             params = params.append("currentPage", query.currentPage);
             params = params.append("pageSize", query.pageSize);
