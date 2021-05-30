@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Person } from './person';
-import { AgeFilter, FilterOperator, IdFilter, NameFilter, PersonFilter, PersonOrderBy, PersonSelectControlFlags, PersonsQuery } from './person-query';
+import { AgeFilter, FilterOperator, GenderFilter, IdFilter, NameFilter, PersonFilter, PersonOrderBy, PersonSelectControlFlags, PersonsQuery, ZodiacSign, ZodiacSignFilter } from './person-query';
 import { PersonsService } from './services/persons.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -24,13 +24,17 @@ export class PersonsComponent implements OnInit {
   orderAscending: boolean = true;
 
   filterNames: string[] = [
-    'Id', 'Name', 'Age'
+    'Id', 'Name', 'Age', 'Gender', 'ZodiacSign'
   ];
   filterOperators: string[] = ['And', 'Or'];
+  genders: string[] = ['Male', 'Female'];
+  zodiacSigns: string[] = Object.keys(ZodiacSign).filter(val => isNaN(Number(val)));
   selectedFilter: string;
   idFilterForm: FormGroup;
   nameFilterForm: FormGroup;
   ageFilterForm: FormGroup;
+  genderFilterForm: FormGroup;
+  zodiacSignFilterForm: FormGroup;
   filters: PersonFilter[] = [];
 
   constructor(private service: PersonsService,
@@ -50,6 +54,12 @@ export class PersonsComponent implements OnInit {
       value: '',
       start: '',
       end: ''
+    });
+    this.genderFilterForm = this.formBuilder.group({
+      gender: '',
+    });
+    this.zodiacSignFilterForm = this.formBuilder.group({
+      sign: ''
     });
     // this.dataSource = new MatTableDataSource<Person>(this.persons);
   } 
@@ -96,6 +106,8 @@ getFilterForm<FormGroup>(filterName: string){
     case 'Id': return this.idFilterForm;
     case 'Name': return this.nameFilterForm;
     case 'Age': return this.ageFilterForm;
+    case 'Gender': return this.genderFilterForm;
+    case 'ZodiacSign': return this.zodiacSignFilterForm;
     default: throw new Error('filterName not implemented');
   }
 }
@@ -103,7 +115,7 @@ getFilterForm<FormGroup>(filterName: string){
 getFilter<PersonFilter>(filterName: string){
     switch(filterName){
       case 'Id': return new IdFilter(this.idFilterForm.controls['id'].value, 
-      this.idFilterForm.controls["filterOperator"]?.value);
+                      this.idFilterForm.controls["filterOperator"]?.value);
       case 'Name': return new NameFilter(this.nameFilterForm.controls['value']?.value,
                   this.nameFilterForm.controls['pattern']?.value,
                   this.nameFilterForm.controls['filterOperator']?.value);
@@ -112,6 +124,10 @@ getFilter<PersonFilter>(filterName: string){
                   this.ageFilterForm.controls['end']?.value,
                   true,//todo implement includingends
                   this.ageFilterForm.controls['filterOperator']?.value);
+      case 'Gender': return new GenderFilter(this.genderFilterForm.controls['gender'].value,
+                  this.genderFilterForm.controls['filterOperator']?.value);
+      case 'ZodiacSign': return new ZodiacSignFilter(this.zodiacSignFilterForm.controls['sign'].value,
+                  this.zodiacSignFilterForm.controls['filterOperator']?.value);
       default: return new IdFilter(1);
     }
 }

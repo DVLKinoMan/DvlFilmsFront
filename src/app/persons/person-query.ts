@@ -80,6 +80,29 @@ export enum FilterOperator
     Or
 }
 
+export enum Gender
+{
+    None,
+    Male,
+    Female
+}
+
+export enum ZodiacSign
+{
+    Aquarius,
+    Pisces,
+    Aries,
+    Taurus,
+    Gemini,
+    Cancer,
+    Leo,
+    Virgo,
+    Libra,
+    Scorpio,
+    Sagittarius,
+    Capricorn
+}
+
 interface IPatternString
     {
         Value?: string;
@@ -118,5 +141,23 @@ export class AgeFilter extends PersonFilter{
         this.start = start;
         this.end = end;
         this.includingEnds = includingEnds;
+    }
+}
+
+export class GenderFilter extends PersonFilter{
+    gender: Gender;
+    constructor(gender: Gender,
+        filterOperator: FilterOperator = FilterOperator.None){
+        super(PersonFilterType.Gender, filterOperator);
+        this.gender = gender;
+    }
+}
+
+export class ZodiacSignFilter extends PersonFilter{
+    sign: ZodiacSign;
+    constructor(sign: ZodiacSign,
+        filterOperator: FilterOperator = FilterOperator.None){
+        super(PersonFilterType.ZodiacSign, filterOperator);
+        this.sign = sign;
     }
 }
