@@ -135,7 +135,7 @@
     <tr *ngFor="let person of persons">
         <td>{{person.id}}</td>
         <td>
-            <img [src]="person.photo.image" *ngIf="person.photo" [alt]="person.photo.title" style="width: 20%;">
+            <img [src]="person.profilePicture.image" *ngIf="person.profilePicture" [alt]="person.profilePicture.title" style="width: 20%;">
         </td>
         <td>
             <a [routerLink]="['/person', person.id]">{{person.name}}</a>

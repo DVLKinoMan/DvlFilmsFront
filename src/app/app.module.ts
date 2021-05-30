@@ -18,12 +18,14 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import { PersonEditComponent } from './persons/person-edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PersonsComponent,
-    NavMenuComponent
+    NavMenuComponent,
+    PersonEditComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +33,8 @@ import {MatIconModule} from '@angular/material/icon';
     HttpClientModule,
     RouterModule.forRoot([
       { path: '', component: PersonsComponent, pathMatch: 'full' },
-      { path: 'persons', component: PersonsComponent }
+      { path: 'persons', component: PersonsComponent },
+      { path: 'person/:id', component: PersonEditComponent }
     ]),
     BrowserAnimationsModule,
     MatPaginatorModule,

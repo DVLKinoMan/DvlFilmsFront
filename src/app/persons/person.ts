@@ -9,7 +9,7 @@ export interface Person{
     deathPlace?: string;
     heightInMeters?: number; 
     otherWork: string;
-    photo: Photo; 
+    profilePicture: Photo; 
     imdbname: string;
     imdbpageMoreBiographyUrl: string;
     imdbpageRelatedNewsArticlesUrl: string;

@@ -185,8 +185,8 @@ searchButtonClick(){
 
       this.service.getList(query).subscribe(result => {
         result.forEach(function(value){
-          if(value.photo != undefined)
-            value.photo.image =  'data:image/png;base64,' + value.photo.image;
+          if(value.profilePicture != undefined)
+            value.profilePicture.image =  'data:image/png;base64,' + value.profilePicture.image;
         });
         this.persons = result;
     }, error => console.error(error));

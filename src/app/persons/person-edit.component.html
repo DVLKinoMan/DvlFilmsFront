@@ -1,0 +1,26 @@
+
+
+<table>
+    <tr>
+        <td style="float: left;">
+            <mat-form-field appearance="fill">
+                <img [src]="model.profilePicture.image" 
+                *ngIf="model.profilePicture" [alt]="model.profilePicture.title">
+            </mat-form-field>
+        </td>
+        <td style="float: left; margin-left: 200px; max-width: 60%;">
+            <h1>{{model.name}}</h1>
+            <textarea disabled type="text" class = "textarea" cols="50" rows="10">{{model.biographyString}}</textarea>
+            <br>
+            <mat-label *ngIf="model.birthDate">Birth Date: {{model.birthDate}}</mat-label><br>
+            <mat-label *ngIf="model.birthPlace">Birth Place: {{model.birthPlace}}</mat-label><br>
+            <mat-label *ngIf="model.deathDate">Death Date: {{model.deathDate}}</mat-label><br>
+            <mat-label *ngIf="model.deathPlace">Death Place: {{model.deathPlace}}</mat-label><br>
+            <mat-label *ngIf="model.heightInMeters">Height: {{model.heightInMeters}}m</mat-label><br>
+            <mat-label *ngIf="model.otherWork">Other Work: {{model.otherWork}}</mat-label><br>
+        </td>
+    </tr>
+</table>
+<h1>{{model.awardsInformationString}}</h1>
+<a target="_blank" href="{{model.imdbpageUrl}}">Visit Imdb Page</a>
+   

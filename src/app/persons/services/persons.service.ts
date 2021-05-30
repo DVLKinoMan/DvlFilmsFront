@@ -59,4 +59,10 @@ export class PersonsService {
                 params: params,
             });
         }
+
+        getById(id: number) : Observable<Person>{
+            var url = this.baseUrl + "/Persons/Get/"+id;
+            
+            return this.http.get<Person>(url);
+        }
 }
