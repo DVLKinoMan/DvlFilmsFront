@@ -106,7 +106,19 @@
         </td>
         <td style="float: right;">
             <button mat-flat-button color="primary" (click)="searchButtonClick()">Search</button><br><br>
-            <button mat-flat-button color="warn" (click)="clearFilters()" [disabled]="filters.length==0 ? 'disabled' : null">Clear All Filters</button>
+        </td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td *ngFor="let filter of filters; let i = index">
+            {{filter.ToString()}} 
+            <button *ngIf='filter' mat-mini-fab (click)="deleteFilter(i)" color="primary" aria-label="Delete This Filter">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </td>
+        <td style = "float: right;" *ngIf="filters.length > 0">
+            <button mat-flat-button color="warn" (click)="clearFilters()">Clear All Filters</button>
         </td>
     </tr>
 </table>

@@ -51,12 +51,14 @@ export class Filter{
     }
 }
 
-export class PersonFilter extends Filter{
+export abstract class PersonFilter extends Filter{
     filterType: PersonFilterType;
     constructor(filterType: PersonFilterType, filterOperator: FilterOperator){
         super(filterOperator);
         this.filterType = filterType;
     }
+
+    public abstract ToString() : string;
 }
 
 enum PersonFilterType
@@ -110,6 +112,10 @@ interface IPatternString
     }
 
 export class IdFilter extends PersonFilter{
+    public ToString(): string {
+        return (this.filterOperator!=FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+        'Id = ' + this.id;
+    }
     id: number;
     constructor(id:number, filterOperator: FilterOperator = FilterOperator.None){
         super(PersonFilterType.Id, filterOperator);
@@ -118,6 +124,10 @@ export class IdFilter extends PersonFilter{
 }
 
 export class NameFilter extends PersonFilter{
+    public ToString(): string {
+        return (this.filterOperator!=FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+        (this.value ? "Name = '" + this.value + "'" : this.pattern ? "Name Contains '" + this.pattern + "'" : '');
+    }
     value?: string;
     pattern?: string;
     constructor( value?:string, pattern?:string,
@@ -129,6 +139,13 @@ export class NameFilter extends PersonFilter{
 }
 
 export class AgeFilter extends PersonFilter{
+    //todo includingEnds not implemented
+    public ToString(): string {
+        return (this.filterOperator!=FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+        (this.value ? "Age = " + this.value :
+                    this.start && this.end ? "Age Between [ "+this.start + ", " + this.end +" ]" :
+                        this.start ? "Age >= "+this.start : "Age <= " + this.end);
+    }
     value?: number;
     start?: number;
     end?: number;
@@ -145,6 +162,10 @@ export class AgeFilter extends PersonFilter{
 }
 
 export class GenderFilter extends PersonFilter{
+    public ToString(): string {
+        return (this.filterOperator!=FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+        "Gender = " + Gender[this.gender];
+    }
     gender: Gender;
     constructor(gender: Gender,
         filterOperator: FilterOperator = FilterOperator.None){
@@ -154,6 +175,10 @@ export class GenderFilter extends PersonFilter{
 }
 
 export class ZodiacSignFilter extends PersonFilter{
+    public ToString(): string {
+        return (this.filterOperator!=FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+                "Zodiac Sign = " + ZodiacSign[this.sign];
+    }
     sign: ZodiacSign;
     constructor(sign: ZodiacSign,
         filterOperator: FilterOperator = FilterOperator.None){

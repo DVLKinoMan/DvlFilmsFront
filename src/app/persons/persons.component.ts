@@ -164,6 +164,12 @@ clearFilters(){
   this.filters = [];
 }
 
+deleteFilter(index: number){
+  this.filters.splice(index,1);
+  if(index == 0 && this.filters.length > 0)
+    this.filters[0].filterOperator = FilterOperator.None;
+}
+
 searchButtonClick(){
   this.pageEvent.pageIndex = 0;
   this.paginator.pageIndex = 0;
