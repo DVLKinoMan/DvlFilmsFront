@@ -14,6 +14,8 @@
             <br>
             <mat-label>Sex: {{model.sex == 0 ? 'Unknown' : 
                 (model.sex == 1 ? 'Male' : 'Female')}}</mat-label><br>
+            <mat-label *ngIf="model.age">Age: {{model.age}}</mat-label><br>
+            <mat-label *ngIf="model.zodiacSign">Zodiac Sign: {{model.zodiacSign}}</mat-label><br>
             <mat-label *ngIf="model.birthDate">Birth Date: {{model.birthDate}}</mat-label><br>
             <mat-label *ngIf="model.birthPlace">Birth Place: {{model.birthPlace}}</mat-label><br>
             <mat-label *ngIf="model.deathDate">Death Date: {{model.deathDate}}</mat-label><br>

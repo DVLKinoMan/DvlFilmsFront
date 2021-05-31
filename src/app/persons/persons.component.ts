@@ -6,7 +6,7 @@ import { AgeFilter, Filter, FilterOperator, Gender, GenderFilter, IdFilter, Name
 import { PersonsService } from './services/persons.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 
@@ -57,21 +57,26 @@ export class PersonsComponent implements OnInit {
       }
     );
     this.idFilterForm = this.formBuilder.group({
-      id: ''
+      filterOperator: [0, Validators.required],
+      id: [null, Validators.required]
     });
     this.nameFilterForm = this.formBuilder.group({
+      filterOperator: 0,
       value: '',
       pattern: ''
     });
     this.ageFilterForm = this.formBuilder.group({
+      filterOperator: 0,
       value: '',
       start: '',
       end: ''
     });
     this.genderFilterForm = this.formBuilder.group({
+      filterOperator: 0,
       gender: '',
     });
     this.zodiacSignFilterForm = this.formBuilder.group({
+      filterOperator: 0,
       sign: ''
     });
   } 
@@ -94,6 +99,7 @@ getOrderBy<PersonOrderBy>(sort: Sort){
       case 'name': return PersonOrderBy.Name;
       case 'birthDate': return PersonOrderBy.BirthDate;
       case 'heightInMeters': return PersonOrderBy.HeightInMeters;
+      case 'age': return PersonOrderBy.Age;
       default: return PersonOrderBy.Id;
     }
 }
@@ -102,6 +108,7 @@ filterChanged(filterName: string){
     if(this.filters.length != 0){
       var form = this.getFilterForm(filterName);
       form.addControl('filterOperator', new FormControl());
+      form.get('filterOperator')?.setValue(1);
     }
 }
 

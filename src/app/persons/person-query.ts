@@ -42,6 +42,7 @@ export enum PersonOrderBy
     Name,
     BirthDate,
     HeightInMeters,
+    Age
 }
 
 export class Filter{

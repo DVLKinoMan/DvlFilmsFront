@@ -1,3 +1,5 @@
+import { Gender, ZodiacSign } from "./person-query";
+
 export interface Person{
     id: number;
     name: string;
@@ -11,21 +13,15 @@ export interface Person{
     otherWork: string;
     profilePicture: Photo; 
     imdbname: string;
-    imdbpageMoreBiographyUrl: string;
-    imdbpageRelatedNewsArticlesUrl: string;
     imdbpageUrl: string;
-    imdbpageRealUrl: string;
-    imdbpageMorePhotosUrl: string;
-    imdbpageMoreOfficialSitesUrl: string;
-    imdbpageMoreAwardsUrl: string;
-    imdbpageMoreOtherWorksUrl: string; 
-    imdbpageMorePublicityListingsUrl: string; 
-    sex: number;
+    sex?: Gender;
+    age?: number;
+    zodiacSign?: ZodiacSign;
 }
 
 export interface Photo{
     // Id: guid;
-    // imdbpageUrl: string;
+    imdbpageUrl: string;
     image: string;
     title: string;
 }
