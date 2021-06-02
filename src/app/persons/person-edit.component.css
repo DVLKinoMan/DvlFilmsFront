@@ -1,5 +1,14 @@
-:host {
+  :host {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .mat-form {
+    background-color: black;
+    color: white;
+  }
+
+  .matInput{
+    color: black;
   }

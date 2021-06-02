@@ -1,30 +1,136 @@
 
-
-<table>
-    <tr>
-        <td style="float: left;">
-            <mat-form-field appearance="fill">
-                <img [src]="model.profilePicture.image" 
-                *ngIf="model.profilePicture" [alt]="model.profilePicture.title">
-            </mat-form-field>
-        </td>
-        <td style="float: left; margin-left: 200px; max-width: 60%;">
-            <h1>{{model.name}}</h1>
-            <textarea disabled type="text" class = "textarea" cols="50" rows="10">{{model.biographyString}}</textarea>
-            <br>
-            <mat-label>Sex: {{model.sex == 0 ? 'Unknown' : 
-                (model.sex == 1 ? 'Male' : 'Female')}}</mat-label><br>
-            <mat-label *ngIf="model.age">Age: {{model.age}}</mat-label><br>
-            <mat-label *ngIf="model.zodiacSign">Zodiac Sign: {{model.zodiacSign}}</mat-label><br>
-            <mat-label *ngIf="model.birthDate">Birth Date: {{model.birthDate}}</mat-label><br>
-            <mat-label *ngIf="model.birthPlace">Birth Place: {{model.birthPlace}}</mat-label><br>
-            <mat-label *ngIf="model.deathDate">Death Date: {{model.deathDate}}</mat-label><br>
-            <mat-label *ngIf="model.deathPlace">Death Place: {{model.deathPlace}}</mat-label><br>
-            <mat-label *ngIf="model.heightInMeters">Height: {{model.heightInMeters}}m</mat-label><br>
-            <mat-label *ngIf="model.otherWork">Other Work: {{model.otherWork}}</mat-label><br>
-        </td>
-    </tr>
-</table>
-<h1>{{model.awardsInformationString}}</h1>
-<a target="_blank" href="{{model.imdbpageUrl}}">Visit Imdb Page</a>
-   
+<form [formGroup]="personForm" (ngSubmit)="save()" >
+    <div style="width: 100%; float: left;">
+        
+        </div>
+    <div id="little-bio" style="width: 100%; float: left;">
+        <div id="profilePicture" style="float: left;">
+                <mat-form-field appearance="fill">
+                    <img [src]="model.profilePicture.image" 
+                    *ngIf="model.profilePicture" [alt]="model.profilePicture.title">
+                </mat-form-field>
+        </div>
+        <div id="little-stats" style="float: left">
+            <div style="margin-left: 200px;">
+                <div>
+                    <mat-label *ngIf="editMode">Name: </mat-label>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Name:</mat-label>
+                        <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="model.name">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-label *ngIf="editMode">Biography: </mat-label><br>
+                    <mat-form-field>
+                        <mat-label>Biography:</mat-label>
+                        <textarea matInput type="text" class="matInput" [attr.disabled]="editMode ? null : ''"  cols="50" rows="10" 
+                        [value]="model.biographyString"></textarea>
+                      </mat-form-field>
+                </div>
+                <br>
+                <div *ngIf="model.sex">
+                    <mat-label>Sex: </mat-label>
+                    <mat-form-field appearance="fill" class="mat-form">
+                        <mat-label>Sex:</mat-label>
+                        <mat-select [disabled]="!editMode"  panelClass="example-panel-black" [(value)]="model.sex">
+                            <mat-option *ngFor="let gender of genders" [value]="gender">
+                                {{gender}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div *ngIf="model.age">
+                    <mat-label>Age: {{model.age}} </mat-label>
+                    <!-- <mat-form-field *ngIf="model.age" appearance="fill">
+                        <mat-label>Age:</mat-label>
+                        <input matInput [value]="model.age">
+                    </mat-form-field> -->
+                </div>
+                <div *ngIf="model.zodiacSign">
+                    <mat-label>Zodiac Sign: {{model.zodiacSign}}</mat-label>
+                    <!-- <mat-form-field appearance="fill" class="mat-form">
+                        <mat-label>Zodiac Sign:</mat-label>
+                        <mat-select panelClass="example-panel-black" [(value)]="model.zodiacSign">
+                            <mat-option *ngFor="let sign of zodiacSigns" [value]="sign">
+                                {{sign}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+                </div>
+                <div *ngIf="model.birthDate">
+                    <mat-label>Birth Date: </mat-label>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Birth Date: </mat-label>
+                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.birthDate">
+                    </mat-form-field>
+                        <!-- <mat-form-field fieldControlName="birthDt" *ngIf="model.birthDate" appearance="fill" class="mat-form">
+                        <mat-label>Birth Date:</mat-label>
+                        <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [matDatepicker]="picker"  [(value)]="model.birthDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field> -->
+                </div> 
+                <div *ngIf="model.birthPlace">
+                    <mat-label>Birth Place: </mat-label>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Birth Place:</mat-label>
+                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.birthPlace">
+                    </mat-form-field>
+                </div>
+                <div *ngIf="model.deathDate">
+                    <mat-label>Death Date: </mat-label>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Death Date: </mat-label>
+                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.deathDate">
+                    </mat-form-field>
+                </div>
+                <div *ngIf="model.deathPlace">
+                    <mat-label>Death Place: </mat-label>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Death Place:</mat-label>
+                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.deathPlace">
+                    </mat-form-field>
+                </div>
+                <div *ngIf="model.heightInMeters">
+                    <mat-label>Height: </mat-label>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Height:</mat-label>
+                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.heightInMeters">
+                    </mat-form-field>
+                </div>
+                <div *ngIf="model.otherWork">
+                    <mat-label>Other Work: </mat-label>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Other Work:</mat-label>
+                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.otherWork">
+                    </mat-form-field>
+                </div>
+           </div>
+        </div>
+        <div style="float: left;">
+            <button mat-flat-button color="primary" (click)="editMode=true">Edit Mode</button>
+        </div>
+    </div>
+    <div *ngIf="model.awardsInformationString" style="width: 100%">
+        <mat-label>Award Information: </mat-label>
+        <h1>{{model.awardsInformationString}}</h1>
+        <!-- <mat-form-field appearance="fill">
+            <mat-label>Award Information:</mat-label>
+            <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="model.awardsInformationString" with whitespace>
+        </mat-form-field> -->
+    </div>
+                 <a target="_blank" href="{{model.imdbpageUrl}}">Visit Imdb Page</a>
+                 <h1>Movies:</h1>
+       <div style="width: 100%;">
+                 <mat-grid-list cols="4" rowHeight="100px">
+                     <mat-grid-tile
+                         *ngFor="let tile of tiles"
+                         [colspan]="tile.cols"
+                         [rowspan]="tile.rows"
+                         [style.background]="tile.color">
+                     <img src="https://picsum.photos/200/300/?random">
+                     </mat-grid-tile>
+                 </mat-grid-list>
+    </div>
+    <button mat-flat-button color="primary" type="submit">Save</button><br><br>
+</form>
