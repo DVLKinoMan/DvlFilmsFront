@@ -17,11 +17,33 @@ export interface Person{
     sex?: Gender;
     age?: number;
     zodiacSign?: ZodiacSign;
+    filmographies?: Filmography[];
 }
 
 export interface Photo{
     // Id: guid;
-    imdbpageUrl: string;
+    imdbPageUrl: string;
     image: string;
     title: string;
+}
+
+export interface Filmography{
+    year?: number;
+    categoryName: string;
+    description?: string;
+    filmItem?: FilmItem;
+    characters?: Character[];
+}
+
+export interface FilmItem{
+    id: number;
+    name: string;
+    imdbPageUrl: string;
+    photo?: Photo;
+}
+
+export interface Character{
+    name: string;
+    imdbPageUrl?: string;
+    description?: string;
 }

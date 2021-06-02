@@ -1,8 +1,7 @@
 
-<form [formGroup]="personForm" (ngSubmit)="save()" >
-    <div style="width: 100%; float: left;">
-        
-        </div>
+<form [formGroup]="personForm" (ngSubmit)="save()" style="width: 100%;" >
+                
+       <div style="width: 100%;">
     <div id="little-bio" style="width: 100%; float: left;">
         <div id="profilePicture" style="float: left;">
                 <mat-form-field appearance="fill">
@@ -18,6 +17,9 @@
                         <mat-label>Name:</mat-label>
                         <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="model.name">
                     </mat-form-field>
+                </div>
+                <div>
+                    <a target="_blank" href="{{model.imdbpageUrl}}">Visit Imdb Page</a>
                 </div>
                 <div>
                     <mat-label *ngIf="editMode">Biography: </mat-label><br>
@@ -111,26 +113,50 @@
             <button mat-flat-button color="primary" (click)="editMode=true">Edit Mode</button>
         </div>
     </div>
+    <button mat-flat-button color="primary" type="submit">Save</button><br><br>
     <div *ngIf="model.awardsInformationString" style="width: 100%">
         <mat-label>Award Information: </mat-label>
         <h1>{{model.awardsInformationString}}</h1>
-        <!-- <mat-form-field appearance="fill">
-            <mat-label>Award Information:</mat-label>
-            <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="model.awardsInformationString" with whitespace>
-        </mat-form-field> -->
+        <div style="float: left">
+            <h1>Movies:</h1>
+        </div>
+        <div style="float: right;">
+            <mat-label>Filmography Category: </mat-label>
+            <mat-form-field appearance="fill" class="mat-form">
+                <mat-label>Filmography Category:</mat-label>
+                <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFilmographyCatName">
+                    <mat-option *ngFor="let categoryName of filmographyCategoryNames" [value]="categoryName">
+                        {{categoryName}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <br><br>
+        <div>
+            <mat-grid-list cols="10" rowHeight="1:2">
+                <mat-grid-tile
+                    *ngFor="let filmography of filmographies">
+                <!-- <mat-grid-tile-header *ngIf="filmography.characters">
+                    <div *ngFor="let character of filmography.characters">
+                        <div *ngIf="character.imdbPageUrl; else justCharName">
+                            <a  target="_blank" 
+                            href="{{character.imdbPageUrl}}">
+                                {{character.name}}
+                            </a>
+                        </div>
+                        <ng-template #justCharName>
+                            <mat-label *ngFor="let character of filmography.characters">{{character.name}}</mat-label>
+                        </ng-template>
+                    </div>
+                </mat-grid-tile-header> -->
+                <a target="_blank" href="{{filmography.filmItem?.imdbPageUrl}}">
+                    <img [src]="filmography.filmItem?.photo?.image" 
+                    [title]="filmography.filmItem?.photo?.title">
+                </a>
+                <mat-grid-tile-footer>{{filmography.filmItem?.name}}({{filmography.year}})</mat-grid-tile-footer>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
     </div>
-                 <a target="_blank" href="{{model.imdbpageUrl}}">Visit Imdb Page</a>
-                 <h1>Movies:</h1>
-       <div style="width: 100%;">
-                 <mat-grid-list cols="4" rowHeight="100px">
-                     <mat-grid-tile
-                         *ngFor="let tile of tiles"
-                         [colspan]="tile.cols"
-                         [rowspan]="tile.rows"
-                         [style.background]="tile.color">
-                     <img src="https://picsum.photos/200/300/?random">
-                     </mat-grid-tile>
-                 </mat-grid-list>
     </div>
-    <button mat-flat-button color="primary" type="submit">Save</button><br><br>
 </form>
