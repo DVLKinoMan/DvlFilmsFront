@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Filmography, Person } from './person';
 import { Gender, ZodiacSign } from './person-query';
 import { PersonsService } from './services/persons.service';
@@ -16,35 +16,78 @@ export class PersonEditComponent implements OnInit {
   selectedZodiacSign: string;
   personForm: FormGroup;
   editMode: boolean = false;
+  
   selectedFilmographyCatName: string = "";
   filmographyCategoryNames: string[] = [];
+
+  selectedFlmSortBy: string = 'Year';
+  sortChoicesForFilms: string[] = ['Year'];
+  sortAscending: boolean = false;
+
   filmographies: Filmography[];
 
-  tiles: any[] = [
-    {text: 'One', cols: 3, rows: 1, color: 'lightblue'},
-    {text: 'Two', cols: 1, rows: 2, color: 'lightgreen'},
-    {text: 'Three', cols: 1, rows: 1, color: 'lightpink'},
-    {text: 'Four', cols: 2, rows: 1, color: '#DDBDF1'},
-  ];
   zodiacSigns: string[] = Object.keys(ZodiacSign).filter(val => isNaN(Number(val)));
   genders: string[] = Object.keys(Gender).filter(val => isNaN(Number(val)));
 
   constructor(private service: PersonsService,
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.personForm = this.formBuilder.group({
       sign: ''
     });
+    this.route.queryParams.subscribe(
+      params => {
+        this.selectedFilmographyCatName = params['flmCatName'];
+        this.selectedFlmSortBy = params['flmSortBy'] ? params['flmSortBy'] : this.selectedFlmSortBy;
+        this.sortAscending = params['flmSortAscending'] ? params['flmSortAscending'] : this.sortAscending;
+      }
+    );
     this.route.params.subscribe(params=>{
         this.id = params['id'];
         this.loadPerson();
-    })
+    });
   }
 
   save(){
     var val = this.model.zodiacSign;
+  }
+
+  sortingChanged(){
+    this.sortAscending = !this.sortAscending;
+    this.loadFilmItems();
+  }
+
+  changeQueryParams(){
+    this.router.navigate(
+      [], 
+      {
+        relativeTo: this.route,
+        queryParams: { 
+          flmCatName: this.selectedFilmographyCatName,
+          flmSortBy: this.selectedFlmSortBy,
+          flmSortAscending: this.sortAscending
+        },
+        queryParamsHandling: 'merge'
+      });
+  }
+
+  loadImages(){
+        if(this.model.profilePicture != undefined)
+          this.model.profilePicture.image =  'data:image/png;base64,' + this.model.profilePicture.image;
+        if(this.model.filmographies)
+          this.model.filmographies.forEach(function(value){
+            if(value.filmItem?.photo?.image)
+              value.filmItem.photo.image = 'data:image/png;base64,' + value.filmItem.photo.image;
+          });
+  }
+
+  loadFilmCategories(){
+        this.selectedFilmographyCatName ??= this.model.filmographies?.[0].categoryName ?? "";
+        this.filmographyCategoryNames = 
+        [...new Set(this.model.filmographies?.map(item=>item.categoryName) ?? [])];
   }
 
   loadFilmItems(){
@@ -55,23 +98,24 @@ export class PersonEditComponent implements OnInit {
             if(val.categoryName == catName)
               items.push(val);
           });
+          items.sort((a,b) => { 
+            switch(this.selectedFlmSortBy){
+              case 'Year': 
+                return this.sortAscending ? (a.year && (!b.year || a.year < b.year) ? -1 : 1 )
+                : (b.year && (!a.year || a.year < b.year) ? 1 : -1 );
+              default: throw new Error("Sorting is not Implemented");
+            }
+          });
           this.filmographies = items;
+          this.changeQueryParams();
       }
   }
 
   loadPerson(){
     this.service.getById(this.id).subscribe(result =>{
-          if(result.profilePicture != undefined)
-            result.profilePicture.image =  'data:image/png;base64,' + result.profilePicture.image;
-          if(result.filmographies)
-            result.filmographies.forEach(function(value){
-              if(value.filmItem?.photo?.image)
-                value.filmItem.photo.image = 'data:image/png;base64,' + value.filmItem.photo.image;
-            });
           this.model = result;
-          this.selectedFilmographyCatName = this.model.filmographies?.[0].categoryName ?? "";
-          this.filmographyCategoryNames = 
-          [...new Set(this.model.filmographies?.map(item=>item.categoryName) ?? [])]; ;
+          this.loadImages();
+          this.loadFilmCategories();
           this.loadFilmItems();
     }, error=>console.log(error));
   }

@@ -5,7 +5,7 @@
     <div id="little-bio" style="width: 100%; float: left;">
         <div id="profilePicture" style="float: left;">
                 <mat-form-field appearance="fill">
-                    <img [src]="model.profilePicture.image" 
+                    <img [src]="model.profilePicture.imdbPageUrl" 
                     *ngIf="model.profilePicture" [alt]="model.profilePicture.title">
                 </mat-form-field>
         </div>
@@ -131,6 +131,18 @@
                 </mat-select>
             </mat-form-field>
         </div>
+        <div style="float: right;">
+            <img [src] = "sortAscending ? 'assets/AscendingIcon.png' : 'assets/DescendingIcon.png'"
+            (click) = "sortingChanged()" style="width: 25px;">
+            <mat-form-field appearance="fill" class="mat-form">
+                <mat-label>Sort By:</mat-label>
+                <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFlmSortBy">
+                    <mat-option *ngFor="let sortChoice of sortChoicesForFilms" [value]="sortChoice">
+                        {{sortChoice}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
         <br><br>
         <div>
             <mat-grid-list cols="10" rowHeight="1:2">
@@ -150,7 +162,7 @@
                     </div>
                 </mat-grid-tile-header> -->
                 <a target="_blank" href="{{filmography.filmItem?.imdbPageUrl}}">
-                    <img [src]="filmography.filmItem?.photo?.image" 
+                    <img [src]="filmography.filmItem?.photo?.imdbPageUrl" 
                     [title]="filmography.filmItem?.photo?.title">
                 </a>
                 <mat-grid-tile-footer>{{filmography.filmItem?.name}}({{filmography.year}})</mat-grid-tile-footer>
