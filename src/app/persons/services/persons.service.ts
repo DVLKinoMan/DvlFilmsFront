@@ -70,7 +70,7 @@ export class PersonsService {
         }
 
         getFilmographies(personId: number) : Observable<Filmography[]>{
-            var url = this.baseUrl + "/Persons/Get/Filmographies/"+personId;
+            var url = this.baseUrl + "/Persons/Get/"+personId+"/Filmographies";
 
             return this.http.get<Filmography[]>(url);
         }

@@ -157,7 +157,8 @@ sortChanged(sort: Sort){
 }
 
 pageChanged(event: PageEvent){ 
-  this.pageEvent = event;  
+  this.pageEvent = event;
+  this.persons = [];  
   this.loadData(true);
   return event;
 }

@@ -110,10 +110,12 @@
            </div>
         </div>
         <div style="float: left;">
-            <button mat-flat-button color="primary" (click)="editMode=true">Edit Mode</button>
+            <button mat-flat-button color="primary" (click)="editMode=!editMode">
+                {{editMode ? "View Mode" : "Edit Mode"}}
+            </button>
         </div>
     </div>
-    <button mat-flat-button color="primary" type="submit">Save</button><br><br>
+    <button mat-flat-button *ngIf="editMode" color="primary" type="submit">Save</button><br><br>
     <div style="width: 100%">
         <mat-label>Award Information: </mat-label>
         <h1>{{model.awardsInformationString}}</h1>
