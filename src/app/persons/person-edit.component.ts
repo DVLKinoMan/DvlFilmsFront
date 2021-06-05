@@ -74,16 +74,6 @@ export class PersonEditComponent implements OnInit {
       });
   }
 
-  loadImages(){
-        if(this.model.profilePicture != undefined)
-          this.model.profilePicture.image =  'data:image/png;base64,' + this.model.profilePicture.image;
-        if(this.model.filmographies)
-          this.model.filmographies.forEach(function(value){
-            if(value.filmItem?.photo?.image)
-              value.filmItem.photo.image = 'data:image/png;base64,' + value.filmItem.photo.image;
-          });
-  }
-
   loadFilmCategories(){
         this.selectedFilmographyCatName ??= this.model.filmographies?.[0].categoryName ?? "";
         this.filmographyCategoryNames = 
@@ -114,9 +104,19 @@ export class PersonEditComponent implements OnInit {
   loadPerson(){
     this.service.getById(this.id).subscribe(result =>{
           this.model = result;
-          this.loadImages();
-          this.loadFilmCategories();
+          if(this.model.profilePicture)
+            this.model.profilePicture.image =  'data:image/png;base64,' + this.model.profilePicture.image;
+    }, error=>console.log(error));
+
+    this.service.getFilmographies(this.id).subscribe(result =>{
+          this.model.filmographies = result;
+          if(this.model.filmographies)
+            this.model.filmographies.forEach(function(value){
+              if(value.filmItem?.photo?.image)
+                value.filmItem.photo.image = 'data:image/png;base64,' + value.filmItem.photo.image;
+            });
           this.loadFilmItems();
+          this.loadFilmCategories();
     }, error=>console.log(error));
   }
 }

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Person } from "../person";
+import { Filmography, Person } from "../person";
 import { Observable } from "rxjs";
 import { PersonsQuery } from "../person-query";
 
@@ -67,5 +67,11 @@ export class PersonsService {
             var url = this.baseUrl + "/Persons/Get/"+id;
             
             return this.http.get<Person>(url);
+        }
+
+        getFilmographies(personId: number) : Observable<Filmography[]>{
+            var url = this.baseUrl + "/Persons/Get/Filmographies/"+personId;
+
+            return this.http.get<Filmography[]>(url);
         }
 }

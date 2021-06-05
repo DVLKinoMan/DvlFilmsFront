@@ -114,13 +114,13 @@
         </div>
     </div>
     <button mat-flat-button color="primary" type="submit">Save</button><br><br>
-    <div *ngIf="model.awardsInformationString" style="width: 100%">
+    <div style="width: 100%">
         <mat-label>Award Information: </mat-label>
         <h1>{{model.awardsInformationString}}</h1>
         <div style="float: left">
             <h1>Movies:</h1>
         </div>
-        <div style="float: right;">
+        <div *ngIf="filmographies" style="float: right;">
             <mat-label>Filmography Category: </mat-label>
             <mat-form-field appearance="fill" class="mat-form">
                 <mat-label>Filmography Category:</mat-label>
@@ -131,7 +131,7 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        <div style="float: right;">
+        <div *ngIf="filmographies" style="float: right;">
             <img [src] = "sortAscending ? 'assets/AscendingIcon.png' : 'assets/DescendingIcon.png'"
             (click) = "sortingChanged()" style="width: 25px;">
             <mat-form-field appearance="fill" class="mat-form">
@@ -144,7 +144,7 @@
             </mat-form-field>
         </div>
         <br><br>
-        <div>
+        <div *ngIf="filmographies">
             <mat-grid-list cols="10" rowHeight="1:2">
                 <mat-grid-tile
                     *ngFor="let filmography of filmographies">
@@ -169,6 +169,7 @@
                 </mat-grid-tile>
             </mat-grid-list>
         </div>
+        <mat-spinner *ngIf="!filmographies"></mat-spinner>
     </div>
     </div>
 </form>
