@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Filmography, Person } from './person';
 import { Gender, ZodiacSign } from './person-query';
+import { PersonFetcherService } from './services/person-fetcher.service';
 import { PersonsService } from './services/persons.service';
 
 @Component({
@@ -30,6 +31,7 @@ export class PersonEditComponent implements OnInit {
   genders: string[] = Object.keys(Gender).filter(val => isNaN(Number(val)));
 
   constructor(private service: PersonsService,
+    private fetcherService: PersonFetcherService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router) { }
@@ -99,6 +101,46 @@ export class PersonEditComponent implements OnInit {
           this.filmographies = items;
           this.changeQueryParams();
       }
+  }
+
+  fetchPersonFromImdb(){
+    this.fetcherService.getByUrl(this.model.imdbPageUrl).subscribe(result => {
+      this.model = result;
+      // if(this.model.filmographies)
+      //   this.model.filmographies.forEach(function(value){
+      //     if(value.filmItem?.photo?.image)
+      //       value.filmItem.photo.image = 'data:image/png;base64,' + value.filmItem.photo.image;
+      //   });
+      let imdbPageUrls: string[] = [];
+      this.model.filmographies?.forEach(function(value){
+        if(value.filmItem)
+          imdbPageUrls.push(value.filmItem.imdbPageUrl);
+      });
+
+      var batch = 30;
+      for(var i = 0; i< imdbPageUrls.length; i+=batch)
+      this.service.getPersonFilmItems(imdbPageUrls.slice(i, i + batch > imdbPageUrls.length ?
+          imdbPageUrls.length - 1 : i + batch - 1
+        )).subscribe(result =>{
+              if(this.model.filmographies)
+                this.model.filmographies.forEach(function(value){
+                  if(value.filmItem)
+                    {
+                      result.forEach(function(res){
+                        if(res.imdbPageUrl == value.filmItem?.imdbPageUrl){
+                          value.filmItem.id = res.id;
+                          value.filmItem.photo = res.photo;
+                          if(value.filmItem.photo)
+                            value.filmItem.photo.image = 'data:image/png;base64,' 
+                            + value.filmItem.photo.image;
+                        }
+                      });
+                    }
+                });
+              this.loadFilmItems();
+              this.loadFilmCategories();
+        }, error=>console.log(error));
+    }, error=>console.log(error));
   }
 
   loadPerson(){

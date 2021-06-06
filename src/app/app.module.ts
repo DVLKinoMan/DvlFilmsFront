@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { PersonsComponent } from './persons/persons.component';
 import { PersonsService } from './persons/services/persons.service';
+import { PersonFetcherService } from './persons/services/person-fetcher.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
@@ -56,7 +57,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatProgressSpinnerModule
   ],
   providers: [
-    PersonsService
+    PersonsService,
+    PersonFetcherService
   ],
   bootstrap: [AppComponent]
 })

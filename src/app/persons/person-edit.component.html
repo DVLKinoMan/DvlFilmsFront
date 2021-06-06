@@ -19,7 +19,7 @@
                     </mat-form-field>
                 </div>
                 <div>
-                    <a target="_blank" href="{{model.imdbpageUrl}}">Visit Imdb Page</a>
+                    <a target="_blank" href="{{model.imdbPageUrl}}">Visit Imdb Page</a>
                 </div>
                 <div>
                     <mat-label *ngIf="editMode">Biography: </mat-label><br>
@@ -112,6 +112,9 @@
         <div style="float: left;">
             <button mat-flat-button color="primary" (click)="editMode=!editMode">
                 {{editMode ? "View Mode" : "Edit Mode"}}
+            </button>
+            <button mat-flat-button color="primary" (click)="fetchPersonFromImdb()">
+                Fetch Person From Imdb
             </button>
         </div>
     </div>

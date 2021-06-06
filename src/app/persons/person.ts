@@ -13,7 +13,7 @@ export interface Person{
     otherWork: string;
     profilePicture: Photo; 
     imdbname: string;
-    imdbpageUrl: string;
+    imdbPageUrl: string;
     sex?: Gender;
     age?: number;
     zodiacSign?: ZodiacSign;
