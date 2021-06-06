@@ -23,7 +23,7 @@ export class PersonEditComponent implements OnInit {
 
   selectedFlmSortBy: string = 'Year';
   sortChoicesForFilms: string[] = ['Year'];
-  sortAscending: boolean = false;
+  sortAscending: boolean;
 
   filmographies: Filmography[];
 
@@ -44,7 +44,7 @@ export class PersonEditComponent implements OnInit {
       params => {
         this.selectedFilmographyCatName = params['flmCatName'];
         this.selectedFlmSortBy = params['flmSortBy'] ? params['flmSortBy'] : this.selectedFlmSortBy;
-        this.sortAscending = params['flmSortAscending'] ? params['flmSortAscending'] : this.sortAscending;
+        this.sortAscending = params['flmSortAscending'] === "true" ? true : false;
       }
     );
     this.route.params.subscribe(params=>{
@@ -137,8 +137,8 @@ export class PersonEditComponent implements OnInit {
                       });
                     }
                 });
-              this.loadFilmItems();
               this.loadFilmCategories();
+              this.loadFilmItems();
         }, error=>console.log(error));
     }, error=>console.log(error));
   }
@@ -157,8 +157,8 @@ export class PersonEditComponent implements OnInit {
               if(value.filmItem?.photo?.image)
                 value.filmItem.photo.image = 'data:image/png;base64,' + value.filmItem.photo.image;
             });
-          this.loadFilmItems();
           this.loadFilmCategories();
+          this.loadFilmItems();
     }, error=>console.log(error));
   }
 }
