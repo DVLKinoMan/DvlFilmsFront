@@ -1,33 +1,34 @@
 import { Gender, ZodiacSign } from "./person-query";
 
-export interface Person{
+export interface Person {
     id: number;
     name: string;
     awardsInformationString?: string;
     biographyString: string;
-    birthDate?: Date; 
+    birthDate?: Date;
     birthPlace?: string;
-    deathDate?: Date; 
+    deathDate?: Date;
     deathPlace?: string;
-    heightInMeters?: number; 
+    heightInMeters?: number;
     otherWork: string;
-    profilePicture: Photo; 
+    profilePicture: Photo;
     imdbname: string;
     imdbPageUrl: string;
     sex?: Gender;
     age?: number;
     zodiacSign?: ZodiacSign;
     filmographies?: Filmography[];
+    photos?: Photo[];
 }
 
-export interface Photo{
+export interface Photo {
     // Id: guid;
     imdbPageUrl: string;
     image: string;
     title: string;
 }
 
-export interface Filmography{
+export interface Filmography {
     year?: number;
     categoryName: string;
     description?: string;
@@ -35,14 +36,14 @@ export interface Filmography{
     characters?: Character[];
 }
 
-export interface FilmItem{
+export interface FilmItem {
     id: number;
     name: string;
     imdbPageUrl: string;
     photo?: Photo;
 }
 
-export interface Character{
+export interface Character {
     name: string;
     imdbPageUrl?: string;
     description?: string;

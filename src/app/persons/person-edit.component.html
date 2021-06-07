@@ -215,7 +215,7 @@
             </div>
         </div>
         <button mat-flat-button *ngIf="editMode" color="primary" type="submit">Save</button>
-        <div id="awards" style="display: inline">
+        <div id="awards" style="display: inline-table">
             <div id="model-awards" style="float:left">
                 <mat-label>Award Information: </mat-label>
                 <h1>{{model.awardsInformationString}}</h1>
@@ -225,7 +225,35 @@
                 <h1>{{fetched.awardsInformationString}}</h1>
             </div>
         </div>
-        <div *ngIf="filmographies"  style="width: 100%; display: inline-table">
+        <div id="photos" *ngIf="model.photos" style="display: inline-table;">
+            <div *ngIf ="model.photos.length <= 5; else manyPhotos" style="width: 100%; display: flex;">
+                <mat-label>Photos: </mat-label>
+                <div *ngFor="let photo of model.photos">
+                                <img [src]="photo?.imdbPageUrl" 
+                                [title]="photo?.title"
+                                style="max-width: 200px;">
+                </div>
+                <button mat-flat-button (click)="getAllPersonPhotos()">Show More</button>
+            </div> 
+            <ng-template #manyPhotos>
+                <mat-label>Photos: </mat-label>
+                <div fxLayout="row wrap">
+                    <ng-container *ngFor="let photo of showedPhotos">
+                        <img [src]="photo?.imdbPageUrl" 
+                        [title]="photo?.title"
+                                style="max-width: 200px;">
+                    </ng-container>
+                </div>
+
+                <mat-paginator [length]="model.photos.length"
+                                [pageSize]="50" 
+                                (page)="photosPageChanged($event)"
+                                [pageSizeOptions]="[50, 100, 150]"
+                                showFirstLastButtons>
+                </mat-paginator>
+            </ng-template>    
+        </div>
+        <div *ngIf="filmographies"  style="width: 100%; margin-top: 50px; display: inline-table">
             <div style="float: left">
                 <h1>Movies:</h1>
             </div>
@@ -255,7 +283,7 @@
             </div>
         </div>
         <!-- Filmographies Grid-List -->
-        <div *ngIf="filmographies" style="margin-top: 50px;">
+        <div *ngIf="filmographies" style="margin-top: 25px;">
             <mat-grid-list cols="10" rowHeight="1:2">
                 <mat-grid-tile
                     *ngFor="let filmography of filmographies">
