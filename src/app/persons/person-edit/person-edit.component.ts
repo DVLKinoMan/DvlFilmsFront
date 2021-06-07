@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Filmography, Person, Photo } from './person';
-import { Gender, ZodiacSign } from './person-query';
-import { PersonFetcherService } from './services/person-fetcher.service';
-import { PersonsService } from './services/persons.service';
+import { Filmography, Person } from '../person';
+import { Gender, ZodiacSign } from '../person-query';
+import { PersonFetcherService } from '../services/person-fetcher.service';
+import { PersonsService } from '../services/persons.service';
 
 @Component({
   selector: 'app-person-edit',
@@ -31,8 +30,6 @@ export class PersonEditComponent implements OnInit {
 
   zodiacSigns: string[] = Object.keys(ZodiacSign).filter(val => isNaN(Number(val)));
   genders: string[] = Object.keys(Gender).filter(val => isNaN(Number(val)));
-
-  showedPhotos: Photo[];
 
   constructor(private service: PersonsService,
     private fetcherService: PersonFetcherService,
@@ -76,6 +73,7 @@ export class PersonEditComponent implements OnInit {
           flmSortBy: this.selectedFlmSortBy,
           flmSortAscending: this.sortAscending
         },
+        replaceUrl: true,
         queryParamsHandling: 'merge'
       });
   }
@@ -107,28 +105,6 @@ export class PersonEditComponent implements OnInit {
       this.filmographies = items;
       this.changeQueryParams();
     }
-  }
-
-  photosPageChanged(event: PageEvent) {
-    let index = 0,
-      startingIndex = event.pageIndex * event.pageSize,
-      endingIndex = startingIndex + event.pageSize;
-
-    this.showedPhotos = this.model.photos?.filter(() => {
-      index++;
-      return (index > startingIndex && index <= endingIndex) ? true : false;
-    }) ?? [];
-  }
-
-  getAllPersonPhotos() {
-    this.service.getPhotos(this.id).subscribe(result => {
-      this.model.photos = result;
-      var event = new PageEvent();
-      event.length = this.model.photos.length;
-      event.pageIndex = 0;
-      event.pageSize = 50;
-      this.photosPageChanged(event)
-    }, error => console.log(error))
   }
 
   fetchPersonFromImdb() {
@@ -173,7 +149,7 @@ export class PersonEditComponent implements OnInit {
         this.model.profilePicture.image = 'data:image/png;base64,' + this.model.profilePicture.image;
     }, error => console.log(error));
 
-    this.service.getPhotos(this.id, 5).subscribe(result => {
+    this.service.getPhotos(this.id, 0, 5).subscribe(result => {
       this.model.photos = result;
     }, error => console.log(error))
 

@@ -1,0 +1,19 @@
+<div>
+    <mat-label>Photos: </mat-label>
+    <div *ngIf="photos; else loading" fxLayout="row wrap">
+        <ng-container *ngFor="let photo of photos">
+            <img [src]="photo?.imdbPageUrl" 
+            [title]="photo?.title"
+                    style="max-width: 200px;">
+        </ng-container>
+    </div>
+    <ng-template #loading>
+        <mat-spinner></mat-spinner>
+    </ng-template>
+    <mat-paginator [length]="photosCount"
+                    [pageSize]="50" 
+                    (page)="pageChanged($event)"
+                    [pageSizeOptions]="[50, 100, 150]"
+                    showFirstLastButtons>
+    </mat-paginator>
+</div>

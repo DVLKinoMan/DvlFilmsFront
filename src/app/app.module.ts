@@ -18,19 +18,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import { PersonEditComponent } from './persons/person-edit.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PersonPhotosComponent } from './persons/person-photos/person-photos.component';
+import { PersonEditComponent } from './persons/person-edit/person-edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PersonsComponent,
     NavMenuComponent,
-    PersonEditComponent
+    PersonEditComponent,
+    PersonPhotosComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +41,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     RouterModule.forRoot([
       { path: '', component: PersonsComponent, pathMatch: 'full' },
       { path: 'persons', component: PersonsComponent },
-      { path: 'person/:id', component: PersonEditComponent }
+      { path: 'person/:id', component: PersonEditComponent },
+      { path: 'person/:id/photos', component: PersonPhotosComponent }
     ]),
     BrowserAnimationsModule,
     MatPaginatorModule,

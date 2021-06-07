@@ -226,32 +226,15 @@
             </div>
         </div>
         <div id="photos" *ngIf="model.photos" style="display: inline-table;">
-            <div *ngIf ="model.photos.length <= 5; else manyPhotos" style="width: 100%; display: flex;">
+            <div style="width: 100%; display: flex;">
                 <mat-label>Photos: </mat-label>
                 <div *ngFor="let photo of model.photos">
                                 <img [src]="photo?.imdbPageUrl" 
                                 [title]="photo?.title"
                                 style="max-width: 200px;">
                 </div>
-                <button mat-flat-button (click)="getAllPersonPhotos()">Show More</button>
-            </div> 
-            <ng-template #manyPhotos>
-                <mat-label>Photos: </mat-label>
-                <div fxLayout="row wrap">
-                    <ng-container *ngFor="let photo of showedPhotos">
-                        <img [src]="photo?.imdbPageUrl" 
-                        [title]="photo?.title"
-                                style="max-width: 200px;">
-                    </ng-container>
-                </div>
-
-                <mat-paginator [length]="model.photos.length"
-                                [pageSize]="50" 
-                                (page)="photosPageChanged($event)"
-                                [pageSizeOptions]="[50, 100, 150]"
-                                showFirstLastButtons>
-                </mat-paginator>
-            </ng-template>    
+                <a class="nav-link text-dark" [routerLink]="['/person/'+id+'/photos']">Show More</a>
+            </div>   
         </div>
         <div *ngIf="filmographies"  style="width: 100%; margin-top: 50px; display: inline-table">
             <div style="float: left">
