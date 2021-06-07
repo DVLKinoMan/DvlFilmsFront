@@ -13,11 +13,12 @@ import { PersonsService } from './services/persons.service';
 })
 export class PersonEditComponent implements OnInit {
   model: Person;
+  fetched?: Person;
   id: number;
   selectedZodiacSign: string;
   personForm: FormGroup;
   editMode: boolean = false;
-  
+
   selectedFilmographyCatName: string = "";
   filmographyCategoryNames: string[] = [];
 
@@ -47,27 +48,27 @@ export class PersonEditComponent implements OnInit {
         this.sortAscending = params['flmSortAscending'] === "true" ? true : false;
       }
     );
-    this.route.params.subscribe(params=>{
-        this.id = params['id'];
-        this.loadPerson();
+    this.route.params.subscribe(params => {
+      this.id = params['id'];
+      this.loadPerson();
     });
   }
 
-  save(){
+  save() {
     var val = this.model.zodiacSign;
   }
 
-  sortingChanged(){
+  sortingChanged() {
     this.sortAscending = !this.sortAscending;
     this.loadFilmItems();
   }
 
-  changeQueryParams(){
+  changeQueryParams() {
     this.router.navigate(
-      [], 
+      [],
       {
         relativeTo: this.route,
-        queryParams: { 
+        queryParams: {
           flmCatName: this.selectedFilmographyCatName,
           flmSortBy: this.selectedFlmSortBy,
           flmSortAscending: this.sortAscending
@@ -76,89 +77,86 @@ export class PersonEditComponent implements OnInit {
       });
   }
 
-  loadFilmCategories(){
-        this.selectedFilmographyCatName ??= this.model.filmographies?.[0].categoryName ?? "";
-        this.filmographyCategoryNames = 
-        [...new Set(this.model.filmographies?.map(item=>item.categoryName) ?? [])];
+  loadFilmCategories() {
+    this.selectedFilmographyCatName ??= this.model.filmographies?.[0].categoryName ?? "";
+    this.filmographyCategoryNames =
+      [...new Set((this.model.filmographies?.map(item => item.categoryName) ?? [])
+        // .concat(this.fetched?.filmographies?.map(item => item.categoryName) ?? [])
+      )];
   }
 
-  loadFilmItems(){
-      if(this.model.filmographies){
-          let items: Filmography[] = [];
-          let catName = this.selectedFilmographyCatName;
-          this.model.filmographies.forEach(function(val){
-            if(val.categoryName == catName)
-              items.push(val);
-          });
-          items.sort((a,b) => { 
-            switch(this.selectedFlmSortBy){
-              case 'Year': 
-                return this.sortAscending ? (a.year && (!b.year || a.year < b.year) ? -1 : 1 )
-                : (b.year && (!a.year || a.year < b.year) ? 1 : -1 );
-              default: throw new Error("Sorting is not Implemented");
-            }
-          });
-          this.filmographies = items;
-          this.changeQueryParams();
-      }
+  loadFilmItems() {
+    if (this.model.filmographies) {
+      let items: Filmography[] = [];
+      let catName = this.selectedFilmographyCatName;
+      this.model.filmographies.forEach(function (val) {
+        if (val.categoryName == catName)
+          items.push(val);
+      });
+      items.sort((a, b) => {
+        switch (this.selectedFlmSortBy) {
+          case 'Year':
+            return this.sortAscending ? (a.year && (!b.year || a.year < b.year) ? -1 : 1)
+              : (b.year && (!a.year || a.year < b.year) ? 1 : -1);
+          default: throw new Error("Sorting is not Implemented");
+        }
+      });
+      this.filmographies = items;
+      this.changeQueryParams();
+    }
   }
 
-  fetchPersonFromImdb(){
+  fetchPersonFromImdb() {
     this.fetcherService.getByUrl(this.model.imdbPageUrl).subscribe(result => {
-      this.model = result;
-      // if(this.model.filmographies)
-      //   this.model.filmographies.forEach(function(value){
-      //     if(value.filmItem?.photo?.image)
-      //       value.filmItem.photo.image = 'data:image/png;base64,' + value.filmItem.photo.image;
-      //   });
+      this.fetched = result;
+      this.model.filmographies = this.fetched.filmographies;
       let imdbPageUrls: string[] = [];
-      this.model.filmographies?.forEach(function(value){
-        if(value.filmItem)
+      this.fetched.filmographies?.forEach(function (value) {
+        if (value.filmItem)
           imdbPageUrls.push(value.filmItem.imdbPageUrl);
       });
 
       var batch = 30;
-      for(var i = 0; i< imdbPageUrls.length; i+=batch)
-      this.service.getPersonFilmItems(imdbPageUrls.slice(i, i + batch > imdbPageUrls.length ?
+      for (var i = 0; i < imdbPageUrls.length; i += batch)
+        this.service.getPersonFilmItems(imdbPageUrls.slice(i, i + batch > imdbPageUrls.length ?
           imdbPageUrls.length - 1 : i + batch - 1
-        )).subscribe(result =>{
-              if(this.model.filmographies)
-                this.model.filmographies.forEach(function(value){
-                  if(value.filmItem)
-                    {
-                      result.forEach(function(res){
-                        if(res.imdbPageUrl == value.filmItem?.imdbPageUrl){
-                          value.filmItem.id = res.id;
-                          value.filmItem.photo = res.photo;
-                          if(value.filmItem.photo)
-                            value.filmItem.photo.image = 'data:image/png;base64,' 
-                            + value.filmItem.photo.image;
-                        }
-                      });
-                    }
+        )).subscribe(result => {
+          if (this.model.filmographies)
+            this.model.filmographies.forEach(function (value) {
+              if (value.filmItem) {
+                result.forEach(function (res) {
+                  if (res.imdbPageUrl == value.filmItem?.imdbPageUrl) {
+                    value.filmItem.id = res.id;
+                    value.filmItem.photo = res.photo;
+                    if (value.filmItem.photo)
+                      value.filmItem.photo.image = 'data:image/png;base64,'
+                        + value.filmItem.photo.image;
+                  }
                 });
-              this.loadFilmCategories();
-              this.loadFilmItems();
-        }, error=>console.log(error));
-    }, error=>console.log(error));
-  }
-
-  loadPerson(){
-    this.service.getById(this.id).subscribe(result =>{
-          this.model = result;
-          if(this.model.profilePicture)
-            this.model.profilePicture.image =  'data:image/png;base64,' + this.model.profilePicture.image;
-    }, error=>console.log(error));
-
-    this.service.getFilmographies(this.id).subscribe(result =>{
-          this.model.filmographies = result;
-          if(this.model.filmographies)
-            this.model.filmographies.forEach(function(value){
-              if(value.filmItem?.photo?.image)
-                value.filmItem.photo.image = 'data:image/png;base64,' + value.filmItem.photo.image;
+              }
             });
           this.loadFilmCategories();
           this.loadFilmItems();
-    }, error=>console.log(error));
+        }, error => console.log(error));
+    }, error => console.log(error));
+  }
+
+  loadPerson() {
+    this.service.getById(this.id).subscribe(result => {
+      this.model = result;
+      if (this.model.profilePicture)
+        this.model.profilePicture.image = 'data:image/png;base64,' + this.model.profilePicture.image;
+    }, error => console.log(error));
+
+    this.service.getFilmographies(this.id).subscribe(result => {
+      this.model.filmographies = result;
+      if (this.model.filmographies)
+        this.model.filmographies.forEach(function (value) {
+          if (value.filmItem?.photo?.image)
+            value.filmItem.photo.image = 'data:image/png;base64,' + value.filmItem.photo.image;
+        });
+      this.loadFilmCategories();
+      this.loadFilmItems();
+    }, error => console.log(error));
   }
 }

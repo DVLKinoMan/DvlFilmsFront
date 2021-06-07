@@ -1,159 +1,270 @@
 
 <form [formGroup]="personForm" (ngSubmit)="save()" style="width: 100%;" >
-                
-       <div style="width: 100%;">
-    <div id="little-bio" style="width: 100%; float: left;">
-        <div id="profilePicture" style="float: left;">
-                <mat-form-field appearance="fill">
-                    <img [src]="model.profilePicture.imdbPageUrl" 
-                    *ngIf="model.profilePicture" [alt]="model.profilePicture.title">
+    <div style="width: 100%;">
+        <div id = "little-bios" style="display: flex;">
+            <div id="little-bio" style="display: flex">
+                    <div id="profilePicture">
+                            <mat-form-field appearance="fill">
+                                <img [src]="model.profilePicture.imdbPageUrl" 
+                                *ngIf="model.profilePicture" [alt]="model.profilePicture.title">
+                            </mat-form-field>
+                    </div>
+                    <div id="little-stats">
+                        <div style="margin-left: 200px;">
+                            <div>
+                                <mat-label *ngIf="editMode">Name: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Name:</mat-label>
+                                    <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="model.name">
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <a target="_blank" href="{{model.imdbPageUrl}}">Visit Imdb Page</a>
+                            </div>
+                            <div>
+                                <mat-label *ngIf="editMode">Biography: </mat-label><br>
+                                <mat-form-field>
+                                    <mat-label>Biography:</mat-label>
+                                    <textarea matInput type="text" class="matInput" [attr.disabled]="editMode ? null : ''"  cols="50" rows="10" 
+                                    [value]="model.biographyString"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <br>
+                            <div *ngIf="model.sex">
+                                <mat-label>Sex: </mat-label>
+                                <mat-form-field appearance="fill" class="mat-form">
+                                    <mat-label>Sex:</mat-label>
+                                    <mat-select [disabled]="!editMode"  panelClass="example-panel-black" [(value)]="model.sex">
+                                        <mat-option *ngFor="let gender of genders" [value]="gender">
+                                            {{gender}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="model.age">
+                                <mat-label>Age: {{model.age}} </mat-label>
+                                <!-- <mat-form-field *ngIf="model.age" appearance="fill">
+                                    <mat-label>Age:</mat-label>
+                                    <input matInput [value]="model.age">
+                                </mat-form-field> -->
+                            </div>
+                            <div *ngIf="model.zodiacSign">
+                                <mat-label>Zodiac Sign: {{model.zodiacSign}}</mat-label>
+                                <!-- <mat-form-field appearance="fill" class="mat-form">
+                                    <mat-label>Zodiac Sign:</mat-label>
+                                    <mat-select panelClass="example-panel-black" [(value)]="model.zodiacSign">
+                                        <mat-option *ngFor="let sign of zodiacSigns" [value]="sign">
+                                            {{sign}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field> -->
+                            </div>
+                            <div *ngIf="model.birthDate">
+                                <mat-label>Birth Date: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Birth Date: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.birthDate">
+                                </mat-form-field>
+                                    <!-- <mat-form-field fieldControlName="birthDt" *ngIf="model.birthDate" appearance="fill" class="mat-form">
+                                    <mat-label>Birth Date:</mat-label>
+                                    <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [matDatepicker]="picker"  [(value)]="model.birthDate">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field> -->
+                            </div> 
+                            <div *ngIf="model.birthPlace">
+                                <mat-label>Birth Place: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Birth Place:</mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.birthPlace">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="model.deathDate">
+                                <mat-label>Death Date: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Death Date: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.deathDate">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="model.deathPlace">
+                                <mat-label>Death Place: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Death Place:</mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.deathPlace">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="model.heightInMeters">
+                                <mat-label>Height: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Height:</mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.heightInMeters">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="model.otherWork">
+                                <mat-label>Other Work: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Other Work:</mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.otherWork">
+                                </mat-form-field>
+                            </div>
+                    </div>
+                    </div>
+                    <div id="edit-fetch-buttons">
+                        <button mat-flat-button color="primary" (click)="editMode=!editMode">
+                            {{editMode ? "View Mode" : "Edit Mode"}}
+                        </button>
+                        <button mat-flat-button color="primary" (click)="fetchPersonFromImdb()">
+                            Fetch Person From Imdb
+                        </button>
+                    </div>
+            </div>
+            <div id="little-bio-for-fetched" *ngIf = "fetched" style="margin-left:50px; display: flex"> 
+                <div id="profilePicture2">
+                        <mat-form-field appearance="fill">
+                            <img [src]="fetched.profilePicture.imdbPageUrl" 
+                            *ngIf="fetched.profilePicture" [alt]="fetched.profilePicture.title">
+                        </mat-form-field>
+                </div>
+                <div id="little-stats2">
+                    <div style="margin-left: 200px;">
+                        <div>
+                            <mat-label *ngIf="editMode">Name: </mat-label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Name:</mat-label>
+                                <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="fetched.name">
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <a target="_blank" href="{{fetched.imdbPageUrl}}">Visit Imdb Page</a>
+                        </div>
+                        <div>
+                            <mat-label *ngIf="editMode">Biography: </mat-label><br>
+                            <mat-form-field>
+                                <mat-label>Biography:</mat-label>
+                                <textarea matInput type="text" class="matInput" [attr.disabled]="editMode ? null : ''"  cols="50" rows="10" 
+                                [value]="fetched.biographyString"></textarea>
+                            </mat-form-field>
+                        </div>
+                        <br>
+                        <div *ngIf="fetched.sex">
+                            <mat-label>Sex: </mat-label>
+                            <mat-form-field appearance="fill" class="mat-form">
+                                <mat-label>Sex:</mat-label>
+                                <mat-select [disabled]="!editMode"  panelClass="example-panel-black" [(value)]="fetched.sex">
+                                    <mat-option *ngFor="let gender of genders" [value]="gender">
+                                        {{gender}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="fetched.age">
+                            <mat-label>Age: {{fetched.age}} </mat-label>
+                        </div>
+                        <div *ngIf="fetched.zodiacSign">
+                            <mat-label>Zodiac Sign: {{fetched.zodiacSign}}</mat-label>
+                        </div>
+                        <div *ngIf="fetched.birthDate">
+                            <mat-label>Birth Date: </mat-label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Birth Date: </mat-label>
+                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.birthDate">
+                            </mat-form-field>
+                        </div> 
+                        <div *ngIf="fetched.birthPlace">
+                            <mat-label>Birth Place: </mat-label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Birth Place:</mat-label>
+                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.birthPlace">
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="fetched.deathDate">
+                            <mat-label>Death Date: </mat-label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Death Date: </mat-label>
+                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.deathDate">
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="fetched.deathPlace">
+                            <mat-label>Death Place: </mat-label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Death Place:</mat-label>
+                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.deathPlace">
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="fetched.heightInMeters">
+                            <mat-label>Height: </mat-label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Height:</mat-label>
+                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.heightInMeters">
+                            </mat-form-field>
+                        </div>
+                        <div *ngIf="fetched.otherWork">
+                            <mat-label>Other Work: </mat-label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Other Work:</mat-label>
+                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.otherWork">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div id="remove-button">
+                    <button mat-flat-button color="primary" (click)="fetched=undefined">
+                                Remove Fetched Result
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button mat-flat-button *ngIf="editMode" color="primary" type="submit">Save</button>
+        <div id="awards" style="display: inline">
+            <div id="model-awards" style="float:left">
+                <mat-label>Award Information: </mat-label>
+                <h1>{{model.awardsInformationString}}</h1>
+            </div>
+            <div id="fetched-awards" *ngIf="fetched" style="margin-left: 100px;">
+                <mat-label>Award Information: </mat-label>
+                <h1>{{fetched.awardsInformationString}}</h1>
+            </div>
+        </div>
+        <div *ngIf="filmographies"  style="width: 100%; display: inline-table">
+            <div style="float: left">
+                <h1>Movies:</h1>
+            </div>
+            <!-- dropdown for filmography Categories -->
+            <div id="categories-dropdown"style="float: right; margin-left: 25px">
+                <mat-form-field appearance="fill" class="mat-form">
+                    <mat-label>Filmography Category:</mat-label>
+                    <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFilmographyCatName">
+                        <mat-option *ngFor="let categoryName of filmographyCategoryNames" [value]="categoryName">
+                            {{categoryName}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
+            </div>
+            <!-- Dropdown for filmography Sorting -->
+            <div id="sorting-dropdown" style="float: right;">
+                <img [src] = "sortAscending ? 'assets/AscendingIcon.png' : 'assets/DescendingIcon.png'"
+                (click) = "sortingChanged()" style="width: 25px;">
+                <mat-form-field appearance="fill" class="mat-form">
+                    <mat-label>Sort By:</mat-label>
+                    <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFlmSortBy">
+                        <mat-option *ngFor="let sortChoice of sortChoicesForFilms" [value]="sortChoice">
+                            {{sortChoice}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
         </div>
-        <div id="little-stats" style="float: left">
-            <div style="margin-left: 200px;">
-                <div>
-                    <mat-label *ngIf="editMode">Name: </mat-label>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Name:</mat-label>
-                        <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="model.name">
-                    </mat-form-field>
-                </div>
-                <div>
-                    <a target="_blank" href="{{model.imdbPageUrl}}">Visit Imdb Page</a>
-                </div>
-                <div>
-                    <mat-label *ngIf="editMode">Biography: </mat-label><br>
-                    <mat-form-field>
-                        <mat-label>Biography:</mat-label>
-                        <textarea matInput type="text" class="matInput" [attr.disabled]="editMode ? null : ''"  cols="50" rows="10" 
-                        [value]="model.biographyString"></textarea>
-                      </mat-form-field>
-                </div>
-                <br>
-                <div *ngIf="model.sex">
-                    <mat-label>Sex: </mat-label>
-                    <mat-form-field appearance="fill" class="mat-form">
-                        <mat-label>Sex:</mat-label>
-                        <mat-select [disabled]="!editMode"  panelClass="example-panel-black" [(value)]="model.sex">
-                            <mat-option *ngFor="let gender of genders" [value]="gender">
-                                {{gender}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div *ngIf="model.age">
-                    <mat-label>Age: {{model.age}} </mat-label>
-                    <!-- <mat-form-field *ngIf="model.age" appearance="fill">
-                        <mat-label>Age:</mat-label>
-                        <input matInput [value]="model.age">
-                    </mat-form-field> -->
-                </div>
-                <div *ngIf="model.zodiacSign">
-                    <mat-label>Zodiac Sign: {{model.zodiacSign}}</mat-label>
-                    <!-- <mat-form-field appearance="fill" class="mat-form">
-                        <mat-label>Zodiac Sign:</mat-label>
-                        <mat-select panelClass="example-panel-black" [(value)]="model.zodiacSign">
-                            <mat-option *ngFor="let sign of zodiacSigns" [value]="sign">
-                                {{sign}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field> -->
-                </div>
-                <div *ngIf="model.birthDate">
-                    <mat-label>Birth Date: </mat-label>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Birth Date: </mat-label>
-                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.birthDate">
-                    </mat-form-field>
-                        <!-- <mat-form-field fieldControlName="birthDt" *ngIf="model.birthDate" appearance="fill" class="mat-form">
-                        <mat-label>Birth Date:</mat-label>
-                        <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [matDatepicker]="picker"  [(value)]="model.birthDate">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field> -->
-                </div> 
-                <div *ngIf="model.birthPlace">
-                    <mat-label>Birth Place: </mat-label>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Birth Place:</mat-label>
-                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.birthPlace">
-                    </mat-form-field>
-                </div>
-                <div *ngIf="model.deathDate">
-                    <mat-label>Death Date: </mat-label>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Death Date: </mat-label>
-                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.deathDate">
-                    </mat-form-field>
-                </div>
-                <div *ngIf="model.deathPlace">
-                    <mat-label>Death Place: </mat-label>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Death Place:</mat-label>
-                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.deathPlace">
-                    </mat-form-field>
-                </div>
-                <div *ngIf="model.heightInMeters">
-                    <mat-label>Height: </mat-label>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Height:</mat-label>
-                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.heightInMeters">
-                    </mat-form-field>
-                </div>
-                <div *ngIf="model.otherWork">
-                    <mat-label>Other Work: </mat-label>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Other Work:</mat-label>
-                        <input matInput class="matInput" [disabled]='!editMode' [value]="model.otherWork">
-                    </mat-form-field>
-                </div>
-           </div>
-        </div>
-        <div style="float: left;">
-            <button mat-flat-button color="primary" (click)="editMode=!editMode">
-                {{editMode ? "View Mode" : "Edit Mode"}}
-            </button>
-            <button mat-flat-button color="primary" (click)="fetchPersonFromImdb()">
-                Fetch Person From Imdb
-            </button>
-        </div>
-    </div>
-    <button mat-flat-button *ngIf="editMode" color="primary" type="submit">Save</button><br><br>
-    <div style="width: 100%">
-        <mat-label>Award Information: </mat-label>
-        <h1>{{model.awardsInformationString}}</h1>
-        <div style="float: left">
-            <h1>Movies:</h1>
-        </div>
-        <div *ngIf="filmographies" style="float: right;">
-            <mat-label>Filmography Category: </mat-label>
-            <mat-form-field appearance="fill" class="mat-form">
-                <mat-label>Filmography Category:</mat-label>
-                <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFilmographyCatName">
-                    <mat-option *ngFor="let categoryName of filmographyCategoryNames" [value]="categoryName">
-                        {{categoryName}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div *ngIf="filmographies" style="float: right;">
-            <img [src] = "sortAscending ? 'assets/AscendingIcon.png' : 'assets/DescendingIcon.png'"
-            (click) = "sortingChanged()" style="width: 25px;">
-            <mat-form-field appearance="fill" class="mat-form">
-                <mat-label>Sort By:</mat-label>
-                <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFlmSortBy">
-                    <mat-option *ngFor="let sortChoice of sortChoicesForFilms" [value]="sortChoice">
-                        {{sortChoice}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <br><br>
-        <div *ngIf="filmographies">
+        <!-- Filmographies Grid-List -->
+        <div *ngIf="filmographies" style="margin-top: 50px;">
             <mat-grid-list cols="10" rowHeight="1:2">
                 <mat-grid-tile
                     *ngFor="let filmography of filmographies">
-                <!-- <mat-grid-tile-header *ngIf="filmography.characters">
+                <a target="_blank" href="{{filmography.filmItem?.imdbPageUrl}}">
+                    <img [src]="filmography.filmItem?.photo?.imdbPageUrl" 
+                    [title]="filmography.filmItem?.photo?.title">
+                </a>
+                <mat-grid-tile-footer style="display: block; height: 70px">
+                    <div>{{filmography.filmItem?.name}}({{filmography.year}})</div>
                     <div *ngFor="let character of filmography.characters">
                         <div *ngIf="character.imdbPageUrl; else justCharName">
                             <a  target="_blank" 
@@ -165,16 +276,10 @@
                             <mat-label *ngFor="let character of filmography.characters">{{character.name}}</mat-label>
                         </ng-template>
                     </div>
-                </mat-grid-tile-header> -->
-                <a target="_blank" href="{{filmography.filmItem?.imdbPageUrl}}">
-                    <img [src]="filmography.filmItem?.photo?.imdbPageUrl" 
-                    [title]="filmography.filmItem?.photo?.title">
-                </a>
-                <mat-grid-tile-footer>{{filmography.filmItem?.name}}({{filmography.year}})</mat-grid-tile-footer>
+                </mat-grid-tile-footer>
                 </mat-grid-tile>
             </mat-grid-list>
         </div>
         <mat-spinner *ngIf="!filmographies"></mat-spinner>
-    </div>
     </div>
 </form>
