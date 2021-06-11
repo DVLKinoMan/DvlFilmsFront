@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { FilmItem, Filmography, Person, Photo } from "../person";
 import { Observable } from "rxjs";
 import { PersonsQuery } from "../person-query";
+import { PersonAwardResult } from "../personAwardResult";
 
 @Injectable({
     providedIn: 'root',
@@ -108,4 +109,9 @@ export class PersonsService {
         return str.substring(firstIndex, endIndex < 0 ? undefined : endIndex - 1);
     }
 
+    getAwards(personId: number): Observable<PersonAwardResult[]> {
+        var url = this.baseUrl + "/Persons/Get/" + personId + "/Awards";
+
+        return this.http.get<PersonAwardResult[]>(url);
+    }
 }

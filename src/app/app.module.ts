@@ -25,6 +25,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PersonPhotosComponent } from './persons/person-photos/person-photos.component';
 import { PersonEditComponent } from './persons/person-edit/person-edit.component';
+import { PersonAwardsComponent } from './persons/person-awards/person-awards.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { PersonEditComponent } from './persons/person-edit/person-edit.component
     PersonsComponent,
     NavMenuComponent,
     PersonEditComponent,
-    PersonPhotosComponent
+    PersonPhotosComponent,
+    PersonAwardsComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +44,8 @@ import { PersonEditComponent } from './persons/person-edit/person-edit.component
       { path: '', component: PersonsComponent, pathMatch: 'full' },
       { path: 'persons', component: PersonsComponent },
       { path: 'person/:id', component: PersonEditComponent },
-      { path: 'person/:id/photos', component: PersonPhotosComponent }
+      { path: 'person/:id/photos', component: PersonPhotosComponent },
+      { path: 'person/:id/awards', component: PersonAwardsComponent }
     ]),
     BrowserAnimationsModule,
     MatPaginatorModule,

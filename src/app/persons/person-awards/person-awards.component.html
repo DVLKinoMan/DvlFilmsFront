@@ -1,0 +1,30 @@
+<div>
+    <mat-label>Award Results: </mat-label>
+    <table matSort *ngIf="awardResults; else loading" >
+    <tr>
+        <th mat-sort-header = "festivalName">Festival Name</th>
+        <th mat-sort-header = "awardName">Award Name</th>
+        <th mat-sort-header = "result">Result</th>
+        <th mat-sort-header = "details">Details</th>
+    </tr>
+    <tr *ngFor="let awardResult of awardResults">
+        <td>{{awardResult.festivalName}}</td>
+        <td>{{awardResult.awardName}}</td>
+        <td>{{awardResult.result}}</td>
+        <td>
+            <div *ngFor="let det of awardResult.resultDetails">
+                 <h1>{{det.achievment}}</h1>
+                    <a *ngIf="det.filmItem" target="_blank" 
+                            href="{{det.filmItem.imdbPageUrl}}" >{{det.filmItem.name}}</a>
+               <div *ngFor="let people in det.sharedWithPeople">
+                    <a [routerLink]="['/person', people.id]">{{people.name}}</a>
+                    <h3 *ngIf="people.description">{{people.description}}</h3>
+               </div>
+            </div>
+        </td>
+    </tr>  
+</table>
+    <ng-template #loading>
+        <mat-spinner></mat-spinner>
+    </ng-template>
+</div>

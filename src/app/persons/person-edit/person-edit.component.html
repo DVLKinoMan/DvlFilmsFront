@@ -219,6 +219,7 @@
             <div id="model-awards" style="float:left">
                 <mat-label>Award Information: </mat-label>
                 <h1>{{model.awardsInformationString}}</h1>
+                <a class="nav-link text-dark" [routerLink]="['/person/'+id+'/awards']">Show More</a>
             </div>
             <div id="fetched-awards" *ngIf="fetched" style="margin-left: 100px;">
                 <mat-label>Award Information: </mat-label>
