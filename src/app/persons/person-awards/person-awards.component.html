@@ -1,4 +1,5 @@
 <div>
+    <a [routerLink]="['/person', personId]">Go to the Person</a>
     <mat-label>Award Results: </mat-label>
     <table matSort *ngIf="awardResults; else loading" >
     <tr>

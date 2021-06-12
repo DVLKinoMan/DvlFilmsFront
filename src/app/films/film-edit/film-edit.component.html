@@ -1,0 +1,214 @@
+
+<form [formGroup]="filmForm" (ngSubmit)="save()" style="width: 100%;" >
+    <div style="width: 100%;">
+        <div id = "little-bios" style="display: flex;">
+            <div id="little-bio" style="display: flex">
+                    <div id="photo">
+                            <mat-form-field appearance="fill">
+                                <img [src]="model.photo.imdbPageUrl" 
+                                *ngIf="model.photo" [alt]="model.photo.title">
+                            </mat-form-field>
+                    </div>
+                    <div id="little-stats">
+                        <div style="margin-left: 200px;">
+                            <div>
+                                <mat-label>Name: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Name:</mat-label>
+                                    <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="model.name">
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <a target="_blank" href="{{model.imdbPageUrl}}">Visit Imdb Page</a>
+                            </div>
+                            <div>
+                                <mat-label >Description: </mat-label><br>
+                                <mat-form-field>
+                                    <mat-label>Description:</mat-label>
+                                    <textarea matInput type="text" class="matInput" [attr.disabled]="editMode ? null : ''"  cols="50" rows="10" 
+                                    [value]="model.description"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <br>
+                            <div *ngIf="model.imdbRating">
+                                <mat-label>Imdb Rating: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Imdb Rating: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.imdbRating">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="model.imdbUserRatingsCount">
+                                <mat-label>Imdb User Ratings Count: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Imdb User Ratings Count: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.imdbUserRatingsCount">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="model.releaseDate">
+                                <mat-label>Release Date: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Release Date: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.releaseDate">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="model.tagline">
+                                <mat-label>Tagline: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Tagline: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.tagline">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="model.boxOffice">
+                                <mat-label>Budget: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Budget: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.boxOffice.budget">
+                                </mat-form-field>
+                                <mat-label>Gross: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Gross: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.boxOffice.gross">
+                                </mat-form-field>
+                                <mat-label>Opening Weekend: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Opening Weekend: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.boxOffice.openingWeekend">
+                                </mat-form-field>
+                            </div> 
+                            <div *ngIf="model.countries">
+                                <mat-label>Countries: </mat-label>
+                                <mat-label *ngFor="let country of model.countries">{{country}} </mat-label>
+                            </div>
+                            <div *ngIf="model.genres">
+                                <mat-label>Genres: </mat-label>
+                                <mat-label *ngFor="let genre of model.genres">{{genre}} </mat-label>
+                            </div>
+                    </div>
+                    </div>
+                    <div id="edit-fetch-buttons">
+                        <button mat-flat-button color="primary" (click)="editMode=!editMode">
+                            {{editMode ? "View Mode" : "Edit Mode"}}
+                        </button>
+                        <button mat-flat-button color="primary" (click)="fetchFilmFromImdb()">
+                            Fetch Film From Imdb
+                        </button>
+                    </div>
+            </div>
+            <div id="little-bio-for-fetched" *ngIf = "fetched" style="margin-left:50px; display: flex"> 
+                <div id="photo2">
+                            <mat-form-field appearance="fill">
+                                <img [src]="fetched.photo.imdbPageUrl" 
+                                *ngIf="fetched.photo" [alt]="fetched.photo.title">
+                            </mat-form-field>
+                    </div>
+                    <div id="little-stats2">
+                        <div style="margin-left: 200px;">
+                            <div>
+                                <mat-label *ngIf="editMode">Name: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Name:</mat-label>
+                                    <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="fetched.name">
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <a target="_blank" href="{{fetched.imdbPageUrl}}">Visit Imdb Page</a>
+                            </div>
+                            <div>
+                                <mat-label *ngIf="editMode">Description: </mat-label><br>
+                                <mat-form-field>
+                                    <mat-label>Description:</mat-label>
+                                    <textarea matInput type="text" class="matInput" [attr.disabled]="editMode ? null : ''"  cols="50" rows="10" 
+                                    [value]="fetched.description"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <br>
+                            <div *ngIf="fetched.imdbRating">
+                                <mat-label>Imdb Rating: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Imdb Rating: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.imdbRating">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="fetched.imdbUserRatingsCount">
+                                <mat-label>Imdb User Ratings Count: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Imdb User Ratings Count: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.imdbUserRatingsCount">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="fetched.releaseDate">
+                                <mat-label>Release Date: {{fetched.releaseDate}} </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Release Date: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.releaseDate">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="fetched.tagline">
+                                <mat-label>Tagline: {{fetched.tagline}}</mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Tagline: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.tagline">
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="fetched.boxOffice">
+                                <mat-label>Budget: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Budget: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.boxOffice.budget">
+                                </mat-form-field>
+                                <mat-label>Gross: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Gross: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.boxOffice.gross">
+                                </mat-form-field>
+                                <mat-label>Opening Weekend: </mat-label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Opening Weekend: </mat-label>
+                                    <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.boxOffice.openingWeekend">
+                                </mat-form-field>
+                            </div> 
+                            <div *ngIf="fetched.countries">
+                                <mat-label>Countries: </mat-label>
+                                <mat-label *ngFor="let country of fetched.countries">{{country}} </mat-label>
+                            </div>
+                            <div *ngIf="fetched.genres">
+                                <mat-label>Genres: </mat-label>
+                                <mat-label *ngFor="let genre of fetched.genres">{{genre}} </mat-label>
+                            </div>
+                    </div>
+                </div>
+                <div id="remove-button">
+                    <button mat-flat-button color="primary" (click)="fetched=undefined">
+                                Remove Fetched Result
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button mat-flat-button *ngIf="editMode" color="primary" type="submit">Save</button>
+        <div id="awards" style="display: inline-table">
+            <div id="model-awards" style="float:left">
+                <mat-label>Award Information: </mat-label>
+                <div style="display: inline;">
+                    <h1>{{model.awardsInformationString}}</h1>
+                    <!-- <a class="nav-link text-dark" [routerLink]="['/person/'+id+'/awards']">Show More</a> -->
+                </div>
+            </div>
+            <div id="fetched-awards" *ngIf="fetched" style="margin-left: 100px;">
+                <mat-label>Award Information: </mat-label>
+                <h1>{{fetched.awardsInformationString}}</h1>
+            </div>
+        </div>
+        <!-- <div id="photos" *ngIf="model.photos" style="display: inline-table;">
+            <div style="width: 100%; display: flex;">
+                <mat-label>Photos: </mat-label>
+                <div *ngFor="let photo of model.photos">
+                                <img [src]="photo?.imdbPageUrl" 
+                                [title]="photo?.title"
+                                style="max-width: 200px;">
+                </div>
+                <a class="nav-link text-dark" [routerLink]="['/person/'+id+'/photos']">Show More</a>
+            </div>   
+        </div> -->
+       
+    </div>
+</form>

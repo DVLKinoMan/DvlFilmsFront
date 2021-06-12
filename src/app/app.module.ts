@@ -26,6 +26,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PersonPhotosComponent } from './persons/person-photos/person-photos.component';
 import { PersonEditComponent } from './persons/person-edit/person-edit.component';
 import { PersonAwardsComponent } from './persons/person-awards/person-awards.component';
+import { FilmsService } from './films/services/films.service';
+import { FilmEditComponent } from './films/film-edit/film-edit.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import { PersonAwardsComponent } from './persons/person-awards/person-awards.com
     NavMenuComponent,
     PersonEditComponent,
     PersonPhotosComponent,
-    PersonAwardsComponent
+    PersonAwardsComponent,
+    FilmEditComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,8 @@ import { PersonAwardsComponent } from './persons/person-awards/person-awards.com
       { path: 'persons', component: PersonsComponent },
       { path: 'person/:id', component: PersonEditComponent },
       { path: 'person/:id/photos', component: PersonPhotosComponent },
-      { path: 'person/:id/awards', component: PersonAwardsComponent }
+      { path: 'person/:id/awards', component: PersonAwardsComponent },
+      { path: 'film/:id', component: FilmEditComponent }
     ]),
     BrowserAnimationsModule,
     MatPaginatorModule,
@@ -64,7 +68,8 @@ import { PersonAwardsComponent } from './persons/person-awards/person-awards.com
   ],
   providers: [
     PersonsService,
-    PersonFetcherService
+    PersonFetcherService,
+    FilmsService
   ],
   bootstrap: [AppComponent]
 })
