@@ -29,6 +29,56 @@
                                 </mat-form-field>
                             </div>
                             <br>
+                            
+                            <div *ngIf="model.directors">
+                                <mat-label>Directors: </mat-label>
+                                <mat-label *ngFor="let director of model.directors"> 
+                                    <div *ngIf="director.id; else onlyName2">
+                                        <mat-card class="person-card" [routerLink]="['/person/'+director.id]"
+                                        [queryParams]="{flmCatName: 'director'}">
+                                            <mat-card-header>
+                                                <mat-card-title>{{director.name}}</mat-card-title>
+                                            </mat-card-header>
+                                            <img mat-card-image  [src]="director.profilePicture?.imdbPageUrl" 
+                                                [title]="director.name">
+                                        </mat-card>
+                                    </div> 
+                                    <ng-template #onlyName2>{{director.name}} </ng-template>
+                                </mat-label>
+                            </div>
+                            <div *ngIf="model.writers">
+                                <mat-label>Writers: </mat-label>
+                                <mat-label *ngFor="let writer of model.writers">
+                                    <div *ngIf="writer.id; else onlyName1">
+                                         <mat-card class="person-card" [routerLink]="['/person/'+writer.id]"
+                                        [queryParams]="{flmCatName: 'writer'}">
+                                            <mat-card-header>
+                                                <mat-card-title>{{writer.name}}</mat-card-title>
+                                            </mat-card-header>
+                                            <img mat-card-image  [src]="writer.profilePicture?.imdbPageUrl" 
+                                                [title]="writer.name">
+                                        </mat-card>
+                                    </div> 
+                                    <ng-template #onlyName1>{{writer.name}} </ng-template>
+                                </mat-label>
+                            </div>
+                            
+                            <div *ngIf="cast" style="display: flex;">
+                                <mat-label>Cast: </mat-label>
+                                <mat-label *ngFor="let castMember of cast"> 
+                                    <div *ngIf="castMember.id; else onlyName2">
+                                        <mat-card class="person-card" [routerLink]="['/person/'+castMember.id]">
+                                        <!-- [queryParams]="{flmCatName: 'director'}"> -->
+                                            <mat-card-header>
+                                                <mat-card-title>{{castMember.name}}</mat-card-title>
+                                            </mat-card-header>
+                                            <img mat-card-image  [src]="castMember.profilePicture?.imdbPageUrl" 
+                                                [title]="castMember.name">
+                                        </mat-card>
+                                    </div> 
+                                    <ng-template #onlyName2>{{castMember.name}} </ng-template>
+                                </mat-label>
+                            </div>
                             <div *ngIf="model.imdbRating">
                                 <mat-label>Imdb Rating: </mat-label>
                                 <mat-form-field appearance="fill">
@@ -81,28 +131,6 @@
                             <div *ngIf="model.genres">
                                 <mat-label>Genres: </mat-label>
                                 <mat-label *ngFor="let genre of model.genres">{{genre}} </mat-label>
-                            </div>
-                            <div *ngIf="model.writers">
-                                <mat-label>Writers: </mat-label>
-                                <mat-label *ngFor="let writer of model.writers">
-                                    <div *ngIf="writer.id; else onlyName1">
-                                        <a class="nav-link text-dark" 
-                                        [routerLink]="['/person/'+writer.id]"
-                                        [queryParams]="{flmCatName: 'writer'}">{{writer.name}} </a>
-                                    </div> 
-                                    <ng-template #onlyName1>{{writer.name}} </ng-template>
-                                </mat-label>
-                            </div>
-                            <div *ngIf="model.directors">
-                                <mat-label>Directors: </mat-label>
-                                <mat-label *ngFor="let director of model.directors"> 
-                                    <div *ngIf="director.id; else onlyName2">
-                                        <a class="nav-link text-dark" 
-                                        [routerLink]="['/person/'+director.id]"
-                                        [queryParams]="{flmCatName: 'director'}" >{{director.name}} </a>
-                                    </div> 
-                                    <ng-template #onlyName2>{{director.name}} </ng-template>
-                                </mat-label>
                             </div>
                     </div>
                     </div>

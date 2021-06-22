@@ -1,4 +1,4 @@
-import { Person, Photo } from "../persons/person";
+import { Character, Person, Photo } from "../persons/person";
 
 export interface Film {
     id: number;
@@ -18,10 +18,19 @@ export interface Film {
     countries?: string[];
     writers?: Person[];
     directors?: Person[];
+    cast?: Person[];
 }
 
 export interface BoxOffice {
     budget?: number;
     gross?: number;
     openingWeekend?: number;
+}
+
+export interface FilmCastMember {
+    id?: number;
+    name: string;
+    imdbPageUrl: string;
+    profilePicture: Photo;
+    characters: Character[];
 }

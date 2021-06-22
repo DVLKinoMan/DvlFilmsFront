@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { Film } from "../film";
+import { Film, FilmCastMember } from "../film";
 import { FilmsService } from "../services/films.service";
 
 @Component({
@@ -16,6 +16,7 @@ export class FilmEditComponent implements OnInit {
     fetched?: Film;
     editMode: boolean = false;
     filmForm: FormGroup;
+    cast?: FilmCastMember[];
 
     constructor(private service: FilmsService,
         private route: ActivatedRoute,
@@ -23,6 +24,7 @@ export class FilmEditComponent implements OnInit {
         this.route.params.subscribe(item => {
             this.id = item['id'];
             this.loadFilm();
+            this.loadCast();
         });
     }
     ngOnInit(): void {
@@ -42,6 +44,12 @@ export class FilmEditComponent implements OnInit {
     loadFilm() {
         this.service.getById(this.id).subscribe(result => {
             this.model = result;
+        }, error => console.log(error));
+    }
+
+    loadCast() {
+        this.service.getCast(this.id).subscribe(result => {
+            this.cast = result;
         }, error => console.log(error));
     }
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Film } from "../film";
+import { Film, FilmCastMember } from "../film";
 
 @Injectable({
     providedIn: 'root',
@@ -18,5 +18,11 @@ export class FilmsService {
         var url = this.baseUrl + "/Films/Get/" + id;
 
         return this.http.get<Film>(url);
+    }
+
+    getCast(filmId: number): Observable<FilmCastMember[]> {
+        var url = this.baseUrl + "/Films/Get/" + filmId + "/Cast";
+
+        return this.http.get<FilmCastMember[]>(url);
     }
 }

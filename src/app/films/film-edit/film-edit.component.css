@@ -8,6 +8,23 @@
     color: black;
   }
 
-  .mat-tab-group {
+.mat-tab-group {
   margin-bottom: 48px;
+}
+
+.person-card {
+  max-width: 70px;
+  cursor: pointer;
+}
+
+.mat-card-header-text {
+  margin-left: 0;
+}
+
+.mat-card-title {
+  font-size: 13px;
+  text-align: left;
+  margin-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
 }
