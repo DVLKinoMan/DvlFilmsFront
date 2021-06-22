@@ -23,6 +23,11 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTabsModule } from '@angular/material/tabs';
+// import { MatToolbarModule } from '@angular/material/toolbar';
+// import { MatMenuModule } from '@angular/material/menu';
+
+
 import { PersonPhotosComponent } from './persons/person-photos/person-photos.component';
 import { PersonEditComponent } from './persons/person-edit/person-edit.component';
 import { PersonAwardsComponent } from './persons/person-awards/person-awards.component';
@@ -64,7 +69,8 @@ import { FilmEditComponent } from './films/film-edit/film-edit.component';
     MatGridListModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTabsModule
   ],
   providers: [
     PersonsService,

@@ -1,4 +1,3 @@
-
 <form [formGroup]="filmForm" (ngSubmit)="save()" style="width: 100%;" >
     <div style="width: 100%;">
         <div id = "little-bios" style="display: flex;">
@@ -82,6 +81,28 @@
                             <div *ngIf="model.genres">
                                 <mat-label>Genres: </mat-label>
                                 <mat-label *ngFor="let genre of model.genres">{{genre}} </mat-label>
+                            </div>
+                            <div *ngIf="model.writers">
+                                <mat-label>Writers: </mat-label>
+                                <mat-label *ngFor="let writer of model.writers">
+                                    <div *ngIf="writer.id; else onlyName1">
+                                        <a class="nav-link text-dark" 
+                                        [routerLink]="['/person/'+writer.id]"
+                                        [queryParams]="{flmCatName: 'writer'}">{{writer.name}} </a>
+                                    </div> 
+                                    <ng-template #onlyName1>{{writer.name}} </ng-template>
+                                </mat-label>
+                            </div>
+                            <div *ngIf="model.directors">
+                                <mat-label>Directors: </mat-label>
+                                <mat-label *ngFor="let director of model.directors"> 
+                                    <div *ngIf="director.id; else onlyName2">
+                                        <a class="nav-link text-dark" 
+                                        [routerLink]="['/person/'+director.id]"
+                                        [queryParams]="{flmCatName: 'director'}" >{{director.name}} </a>
+                                    </div> 
+                                    <ng-template #onlyName2>{{director.name}} </ng-template>
+                                </mat-label>
                             </div>
                     </div>
                     </div>
@@ -209,6 +230,13 @@
                 <a class="nav-link text-dark" [routerLink]="['/person/'+id+'/photos']">Show More</a>
             </div>   
         </div> -->
-       
+        <div>
+            <mat-tab-group>
+                mat-align-tabs="center">
+                <mat-tab label="First"> Content 1 </mat-tab>
+                <mat-tab label="Second"> Content 2 </mat-tab>
+                <mat-tab label="Third"> Content 3 </mat-tab>
+            </mat-tab-group>
+        </div>
     </div>
 </form>

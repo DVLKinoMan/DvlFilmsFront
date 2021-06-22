@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { Film } from "../film";
 import { FilmsService } from "../services/films.service";
@@ -10,7 +10,7 @@ import { FilmsService } from "../services/films.service";
     styleUrls: ['./film-edit.component.css']
 })
 
-export class FilmEditComponent {
+export class FilmEditComponent implements OnInit {
     id: number;
     model: Film;
     fetched?: Film;
@@ -18,10 +18,16 @@ export class FilmEditComponent {
     filmForm: FormGroup;
 
     constructor(private service: FilmsService,
-        private route: ActivatedRoute) {
+        private route: ActivatedRoute,
+        private formBuilder: FormBuilder) {
         this.route.params.subscribe(item => {
             this.id = item['id'];
             this.loadFilm();
+        });
+    }
+    ngOnInit(): void {
+        this.filmForm = this.formBuilder.group({
+
         });
     }
 

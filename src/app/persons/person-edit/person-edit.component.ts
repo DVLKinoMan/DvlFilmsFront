@@ -145,7 +145,7 @@ export class PersonEditComponent implements OnInit {
   loadPerson() {
     this.service.getById(this.id).subscribe(result => {
       this.model = result;
-      if (this.model.profilePicture)
+      if (this.model.profilePicture.image)
         this.model.profilePicture.image = 'data:image/png;base64,' + this.model.profilePicture.image;
     }, error => console.log(error));
 
