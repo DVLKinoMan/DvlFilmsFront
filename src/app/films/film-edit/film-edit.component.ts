@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { Person } from "src/app/persons/person";
 import { Gender } from "src/app/persons/person-query";
 import { Film, FilmCastMember } from "../film";
 import { FilmsService } from "../services/films.service";
@@ -45,6 +46,12 @@ export class FilmEditComponent implements OnInit {
         if (typeof castMember.gender == "string")
             event.target.src = castMember.gender == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
         else event.target.src = castMember.gender == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
+    }
+
+    setDefaultPersonPhoto(event: any, person: Person) {
+        if (typeof person.sex == "string")
+            event.target.src = person?.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
+        else event.target.src = person?.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
     }
 
     fetchFilmFromImdb() {

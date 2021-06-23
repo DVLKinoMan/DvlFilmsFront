@@ -41,8 +41,10 @@
                                             <mat-card-header>
                                                 <mat-card-title>{{director.name}}</mat-card-title>
                                             </mat-card-header>
-                                            <img mat-card-image  [src]="director.profilePicture?.imdbPageUrl" 
-                                                [title]="director.name">
+                                            <img mat-card-image  
+                                            [src]="director.profilePicture?.imdbPageUrl" 
+                                                [title]="director.name"
+                                                (error)="setDefaultPersonPhoto($event, director)">
                                         </mat-card>
                                     </div> 
                                     <ng-template #onlyName2>{{director.name}} </ng-template>
@@ -57,8 +59,10 @@
                                             <mat-card-header>
                                                 <mat-card-title>{{writer.name}}</mat-card-title>
                                             </mat-card-header>
-                                            <img mat-card-image  [src]="writer.profilePicture?.imdbPageUrl" 
-                                                [title]="writer.name">
+                                            <img mat-card-image  
+                                                [src]="writer.profilePicture?.imdbPageUrl" 
+                                                [title]="writer.name"
+                                                (error)="setDefaultPersonPhoto($event, writer)">
                                         </mat-card>
                                     </div> 
                                     <ng-template #onlyName1>{{writer.name}} </ng-template>
