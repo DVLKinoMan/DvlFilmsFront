@@ -11,6 +11,7 @@ import { PersonsService } from '../services/persons.service';
   templateUrl: './person-edit.component.html',
   styleUrls: ['./person-edit.component.css']
 })
+
 export class PersonEditComponent implements OnInit {
   model: Person;
   fetched?: Person;
@@ -28,8 +29,9 @@ export class PersonEditComponent implements OnInit {
 
   filmographies: Filmography[];
 
-  zodiacSigns: string[] = Object.keys(ZodiacSign).filter(val => isNaN(Number(val)));
-  genders: string[] = Object.keys(Gender).filter(val => isNaN(Number(val)));
+  // zodiacSigns: any[] = Object.keys(ZodiacSign).filter(e => !isNaN(+e)).map(o => { return { index: +o, name: ZodiacSign[+o] } });
+  public genders = Object.keys(Gender).filter(e => !isNaN(+e)).map(o => { return { index: +o, name: Gender[+o] } });
+  // genders: string[] = Object.keys(Gender).filter(val => isNaN(Number(val)));
 
   constructor(private service: PersonsService,
     private fetcherService: PersonFetcherService,
@@ -52,6 +54,12 @@ export class PersonEditComponent implements OnInit {
       this.id = params['id'];
       this.loadPerson();
     });
+  }
+
+  setDefaultProfilePicture(event: any) {
+    if (typeof this.model.sex == "string")
+      event.target.src = this.model.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
+    else event.target.src = this.model.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
   }
 
   save() {

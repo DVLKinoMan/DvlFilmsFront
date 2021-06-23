@@ -25,9 +25,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
-// import { MatToolbarModule } from '@angular/material/toolbar';
-// import { MatMenuModule } from '@angular/material/menu';
-
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { PersonPhotosComponent } from './persons/person-photos/person-photos.component';
 import { PersonEditComponent } from './persons/person-edit/person-edit.component';
@@ -72,7 +71,9 @@ import { FilmEditComponent } from './films/film-edit/film-edit.component';
     MatNativeDateModule,
     MatProgressSpinnerModule,
     MatTabsModule,
-    MatCardModule
+    MatCardModule,
+    MatMenuModule,
+    MatToolbarModule
   ],
   providers: [
     PersonsService,

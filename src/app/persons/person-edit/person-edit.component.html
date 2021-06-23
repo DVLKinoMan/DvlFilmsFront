@@ -5,8 +5,11 @@
             <div id="little-bio" style="display: flex">
                     <div id="profilePicture">
                             <mat-form-field appearance="fill">
-                                <img [src]="model.profilePicture.imdbPageUrl" 
-                                *ngIf="model.profilePicture" [alt]="model.profilePicture.title">
+                                <img class="profile-photo-image"
+                                [src]="model.profilePicture.imdbPageUrl" 
+                                *ngIf="model.profilePicture" 
+                                [title]="model.profilePicture.title"
+                                (error)="setDefaultProfilePicture($event)">
                             </mat-form-field>
                     </div>
                     <div id="little-stats">
@@ -35,9 +38,9 @@
                                 <mat-form-field appearance="fill" class="mat-form">
                                     <mat-label>Sex:</mat-label>
                                     <mat-select [disabled]="!editMode"  panelClass="example-panel-black" [(value)]="model.sex">
-                                        <mat-option *ngFor="let gender of genders" [value]="gender">
-                                            {{gender}}
-                                        </mat-option>
+                                    <mat-option *ngFor="let gender of genders" [value]="gender.name">
+                                        {{gender.name}}
+                                    </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -151,8 +154,8 @@
                             <mat-form-field appearance="fill" class="mat-form">
                                 <mat-label>Sex:</mat-label>
                                 <mat-select [disabled]="!editMode"  panelClass="example-panel-black" [(value)]="fetched.sex">
-                                    <mat-option *ngFor="let gender of genders" [value]="gender">
-                                        {{gender}}
+                                   <mat-option *ngFor="let gender of genders" [value]="gender.name">
+                                        {{gender.name}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
@@ -274,8 +277,9 @@
                 <mat-grid-tile
                     *ngFor="let filmography of filmographies">
                 <a [routerLink]="['/film', filmography.filmItem?.id]">
-                    <img [src]="filmography.filmItem?.photo?.imdbPageUrl" 
-                    [title]="filmography.filmItem?.photo?.title">
+                    <img class="film-item-image" [src]="filmography.filmItem?.photo?.imdbPageUrl" 
+                    [title]="filmography.filmItem?.photo?.title"
+                    onerror="this.src='assets/DefaultMovie.png'">
                 </a>
                 <mat-grid-tile-footer style="display: block; height: 70px">
                     <div>{{filmography.filmItem?.name}}({{filmography.year}})</div>

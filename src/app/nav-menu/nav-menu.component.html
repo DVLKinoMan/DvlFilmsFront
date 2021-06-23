@@ -1,25 +1,11 @@
 <header>
-  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">DvlFilms</a>
-      <button class="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target=".navbar-collapse"
-              aria-label="Toggle navigation"
-              [attr.aria-expanded]="isExpanded"
-              (click)="toggle()">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
-           [ngClass]="{ show: isExpanded }">
-           <!-- <app-login-menu></app-login-menu> -->
-        <ul class="navbar-nav flex-grow">
-         <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/persons']">Persons</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <mat-toolbar>
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>DvlFilms</span>
+    <button mat-icon-button style="margin-left: 50px;">
+      <span [routerLink]="['/persons']">Persons</span>
+    </button>
+  </mat-toolbar>
 </header>

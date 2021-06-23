@@ -12,3 +12,13 @@
   .matInput{
     color: black;
   }
+
+  .film-item-image {
+      width: 182px;
+      height: 268px;
+  }
+
+  .profile-photo-image {
+      width: 214px;
+      height: 317px;
+  }
