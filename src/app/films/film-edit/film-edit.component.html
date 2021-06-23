@@ -71,6 +71,14 @@
                                         <!-- [queryParams]="{flmCatName: 'director'}"> -->
                                             <mat-card-header>
                                                 <mat-card-title>{{castMember.name}}</mat-card-title>
+                                                <mat-card-subtitle *ngFor="let character of castMember.characters">
+                                                    <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
+                                                        {{character.name}}
+                                                    </a>
+                                                    <ng-template #chOnlyName>{{character.name}}
+                                                        <p *ngIf="character.description"> ({{character.description}})</p>
+                                                    </ng-template>
+                                                </mat-card-subtitle>
                                             </mat-card-header>
                                             <img mat-card-image  [src]="castMember.profilePicture?.imdbPageUrl" 
                                                 [title]="castMember.name">
