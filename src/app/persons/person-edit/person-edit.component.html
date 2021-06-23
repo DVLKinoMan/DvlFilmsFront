@@ -276,7 +276,7 @@
             <mat-grid-list cols="10" rowHeight="1:2">
                 <mat-grid-tile
                     *ngFor="let filmography of filmographies">
-                <a [routerLink]="['/film', filmography.filmItem?.id]">
+                <a [routerLink]="filmography.filmItem?.id ? ['/film', filmography.filmItem?.id] : []">
                     <img class="film-item-image" [src]="filmography.filmItem?.photo?.imdbPageUrl" 
                     [title]="filmography.filmItem?.photo?.title"
                     onerror="this.src='assets/DefaultMovie.png'">

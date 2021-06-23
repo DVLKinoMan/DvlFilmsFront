@@ -5,7 +5,9 @@
                     <div id="photo">
                             <mat-form-field appearance="fill">
                                 <img [src]="model.photo.imdbPageUrl" 
-                                *ngIf="model.photo" [alt]="model.photo.title">
+                                *ngIf="model.photo" 
+                                [alt]="model.photo.title"
+                                onerror="this.src='assets/DefaultMovie.png'">
                             </mat-form-field>
                     </div>
                     <div id="little-stats">
@@ -71,8 +73,8 @@
                                     </button>
                                 </div>
                                 <mat-label *ngFor="let castMember of cast"> 
-                                    <div *ngIf="castMember.id; else onlyName2">
-                                        <mat-card class="person-card" [routerLink]="['/person/'+castMember.id]">
+                                    <div>
+                                        <mat-card class="person-card" [routerLink]="castMember.id ? ['/person/'+castMember.id] : []">
                                         <!-- [queryParams]="{flmCatName: 'director'}"> -->
                                             <mat-card-header>
                                                 <mat-card-title>{{castMember.name}}</mat-card-title>
@@ -91,7 +93,6 @@
                                                 (error)="setDefaultProfilePicture($event, castMember)">
                                         </mat-card>
                                     </div> 
-                                    <ng-template #onlyName2>{{castMember.name}} </ng-template>
                                 </mat-label>
                                  <div>
                                     <button mat-mini-fab [disabled]="rightCastArrowDisabled" (click)="castPageArrowClicked(true)">
@@ -168,7 +169,9 @@
                 <div id="photo2">
                             <mat-form-field appearance="fill">
                                 <img [src]="fetched.photo.imdbPageUrl" 
-                                *ngIf="fetched.photo" [alt]="fetched.photo.title">
+                                *ngIf="fetched.photo" 
+                                [alt]="fetched.photo.title"
+                                onerror="this.src='assets/DefaultMovie.png'">
                             </mat-form-field>
                     </div>
                     <div id="little-stats2">
