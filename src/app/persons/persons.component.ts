@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Person } from './person';
-import { AgeFilter, Filter, FilterOperator, Gender, GenderFilter, IdFilter, NameFilter,
-   PersonFilter, PersonOrderBy, PersonSelectControlFlags, PersonsQuery,
-    ZodiacSign, ZodiacSignFilter } from './person-query';
+import {
+  AgeFilter, Filter, FilterOperator, Gender, GenderFilter, IdFilter, NameFilter,
+  PersonFilter, PersonOrderBy, PersonSelectControlFlags, PersonsQuery,
+  ZodiacSign, ZodiacSignFilter
+} from './person-query';
 import { PersonsService } from './services/persons.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
@@ -79,22 +81,22 @@ export class PersonsComponent implements OnInit {
       filterOperator: 0,
       sign: ''
     });
-  } 
-
-  ngAfterViewInit() {
-    
   }
 
- setPageLength(){
-        var query: PersonsQuery = new PersonsQuery(this.filters);
+  ngAfterViewInit() {
 
-        this.service.getCount(query).subscribe(result => {
-            this.paginator.length = result;
-        }, error => console.error(error));
-}
+  }
 
-getOrderBy<PersonOrderBy>(sort: Sort){
-    switch(sort.active){
+  setPageLength() {
+    var query: PersonsQuery = new PersonsQuery(this.filters);
+
+    this.service.getCount(query).subscribe(result => {
+      this.paginator.length = result;
+    }, error => console.error(error));
+  }
+
+  getOrderBy<PersonOrderBy>(sort: Sort) {
+    switch (sort.active) {
       case 'id': return PersonOrderBy.Id;
       case 'name': return PersonOrderBy.Name;
       case 'birthDate': return PersonOrderBy.BirthDate;
@@ -102,96 +104,95 @@ getOrderBy<PersonOrderBy>(sort: Sort){
       case 'age': return PersonOrderBy.Age;
       default: return PersonOrderBy.Id;
     }
-}
+  }
 
-filterChanged(filterName: string){
-    if(this.filters.length != 0){
+  filterChanged(filterName: string) {
+    if (this.filters.length != 0) {
       var form = this.getFilterForm(filterName);
       form.addControl('filterOperator', new FormControl());
       form.get('filterOperator')?.setValue(1);
     }
-}
-
-getFilterForm<FormGroup>(filterName: string){
-  switch(filterName){
-    case 'Id': return this.idFilterForm;
-    case 'Name': return this.nameFilterForm;
-    case 'Age': return this.ageFilterForm;
-    case 'Gender': return this.genderFilterForm;
-    case 'ZodiacSign': return this.zodiacSignFilterForm;
-    default: throw new Error('filterName not implemented');
   }
-}
 
-getFilter<PersonFilter>(filterName: string){
-    switch(filterName){
-      case 'Id': return new IdFilter(this.idFilterForm.controls['id'].value, 
-                      this.idFilterForm.controls["filterOperator"]?.value);
+  getFilterForm<FormGroup>(filterName: string) {
+    switch (filterName) {
+      case 'Id': return this.idFilterForm;
+      case 'Name': return this.nameFilterForm;
+      case 'Age': return this.ageFilterForm;
+      case 'Gender': return this.genderFilterForm;
+      case 'ZodiacSign': return this.zodiacSignFilterForm;
+      default: throw new Error('filterName not implemented');
+    }
+  }
+
+  getFilter<PersonFilter>(filterName: string) {
+    switch (filterName) {
+      case 'Id': return new IdFilter(this.idFilterForm.controls['id'].value,
+        this.idFilterForm.controls["filterOperator"]?.value);
       case 'Name': return new NameFilter(this.nameFilterForm.controls['value']?.value,
-                  this.nameFilterForm.controls['pattern']?.value,
-                  this.nameFilterForm.controls['filterOperator']?.value);
+        this.nameFilterForm.controls['pattern']?.value,
+        this.nameFilterForm.controls['filterOperator']?.value);
       case 'Age': return new AgeFilter(this.ageFilterForm.controls['value']?.value,
-                  this.ageFilterForm.controls['start']?.value,
-                  this.ageFilterForm.controls['end']?.value,
-                  true,//todo implement includingends
-                  this.ageFilterForm.controls['filterOperator']?.value);
+        this.ageFilterForm.controls['start']?.value,
+        this.ageFilterForm.controls['end']?.value,
+        true,//todo implement includingends
+        this.ageFilterForm.controls['filterOperator']?.value);
       case 'Gender': return new GenderFilter(this.genderFilterForm.controls['gender'].value,
-                  this.genderFilterForm.controls['filterOperator']?.value);
+        this.genderFilterForm.controls['filterOperator']?.value);
       case 'ZodiacSign': return new ZodiacSignFilter(this.zodiacSignFilterForm.controls['sign'].value,
-                  this.zodiacSignFilterForm.controls['filterOperator']?.value);
+        this.zodiacSignFilterForm.controls['filterOperator']?.value);
       default: return new IdFilter(1);
     }
-}
+  }
 
-clearForm(filterName: string){
-  var form = this.getFilterForm(filterName);
-  form.reset();
-  if(form.controls['filterOperator'])
-    form.removeControl('filterOperator');
-}
+  clearForm(filterName: string) {
+    var form = this.getFilterForm(filterName);
+    form.reset();
+    if (form.controls['filterOperator'])
+      form.removeControl('filterOperator');
+  }
 
-sortChanged(sort: Sort){
-  this.personOrderBy = this.getOrderBy(sort);
-  this.orderAscending = sort.direction == 'asc';
-  this.loadData(true);
-}
+  sortChanged(sort: Sort) {
+    this.personOrderBy = this.getOrderBy(sort);
+    this.orderAscending = sort.direction == 'asc';
+    this.loadData(true);
+  }
 
-pageChanged(event: PageEvent){ 
-  this.pageEvent = event;
-  this.persons = [];  
-  this.loadData(true);
-  return event;
-}
+  pageChanged(event: PageEvent) {
+    this.pageEvent = event;
+    this.persons = [];
+    this.loadData(true);
+    return event;
+  }
 
-addFilter(){
-  if(!this.selectedFilter)
-    return;
+  addFilter() {
+    if (!this.selectedFilter)
+      return;
 
-  this.filters.push(this.getFilter(this.selectedFilter));
-  this.clearForm(this.selectedFilter);
-  this.selectedFilter = 'none';
-}
+    this.filters.push(this.getFilter(this.selectedFilter));
+    this.clearForm(this.selectedFilter);
+    this.selectedFilter = 'none';
+  }
 
-clearFilters(){
-  this.filters = [];
-}
+  clearFilters() {
+    this.filters = [];
+  }
 
-deleteFilter(index: number){
-  this.filters.splice(index,1);
-  if(index == 0 && this.filters.length > 0)
-    this.filters[0].filterOperator = FilterOperator.None;
-}
+  deleteFilter(index: number) {
+    this.filters.splice(index, 1);
+    if (index == 0 && this.filters.length > 0)
+      this.filters[0].filterOperator = FilterOperator.None;
+  }
 
-searchButtonClick(){
-  this.pageEvent.pageIndex = 0;
-  this.paginator.pageIndex = 0;
-  this.loadData(true);
-  this.setPageLength();
-}
+  searchButtonClick() {
+    this.pageEvent.pageIndex = 0;
+    this.paginator.pageIndex = 0;
+    this.loadData(true);
+    this.setPageLength();
+  }
 
-getPersonsQuery(notFromRoute: boolean = false) : [PersonsQuery, boolean]{
-  if(!notFromRoute)
-  {
+  getPersonsQuery(notFromRoute: boolean = false): [PersonsQuery, boolean] {
+    if (!notFromRoute) {
       var filtersString = this.queryParams['personFilters'];
 
       var controlFlags = this.queryParams['selectControlFlags'];
@@ -200,86 +201,92 @@ getPersonsQuery(notFromRoute: boolean = false) : [PersonsQuery, boolean]{
       var orderBy = this.queryParams['orderBy'];
       var orderByAscending = this.queryParams['orderByAscending'];
 
-      if(controlFlags && currPage && pageSize && orderBy && orderByAscending)
+      if (controlFlags && currPage && pageSize && orderBy && orderByAscending)
         return [new PersonsQuery(
-          filtersString ? this.getPersonFilters(filtersString) : this.filters, 
-          currPage, 
-          pageSize, 
-          orderBy, 
-          orderByAscending, 
+          filtersString ? this.getPersonFilters(filtersString) : this.filters,
+          currPage,
+          pageSize,
+          orderBy,
+          orderByAscending,
           controlFlags), true];
-   }
+    }
 
     return [new PersonsQuery(
-      this.filters, 
-      this.pageEvent.pageIndex + 1, 
-      this.pageEvent.pageSize, 
-      this.personOrderBy, 
-      this.orderAscending, 
+      this.filters,
+      this.pageEvent.pageIndex + 1,
+      this.pageEvent.pageSize,
+      this.personOrderBy,
+      this.orderAscending,
       PersonSelectControlFlags.WithPhoto), false];
-}
+  }
 
-getPersonFilters(obj: any) : PersonFilter[]{
-  let array: PersonFilter[] = [];
-  if(typeof obj == 'string')
-    array.push(this.getPersonFilter(obj));
-  else
-    for(var i = 0; i<obj.length; i++)
-      array.push(this.getPersonFilter(obj[i]));
+  getPersonFilters(obj: any): PersonFilter[] {
+    let array: PersonFilter[] = [];
+    if (typeof obj == 'string')
+      array.push(this.getPersonFilter(obj));
+    else
+      for (var i = 0; i < obj.length; i++)
+        array.push(this.getPersonFilter(obj[i]));
 
-  return array;
-}
+    return array;
+  }
 
-getPersonFilter(str: string) : PersonFilter{
-     var json =  JSON.parse(str);
-     for(var propName in json){
-        if(propName == 'filterType')
-          switch(json[propName]){
-            case 0: return new IdFilter(json['id'], json['filterOperator']);
-            case 1: return new NameFilter(json['value'], json['pattern'],
+  setDefaultProfilePicture(event: any, person: Person) {
+    if (typeof person.sex == "string")
+      event.target.src = person.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
+    else event.target.src = person.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
+  }
+
+  getPersonFilter(str: string): PersonFilter {
+    var json = JSON.parse(str);
+    for (var propName in json) {
+      if (propName == 'filterType')
+        switch (json[propName]) {
+          case 0: return new IdFilter(json['id'], json['filterOperator']);
+          case 1: return new NameFilter(json['value'], json['pattern'],
             json['filterOperator']);
-            case 4: return new ZodiacSignFilter(json['sign'], json['filterOperator']);
-            case 7: return new AgeFilter(json['value'],json['start'],
-            json['end'],json['includingEnds'],json['filterOperator']);
-            case 8: return new GenderFilter(json['gender'], json['filterOperator']);
-            default: throw console.error('not implemented');
+          case 4: return new ZodiacSignFilter(json['sign'], json['filterOperator']);
+          case 7: return new AgeFilter(json['value'], json['start'],
+            json['end'], json['includingEnds'], json['filterOperator']);
+          case 8: return new GenderFilter(json['gender'], json['filterOperator']);
+          default: throw console.error('not implemented');
+        }
+    }
+    throw console.error('not implemented');
+  }
+
+  loadData(notFromRoute: boolean = false) {
+    var [query, fromRoute] = this.getPersonsQuery(notFromRoute);
+    if (!fromRoute) {
+      var params = new HttpParams();
+      query.personFilters.forEach(function (value) {
+        params = params.append('personFilters', JSON.stringify(value, (key, val) => {
+          if (val === null || (typeof val === 'string' && val === ''))
+            return undefined;
+          return val;
+        }));
+      });
+      this.router.navigate(['/persons'],
+        {
+          queryParams: {
+            personFilters: params.getAll('personFilters'),
+            currentPage: query.currentPage,
+            orderBy: query.orderBy,
+            orderByAscending: query.orderByAscending,
+            pageSize: query.pageSize,
+            selectControlFlags: query.selectControlFlags
           }
-      }
-      throw console.error('not implemented');
-}
+        });
+      return;
+    }
+    this.filters = query.personFilters;
 
-loadData(notFromRoute: boolean = false){
-      var [query, fromRoute] = this.getPersonsQuery(notFromRoute);
-      if(!fromRoute){
-          var params = new HttpParams();
-        query.personFilters.forEach(function(value){
-          params = params.append('personFilters',  JSON.stringify(value, (key, val) => {
-              if (val === null || (typeof val === 'string' && val ===''))
-                  return undefined;
-                return val;
-            }));
-          }); 
-          this.router.navigate(['/persons'], 
-          {
-            queryParams: {
-              personFilters: params.getAll('personFilters'), 
-              currentPage: query.currentPage,
-              orderBy: query.orderBy,
-              orderByAscending: query.orderByAscending,
-              pageSize: query.pageSize,
-              selectControlFlags: query.selectControlFlags
-            }
-          });
-          return;
-      }
-      this.filters = query.personFilters;
-
-      this.service.getList(query).subscribe(result => {
-        // result.forEach(function(value){
-        //   if(value.profilePicture != undefined)
-        //     value.profilePicture.image =  'data:image/png;base64,' + value.profilePicture.image;
-        // });
-        this.persons = result;
+    this.service.getList(query).subscribe(result => {
+      // result.forEach(function(value){
+      //   if(value.profilePicture != undefined)
+      //     value.profilePicture.image =  'data:image/png;base64,' + value.profilePicture.image;
+      // });
+      this.persons = result;
     }, error => console.error(error));
   }
 }

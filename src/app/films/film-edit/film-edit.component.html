@@ -80,9 +80,10 @@
                                                     </ng-template>
                                                 </mat-card-subtitle>
                                             </mat-card-header>
-                                            <img mat-card-image  [src]="castMember.profilePicture?.imdbPageUrl" 
+                                            <img mat-card-image  
+                                                [src]="castMember.profilePicture?.imdbPageUrl" 
                                                 [title]="castMember.name"
-                                                onerror="this.src='assets/DefaultPersonMale.jpeg'">
+                                                (error)="setDefaultProfilePicture($event, castMember)">
                                         </mat-card>
                                     </div> 
                                     <ng-template #onlyName2>{{castMember.name}} </ng-template>

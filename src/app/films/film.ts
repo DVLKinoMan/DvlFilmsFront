@@ -1,4 +1,5 @@
 import { Character, Person, Photo } from "../persons/person";
+import { Gender } from "../persons/person-query";
 
 export interface Film {
     id: number;
@@ -33,4 +34,5 @@ export interface FilmCastMember {
     imdbPageUrl: string;
     profilePicture: Photo;
     characters: Character[];
+    gender: Gender;
 }

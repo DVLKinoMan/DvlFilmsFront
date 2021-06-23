@@ -139,7 +139,11 @@
     <tr *ngFor="let person of persons">
         <td>{{person.id}}</td>
         <td>
-            <img [src]="person.profilePicture.imdbPageUrl" *ngIf="person.profilePicture" [alt]="person.profilePicture.title" style="width: 20%;">
+            <img class="person-image" 
+            [src]="person.profilePicture.imdbPageUrl" 
+            *ngIf="person.profilePicture" 
+            [alt]="person.profilePicture.title" 
+            (error)="setDefaultProfilePicture($event, person)">
         </td>
         <td>
             <a [routerLink]="['/person', person.id]">{{person.name}}</a>
