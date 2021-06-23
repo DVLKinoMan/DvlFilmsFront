@@ -17,7 +17,14 @@ export class FilmEditComponent implements OnInit {
     fetched?: Film;
     editMode: boolean = false;
     filmForm: FormGroup;
-    cast?: FilmCastMember[];
+
+    cast: FilmCastMember[];
+    castItemsPerPage: number = 10;
+    castCurrPage: number = 0;
+    castPagesLength: number = 0;
+    allCast: FilmCastMember[];
+    leftCastArrowDisabled: boolean = true;
+    rightCastArrowDisabled: boolean = false;
 
     constructor(private service: FilmsService,
         private route: ActivatedRoute,
@@ -54,9 +61,22 @@ export class FilmEditComponent implements OnInit {
         }, error => console.log(error));
     }
 
+    castPageArrowClicked(right: boolean) {
+        this.castCurrPage = right ? this.castCurrPage + 1 : this.castCurrPage - 1;
+        this.cast = this.allCast.slice(this.castCurrPage * this.castItemsPerPage,
+            this.castCurrPage * this.castItemsPerPage + this.castItemsPerPage);
+        this.leftCastArrowDisabled = this.castCurrPage < 1;
+        this.rightCastArrowDisabled = this.castCurrPage >= this.castPagesLength - 1;
+    }
+
     loadCast() {
         this.service.getCast(this.id).subscribe(result => {
-            this.cast = result;
+            this.allCast = result;
+            this.cast = this.allCast.slice(0, this.castItemsPerPage);
+            this.castPagesLength = Math.floor(this.allCast.length / this.castItemsPerPage) +
+                (this.allCast.length % this.castItemsPerPage > 0 ? 1 : 0);
+            this.leftCastArrowDisabled = true;
+            this.rightCastArrowDisabled = this.castPagesLength <= 1;
         }, error => console.log(error));
     }
 }

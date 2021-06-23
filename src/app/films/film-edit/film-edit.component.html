@@ -65,6 +65,11 @@
                             
                             <div *ngIf="cast" style="display: flex;">
                                 <mat-label>Cast: </mat-label>
+                                <div>
+                                    <button mat-mini-fab [disabled]="leftCastArrowDisabled" (click)="castPageArrowClicked(false)">
+                                        <mat-icon>keyboard_arrow_left</mat-icon>
+                                    </button>
+                                </div>
                                 <mat-label *ngFor="let castMember of cast"> 
                                     <div *ngIf="castMember.id; else onlyName2">
                                         <mat-card class="person-card" [routerLink]="['/person/'+castMember.id]">
@@ -88,7 +93,13 @@
                                     </div> 
                                     <ng-template #onlyName2>{{castMember.name}} </ng-template>
                                 </mat-label>
+                                 <div>
+                                    <button mat-mini-fab [disabled]="rightCastArrowDisabled" (click)="castPageArrowClicked(true)">
+                                        <mat-icon>keyboard_arrow_right</mat-icon>
+                                    </button>
+                                </div>
                             </div>
+                            <span>{{castCurrPage + 1}}/{{castPagesLength}}</span>
                             <div *ngIf="model.imdbRating">
                                 <mat-label>Imdb Rating: </mat-label>
                                 <mat-form-field appearance="fill">
