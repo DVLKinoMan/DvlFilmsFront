@@ -11,6 +11,7 @@ import { Sort } from '@angular/material/sort';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
+import { PhotosService } from '../common/services/photos.service';
 
 @Component({
   selector: 'app-persons',
@@ -44,6 +45,7 @@ export class PersonsComponent implements OnInit {
 
   constructor(private service: PersonsService,
     private formBuilder: FormBuilder,
+    private photosService: PhotosService,
     private route: ActivatedRoute,
     private router: Router) { }
 
@@ -282,10 +284,7 @@ export class PersonsComponent implements OnInit {
     this.filters = query.personFilters;
 
     this.service.getList(query).subscribe(result => {
-      result.forEach(function (value) {
-        if (value.profilePicture != undefined)
-          value.profilePicture.image = 'data:image/png;base64,' + value.profilePicture.image;
-      });
+      this.photosService.fixImages(result.map(function (p) { return p.profilePicture; }))
       this.persons = result;
     }, error => console.error(error));
   }
