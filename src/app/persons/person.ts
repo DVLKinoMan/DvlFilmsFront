@@ -1,3 +1,4 @@
+import { Photo } from "../common/photo";
 import { Gender, ZodiacSign } from "./person-query";
 
 export interface Person {
@@ -19,13 +20,6 @@ export interface Person {
     zodiacSign?: ZodiacSign;
     filmographies?: Filmography[];
     photos?: Photo[];
-}
-
-export interface Photo {
-    // Id: guid;
-    imdbPageUrl: string;
-    image: string;
-    title: string;
 }
 
 export interface Filmography {

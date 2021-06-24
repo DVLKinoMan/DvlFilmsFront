@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { Person } from "src/app/persons/person";
 import { Gender } from "src/app/persons/person-query";
+import { PhotosService } from "src/app/common/services/photos.service";
 import { Film, FilmCastMember } from "../film";
 import { FilmsService } from "../services/films.service";
 
@@ -28,6 +29,7 @@ export class FilmEditComponent implements OnInit {
     rightCastArrowDisabled: boolean = false;
 
     constructor(private service: FilmsService,
+        private photosService: PhotosService,
         private route: ActivatedRoute,
         private formBuilder: FormBuilder) {
         this.route.params.subscribe(item => {
@@ -64,6 +66,7 @@ export class FilmEditComponent implements OnInit {
 
     loadFilm() {
         this.service.getById(this.id).subscribe(result => {
+            this.photosService.fixImage(result.photo);
             this.model = result;
         }, error => console.log(error));
     }
@@ -78,6 +81,7 @@ export class FilmEditComponent implements OnInit {
 
     loadCast() {
         this.service.getCast(this.id).subscribe(result => {
+            this.photosService.fixImagesForCast(result);
             this.allCast = result;
             this.cast = this.allCast.slice(0, this.castItemsPerPage);
             this.castPagesLength = Math.floor(this.allCast.length / this.castItemsPerPage) +

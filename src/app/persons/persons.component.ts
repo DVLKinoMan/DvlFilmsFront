@@ -282,10 +282,10 @@ export class PersonsComponent implements OnInit {
     this.filters = query.personFilters;
 
     this.service.getList(query).subscribe(result => {
-      // result.forEach(function(value){
-      //   if(value.profilePicture != undefined)
-      //     value.profilePicture.image =  'data:image/png;base64,' + value.profilePicture.image;
-      // });
+      result.forEach(function (value) {
+        if (value.profilePicture != undefined)
+          value.profilePicture.image = 'data:image/png;base64,' + value.profilePicture.image;
+      });
       this.persons = result;
     }, error => console.error(error));
   }

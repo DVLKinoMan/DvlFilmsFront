@@ -2,9 +2,11 @@
     <mat-label>Photos: </mat-label>
     <div *ngIf="photos; else loading" fxLayout="row wrap">
         <ng-container *ngFor="let photo of photos">
-            <img [src]="photo?.imdbPageUrl" 
-            [title]="photo?.title"
-                    style="max-width: 200px;">
+            <img  class="person-item-image" 
+                    [src]="photo?.image" 
+                    [title]="photo?.title"
+                    style="max-width: 200px;"
+                    onerror="this.src='assets/DefaultPersonMale.jpeg'">
         </ng-container>
     </div>
     <ng-template #loading>

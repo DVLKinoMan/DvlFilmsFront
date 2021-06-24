@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PhotosService } from 'src/app/common/services/photos.service';
 import { Filmography, Person } from '../person';
 import { Gender, ZodiacSign } from '../person-query';
 import { PersonFetcherService } from '../services/person-fetcher.service';
@@ -35,6 +36,7 @@ export class PersonEditComponent implements OnInit {
 
   constructor(private service: PersonsService,
     private fetcherService: PersonFetcherService,
+    private photosService: PhotosService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router) { }
@@ -137,6 +139,7 @@ export class PersonEditComponent implements OnInit {
                   if (res.imdbPageUrl == value.filmItem?.imdbPageUrl) {
                     value.filmItem.id = res.id;
                     value.filmItem.photo = res.photo;
+                    //todo use somehow photosService
                     if (value.filmItem.photo)
                       value.filmItem.photo.image = 'data:image/png;base64,'
                         + value.filmItem.photo.image;
@@ -152,22 +155,18 @@ export class PersonEditComponent implements OnInit {
 
   loadPerson() {
     this.service.getById(this.id).subscribe(result => {
+      this.photosService.fixImage(result.profilePicture);
       this.model = result;
-      if (this.model.profilePicture.image)
-        this.model.profilePicture.image = 'data:image/png;base64,' + this.model.profilePicture.image;
     }, error => console.log(error));
 
     this.service.getPhotos(this.id, 0, 5).subscribe(result => {
+      this.photosService.fixImages(result);
       this.model.photos = result;
     }, error => console.log(error))
 
     this.service.getFilmographies(this.id).subscribe(result => {
+      this.photosService.fixImagesForFilmographies(result);
       this.model.filmographies = result;
-      if (this.model.filmographies)
-        this.model.filmographies.forEach(function (value) {
-          if (value.filmItem?.photo?.image)
-            value.filmItem.photo.image = 'data:image/png;base64,' + value.filmItem.photo.image;
-        });
       this.loadFilmCategories();
       this.loadFilmItems();
     }, error => console.log(error));

@@ -33,6 +33,7 @@ import { PersonEditComponent } from './persons/person-edit/person-edit.component
 import { PersonAwardsComponent } from './persons/person-awards/person-awards.component';
 import { FilmsService } from './films/services/films.service';
 import { FilmEditComponent } from './films/film-edit/film-edit.component';
+import { PhotosService } from './common/services/photos.service';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { FilmEditComponent } from './films/film-edit/film-edit.component';
   providers: [
     PersonsService,
     PersonFetcherService,
-    FilmsService
+    FilmsService,
+    PhotosService
   ],
   bootstrap: [AppComponent]
 })

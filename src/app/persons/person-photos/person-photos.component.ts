@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Photo } from '../person';
+import { Photo } from 'src/app/common/photo';
+import { PhotosService } from 'src/app/common/services/photos.service';
 import { PersonsService } from '../services/persons.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class PersonPhotosComponent implements OnInit {
 
     constructor(private route: ActivatedRoute,
         private personsService: PersonsService,
+        private photosService: PhotosService,
         private router: Router
     ) {
 
@@ -56,6 +58,7 @@ export class PersonPhotosComponent implements OnInit {
         var take = this.pageEvent.pageSize;
 
         this.personsService.getPhotos(this.personId, skip, take).subscribe(result => {
+            this.photosService.fixImages(result);
             this.photos = result;
         });
     }

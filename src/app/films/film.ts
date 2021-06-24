@@ -1,5 +1,6 @@
-import { Character, Person, Photo } from "../persons/person";
+import { Character, Person } from "../persons/person";
 import { Gender } from "../persons/person-query";
+import { Photo } from "../common/photo";
 
 export interface Film {
     id: number;

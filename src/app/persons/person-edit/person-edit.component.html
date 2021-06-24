@@ -6,7 +6,7 @@
                     <div id="profilePicture">
                             <mat-form-field appearance="fill">
                                 <img class="profile-photo-image"
-                                [src]="model.profilePicture.imdbPageUrl" 
+                                [src]="model.profilePicture.image" 
                                 *ngIf="model.profilePicture" 
                                 [title]="model.profilePicture.title"
                                 (error)="setDefaultProfilePicture($event)">
@@ -124,8 +124,9 @@
             <div id="little-bio-for-fetched" *ngIf = "fetched" style="margin-left:50px; display: flex"> 
                 <div id="profilePicture2">
                         <mat-form-field appearance="fill">
-                            <img [src]="fetched.profilePicture.imdbPageUrl" 
-                            *ngIf="fetched.profilePicture" [alt]="fetched.profilePicture.title">
+                            <img [src]="fetched.profilePicture.image" 
+                            *ngIf="fetched.profilePicture" 
+                            [alt]="fetched.profilePicture.title">
                         </mat-form-field>
                 </div>
                 <div id="little-stats2">
@@ -235,7 +236,7 @@
             <div style="width: 100%; display: flex;">
                 <mat-label>Photos: </mat-label>
                 <div *ngFor="let photo of model.photos">
-                                <img [src]="photo?.imdbPageUrl" 
+                                <img [src]="photo?.image" 
                                 [title]="photo?.title"
                                 style="max-width: 200px;">
                 </div>
@@ -277,7 +278,8 @@
                 <mat-grid-tile
                     *ngFor="let filmography of filmographies">
                 <a [routerLink]="filmography.filmItem?.id ? ['/film', filmography.filmItem?.id] : []">
-                    <img class="film-item-image" [src]="filmography.filmItem?.photo?.imdbPageUrl" 
+                    <img class="film-item-image" 
+                    [src]="filmography.filmItem?.photo?.image" 
                     [title]="filmography.filmItem?.photo?.title"
                     onerror="this.src='assets/DefaultMovie.png'">
                 </a>
