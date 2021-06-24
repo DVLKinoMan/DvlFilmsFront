@@ -4,7 +4,6 @@ import { FilmItem, Filmography, Person } from "../person";
 import { Observable } from "rxjs";
 import { PersonsQuery } from "../person-query";
 import { PersonAwardResult } from "../personAwardResult";
-import { Photo } from "src/app/common/photo";
 
 @Injectable({
     providedIn: 'root',
@@ -85,23 +84,6 @@ export class PersonsService {
             params = params.append("imdbTitles", title);
         })
         return this.http.get<FilmItem[]>(url, { params: params });
-    }
-
-    getPhotos(personId: number, skip?: number, take?: number): Observable<Photo[]> {
-        var url = this.baseUrl + "/Persons/Get/" + personId + "/Photos";
-        var params = new HttpParams();
-        if (skip)
-            params = params.append('skip', skip)
-        if (take)
-            params = params.append('take', take);
-
-        return this.http.get<Photo[]>(url, { params: params });
-    }
-
-    getPhotosCount(personId: number): Observable<number> {
-        var url = this.baseUrl + "/Persons/Get/" + personId + "/Photos/Count";
-
-        return this.http.get<number>(url);
     }
 
     getBetweenString(str: string, prevString: string, afterString: string): string {

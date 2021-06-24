@@ -5,11 +5,11 @@ import { Photo } from 'src/app/common/photo';
 import { PhotosService } from 'src/app/common/services/photos.service';
 
 @Component({
-    selector: 'app-person-photos',
-    templateUrl: './person-photos.component.html',
-    styleUrls: ['./person-photos.component.css']
+    selector: 'app-film-photos',
+    templateUrl: './film-photos.component.html',
+    styleUrls: ['./film-photos.component.css']
 })
-export class PersonPhotosComponent implements OnInit {
+export class FilmPhotosComponent implements OnInit {
     personId: number;
     pageEvent: PageEvent;
     photos: Photo[];
@@ -55,14 +55,14 @@ export class PersonPhotosComponent implements OnInit {
         var skip = this.pageEvent.pageIndex * this.pageEvent.pageSize;
         var take = this.pageEvent.pageSize;
 
-        this.photosService.getPersonPhotos(this.personId, skip, take).subscribe(result => {
+        this.photosService.getFilmPhotos(this.personId, skip, take).subscribe(result => {
             this.photosService.fixImages(result);
             this.photos = result;
         });
     }
 
     loadPhotosCount() {
-        this.photosService.getPersonPhotosCount(this.personId).subscribe(result => {
+        this.photosService.getFilmPhotosCount(this.personId).subscribe(result => {
             this.photosCount = result;
         });
     }

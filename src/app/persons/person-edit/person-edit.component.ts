@@ -34,6 +34,8 @@ export class PersonEditComponent implements OnInit {
   public genders = Object.keys(Gender).filter(e => !isNaN(+e)).map(o => { return { index: +o, name: Gender[+o] } });
   // genders: string[] = Object.keys(Gender).filter(val => isNaN(Number(val)));
 
+  showPhotos: number = 5;
+
   constructor(private service: PersonsService,
     private fetcherService: PersonFetcherService,
     private photosService: PhotosService,
@@ -157,18 +159,18 @@ export class PersonEditComponent implements OnInit {
     this.service.getById(this.id).subscribe(result => {
       this.photosService.fixImage(result.profilePicture);
       this.model = result;
+      this.photosService.getPersonPhotos(this.id, 0, this.showPhotos).subscribe(result => {
+        this.photosService.fixImages(result);
+        this.model.photos = result;
+      }, error => console.log(error));
+
+      this.service.getFilmographies(this.id).subscribe(result => {
+        this.photosService.fixImagesForFilmographies(result);
+        this.model.filmographies = result;
+        this.loadFilmCategories();
+        this.loadFilmItems();
+      }, error => console.log(error));
     }, error => console.log(error));
 
-    this.service.getPhotos(this.id, 0, 5).subscribe(result => {
-      this.photosService.fixImages(result);
-      this.model.photos = result;
-    }, error => console.log(error))
-
-    this.service.getFilmographies(this.id).subscribe(result => {
-      this.photosService.fixImagesForFilmographies(result);
-      this.model.filmographies = result;
-      this.loadFilmCategories();
-      this.loadFilmItems();
-    }, error => console.log(error));
   }
 }

@@ -21,6 +21,7 @@ export interface Film {
     writers?: Person[];
     directors?: Person[];
     cast?: Person[];
+    photos?: Photo[];
 }
 
 export interface BoxOffice {

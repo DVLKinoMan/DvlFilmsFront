@@ -34,6 +34,7 @@ import { PersonAwardsComponent } from './persons/person-awards/person-awards.com
 import { FilmsService } from './films/services/films.service';
 import { FilmEditComponent } from './films/film-edit/film-edit.component';
 import { PhotosService } from './common/services/photos.service';
+import { FilmPhotosComponent } from './films/film-photos/film-photos.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { PhotosService } from './common/services/photos.service';
     PersonEditComponent,
     PersonPhotosComponent,
     PersonAwardsComponent,
-    FilmEditComponent
+    FilmEditComponent,
+    FilmPhotosComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +56,7 @@ import { PhotosService } from './common/services/photos.service';
       { path: 'persons', component: PersonsComponent },
       { path: 'person/:id', component: PersonEditComponent },
       { path: 'person/:id/photos', component: PersonPhotosComponent },
+      { path: 'film/:id/photos', component: FilmPhotosComponent },
       { path: 'person/:id/awards', component: PersonAwardsComponent },
       { path: 'film/:id', component: FilmEditComponent }
     ]),

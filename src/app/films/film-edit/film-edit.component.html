@@ -4,9 +4,9 @@
             <div id="little-bio" style="display: flex">
                     <div id="photo">
                             <mat-form-field appearance="fill">
-                                <img [src]="model.photo.imdbPageUrl" 
-                                *ngIf="model.photo" 
-                                [alt]="model.photo.title"
+                                <img 
+                                [src]="model.photo?.image" 
+                                [alt]="model.photo?.title"
                                 onerror="this.src='assets/DefaultMovie.png'">
                             </mat-form-field>
                     </div>
@@ -275,17 +275,17 @@
                 <h1>{{fetched.awardsInformationString}}</h1>
             </div>
         </div>
-        <!-- <div id="photos" *ngIf="model.photos" style="display: inline-table;">
+        <div id="photos" *ngIf="model.photos" style="display: inline-table;">
             <div style="width: 100%; display: flex;">
                 <mat-label>Photos: </mat-label>
                 <div *ngFor="let photo of model.photos">
-                                <img [src]="photo?.imdbPageUrl" 
+                                <img [src]="photo?.image" 
                                 [title]="photo?.title"
                                 style="max-width: 200px;">
                 </div>
-                <a class="nav-link text-dark" [routerLink]="['/person/'+id+'/photos']">Show More</a>
+                <a class="nav-link text-dark" [routerLink]="['/film/'+id+'/photos']">Show More</a>
             </div>   
-        </div> -->
+        </div>
         <div>
             <mat-tab-group>
                 mat-align-tabs="center">

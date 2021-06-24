@@ -6,6 +6,7 @@ import { Gender } from "src/app/persons/person-query";
 import { PhotosService } from "src/app/common/services/photos.service";
 import { Film, FilmCastMember } from "../film";
 import { FilmsService } from "../services/films.service";
+import { Photo } from "src/app/common/photo";
 
 @Component({
     selector: 'app-film-edit',
@@ -27,6 +28,8 @@ export class FilmEditComponent implements OnInit {
     allCast: FilmCastMember[];
     leftCastArrowDisabled: boolean = true;
     rightCastArrowDisabled: boolean = false;
+
+    showPhotos: number = 5;
 
     constructor(private service: FilmsService,
         private photosService: PhotosService,
@@ -68,6 +71,10 @@ export class FilmEditComponent implements OnInit {
         this.service.getById(this.id).subscribe(result => {
             this.photosService.fixImage(result.photo);
             this.model = result;
+            this.photosService.getFilmPhotos(this.id, 0, this.showPhotos).subscribe(result => {
+                this.photosService.fixImages(result);
+                this.model.photos = result;
+            }, error => console.log(error));
         }, error => console.log(error));
     }
 
