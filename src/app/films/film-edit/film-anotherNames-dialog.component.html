@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>{{data.filmName}}</h1>
+<mat-dialog-content>
+  <div *ngFor="let anotherName of data.anotherNames">
+    <p>{{anotherName.country.name}}: {{anotherName.name}}
+      <span *ngIf="anotherName.description"> ({{anotherName.description}})</span>
+    </p>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

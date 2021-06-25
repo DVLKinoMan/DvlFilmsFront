@@ -14,9 +14,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -27,6 +27,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { PersonPhotosComponent } from './persons/person-photos/person-photos.component';
 import { PersonEditComponent } from './persons/person-edit/person-edit.component';
@@ -35,6 +36,8 @@ import { FilmsService } from './films/services/films.service';
 import { FilmEditComponent } from './films/film-edit/film-edit.component';
 import { PhotosService } from './common/services/photos.service';
 import { FilmPhotosComponent } from './films/film-photos/film-photos.component';
+import { FilmAnotherNamesDialogComponent } from './films/film-edit/film-anotherNames-dialog.component';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 @NgModule({
   declarations: [
@@ -45,7 +48,8 @@ import { FilmPhotosComponent } from './films/film-photos/film-photos.component';
     PersonPhotosComponent,
     PersonAwardsComponent,
     FilmEditComponent,
-    FilmPhotosComponent
+    FilmPhotosComponent,
+    FilmAnotherNamesDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +62,8 @@ import { FilmPhotosComponent } from './films/film-photos/film-photos.component';
       { path: 'person/:id/photos', component: PersonPhotosComponent },
       { path: 'film/:id/photos', component: FilmPhotosComponent },
       { path: 'person/:id/awards', component: PersonAwardsComponent },
-      { path: 'film/:id', component: FilmEditComponent }
+      { path: 'film/:id', component: FilmEditComponent },
+      // { path: 'film/anotherNames', component: FilmAnotherNamesDialogComponent }
     ]),
     BrowserAnimationsModule,
     MatPaginatorModule,
@@ -67,6 +72,7 @@ import { FilmPhotosComponent } from './films/film-photos/film-photos.component';
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
+    FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
@@ -77,14 +83,19 @@ import { FilmPhotosComponent } from './films/film-photos/film-photos.component';
     MatTabsModule,
     MatCardModule,
     MatMenuModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatDialogModule
   ],
   providers: [
     PersonsService,
     PersonFetcherService,
     FilmsService,
-    PhotosService
+    PhotosService,
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.error(err));

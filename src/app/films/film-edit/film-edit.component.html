@@ -1,14 +1,15 @@
+
 <form [formGroup]="filmForm" (ngSubmit)="save()" style="width: 100%;" >
     <div style="width: 100%;">
         <div id = "little-bios" style="display: flex;">
             <div id="little-bio" style="display: flex">
                     <div id="photo">
-                            <mat-form-field appearance="fill">
+                            <!-- <mat-form-field appearance="fill"> -->
                                 <img 
                                 [src]="model.photo?.image" 
                                 [alt]="model.photo?.title"
                                 onerror="this.src='assets/DefaultMovie.png'">
-                            </mat-form-field>
+                            <!-- </mat-form-field> -->
                     </div>
                     <div id="little-stats">
                         <div style="margin-left: 200px;">
@@ -18,13 +19,18 @@
                                     <mat-label>Name:</mat-label>
                                     <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="model.name">
                                 </mat-form-field>
+                                <button mat-mini-fab 
+                                        (click)="openAnotherNamesDialog()" 
+                                        title="Film Another Names">
+                                            <mat-icon>info</mat-icon>
+                                    </button>
                             </div>
                             <div>
-                                <a target="_blank" href="{{model.imdbPageUrl}}">Visit Imdb Page</a>
+                                <a target="_blank" *ngIf="model.imdbPageUrl" href="{{model.imdbPageUrl}}">Visit Imdb Page</a>
                             </div>
-                            <div>
+                            <div *ngIf="model.description">
                                 <mat-label >Description: </mat-label><br>
-                                <mat-form-field>
+                                <mat-form-field appearance="fill">
                                     <mat-label>Description:</mat-label>
                                     <textarea matInput type="text" class="matInput" [attr.disabled]="editMode ? null : ''"  cols="50" rows="10" 
                                     [value]="model.description"></textarea>
@@ -84,9 +90,9 @@
                                                 <mat-card-title>{{castMember.name}}</mat-card-title>
                                                 <mat-card-subtitle *ngFor="let character of castMember.characters">
                                                     <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
-                                                        {{character.name}}
+                                                        {{character?.name}}
                                                     </a>
-                                                    <ng-template #chOnlyName>{{character.name}}
+                                                    <ng-template #chOnlyName>{{character?.name}}
                                                         <p *ngIf="character.description"> ({{character.description}})</p>
                                                     </ng-template>
                                                 </mat-card-subtitle>
@@ -171,12 +177,12 @@
             </div>
             <div id="little-bio-for-fetched" *ngIf = "fetched" style="margin-left:50px; display: flex"> 
                 <div id="photo2">
-                            <mat-form-field appearance="fill">
-                                <img [src]="fetched.photo.imdbPageUrl" 
+                            <!-- <mat-form-field appearance="fill"> -->
+                                <img [src]="fetched.photo?.imdbPageUrl" 
                                 *ngIf="fetched.photo" 
-                                [alt]="fetched.photo.title"
+                                [alt]="fetched.photo?.title"
                                 onerror="this.src='assets/DefaultMovie.png'">
-                            </mat-form-field>
+                            <!-- </mat-form-field> -->
                     </div>
                     <div id="little-stats2">
                         <div style="margin-left: 200px;">
@@ -184,7 +190,7 @@
                                 <mat-label *ngIf="editMode">Name: </mat-label>
                                 <mat-form-field appearance="fill">
                                     <mat-label>Name:</mat-label>
-                                    <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="fetched.name">
+                                    <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="fetched?.name">
                                 </mat-form-field>
                             </div>
                             <div>
@@ -192,7 +198,7 @@
                             </div>
                             <div>
                                 <mat-label *ngIf="editMode">Description: </mat-label><br>
-                                <mat-form-field>
+                                <mat-form-field appearance="fill">
                                     <mat-label>Description:</mat-label>
                                     <textarea matInput type="text" class="matInput" [attr.disabled]="editMode ? null : ''"  cols="50" rows="10" 
                                     [value]="fetched.description"></textarea>
@@ -286,13 +292,13 @@
                 <a class="nav-link text-dark" [routerLink]="['/film/'+id+'/photos']">Show More</a>
             </div>   
         </div>
-        <div>
+        <!-- <div>
             <mat-tab-group>
                 mat-align-tabs="center">
                 <mat-tab label="First"> Content 1 </mat-tab>
                 <mat-tab label="Second"> Content 2 </mat-tab>
                 <mat-tab label="Third"> Content 3 </mat-tab>
             </mat-tab-group>
-        </div>
+        </div> -->
     </div>
 </form>

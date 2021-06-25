@@ -7,6 +7,8 @@ import { PhotosService } from "src/app/common/services/photos.service";
 import { Film, FilmCastMember } from "../film";
 import { FilmsService } from "../services/films.service";
 import { Photo } from "src/app/common/photo";
+import { FilmAnotherNamesDialogComponent } from "./film-anotherNames-dialog.component";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-film-edit',
@@ -34,7 +36,8 @@ export class FilmEditComponent implements OnInit {
     constructor(private service: FilmsService,
         private photosService: PhotosService,
         private route: ActivatedRoute,
-        private formBuilder: FormBuilder) {
+        private formBuilder: FormBuilder,
+        public anotherNamesDialog: MatDialog) {
         this.route.params.subscribe(item => {
             this.id = item['id'];
             this.loadFilm();
@@ -57,6 +60,17 @@ export class FilmEditComponent implements OnInit {
         if (typeof person.sex == "string")
             event.target.src = person?.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
         else event.target.src = person?.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
+    }
+
+    openAnotherNamesDialog(): void {
+        const dialogRef = this.anotherNamesDialog.open(FilmAnotherNamesDialogComponent, {
+            width: '800px',
+            data: { filmName: this.model.name, anotherNames: this.model.anotherNames }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
     }
 
     fetchFilmFromImdb() {

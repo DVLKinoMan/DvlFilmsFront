@@ -1,6 +1,7 @@
 import { Character, Person } from "../persons/person";
 import { Gender } from "../persons/person-query";
 import { Photo } from "../common/photo";
+import { FormGroupDirective } from "@angular/forms";
 
 export interface Film {
     id: number;
@@ -22,6 +23,19 @@ export interface Film {
     directors?: Person[];
     cast?: Person[];
     photos?: Photo[];
+    anotherNames?: AnotherName[];
+}
+
+export interface AnotherName {
+    id: string;
+    name: string;
+    description?: string;
+    country: Country;
+}
+
+export interface Country {
+    id: number;
+    name: string;
 }
 
 export interface BoxOffice {
