@@ -8,7 +8,7 @@ import { Gender, ZodiacSign } from '../person-query';
 import { PersonFetcherService } from '../services/person-fetcher.service';
 import { PersonsService } from '../services/persons.service';
 import { PersonAlternateNamesDailogComponent } from './person-alternate-names/person-alternate-names.dialog.component';
-import { PersonAwardsDailogComponent } from './person-awards/person-awards-dialog.component';
+import { PersonAwardsDialogComponent } from './person-awards/person-awards.dialog.component';
 
 @Component({
   selector: 'app-person-edit',
@@ -77,7 +77,7 @@ export class PersonEditComponent implements OnInit {
   }
 
   openAwardsDialog() {
-    const dialogRef = this.awardsDialog.open(PersonAwardsDailogComponent, {
+    const dialogRef = this.awardsDialog.open(PersonAwardsDialogComponent, {
       width: '800px',
       data: { personId: this.id, personName: this.model.name }
     });

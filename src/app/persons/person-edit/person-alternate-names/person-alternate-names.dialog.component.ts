@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AlternateName } from '../../person';
-import { PersonAwardResult } from '../../personAwardResult';
+import { PersonAwardResult } from '../person-awards/personAwardResult';
 import { PersonsService } from '../../services/persons.service';
 
 @Component({

@@ -268,7 +268,7 @@
             </div>
         </div>
         <button mat-flat-button *ngIf="editMode" color="primary" type="submit">Save</button>
-        <div id="awards" style="display: inline-table">
+        <div id="awards" style="display: flex">
             <div id="model-awards" style="float:left">
                 <mat-label>Award Information: </mat-label>
                 <div style="display: inline;">
@@ -276,12 +276,17 @@
                     <!-- <a class="nav-link text-dark" [routerLink]="['/person/'+id+'/awards']">Show More</a> -->
                 </div>
             </div>
+            <button mat-mini-fab 
+                    (click)="openAwardsDialog()" 
+                    title="Detailed Awards Information">
+                        <mat-icon>info</mat-icon>
+            </button>
             <div id="fetched-awards" *ngIf="fetched" style="margin-left: 100px;">
                 <mat-label>Award Information: </mat-label>
                 <h1>{{fetched.awardsInformationString}}</h1>
             </div>
         </div>
-        <div id="photos" *ngIf="model.photos" style="display: inline-table;">
+        <div id="photos" *ngIf="model.photos" style="display: block;">
             <div style="width: 100%; display: flex;">
                 <mat-label>Photos: </mat-label>
                 <div *ngFor="let photo of model.photos">

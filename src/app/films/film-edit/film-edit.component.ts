@@ -6,9 +6,9 @@ import { Gender } from "src/app/persons/person-query";
 import { PhotosService } from "src/app/common/services/photos.service";
 import { Film, FilmCastMember } from "../film";
 import { FilmsService } from "../services/films.service";
-import { Photo } from "src/app/common/photo";
 import { FilmAnotherNamesDialogComponent } from "./film-anotherNames-dialog.component";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FilmAwardsDialogComponent } from "./film-awards/film-awards.dialog.component";
 
 @Component({
     selector: 'app-film-edit',
@@ -37,7 +37,8 @@ export class FilmEditComponent implements OnInit {
         private photosService: PhotosService,
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
-        public anotherNamesDialog: MatDialog) {
+        public anotherNamesDialog: MatDialog,
+        public awardsDialog: MatDialog) {
         this.route.params.subscribe(item => {
             this.id = item['id'];
             this.loadFilm();
@@ -66,6 +67,17 @@ export class FilmEditComponent implements OnInit {
         const dialogRef = this.anotherNamesDialog.open(FilmAnotherNamesDialogComponent, {
             width: '800px',
             data: { filmName: this.model.name, anotherNames: this.model.anotherNames }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+    }
+
+    openAwardsDialog() {
+        const dialogRef = this.awardsDialog.open(FilmAwardsDialogComponent, {
+            width: '800px',
+            data: { filmId: this.id, filmName: this.model.name }
         });
 
         dialogRef.afterClosed().subscribe(result => {

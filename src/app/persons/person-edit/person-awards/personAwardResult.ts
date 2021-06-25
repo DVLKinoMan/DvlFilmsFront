@@ -1,4 +1,4 @@
-import { FilmItem } from "./person";
+import { FilmItem } from "../../person";
 
 export interface PersonAwardResult {
     festivalId: number;

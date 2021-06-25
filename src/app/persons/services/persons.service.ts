@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { FilmItem, Filmography, Person } from "../person";
 import { Observable } from "rxjs";
 import { PersonsQuery } from "../person-query";
-import { PersonAwardResult } from "../personAwardResult";
+import { PersonAwardResult } from "../person-edit/person-awards/personAwardResult";
 
 @Injectable({
     providedIn: 'root',

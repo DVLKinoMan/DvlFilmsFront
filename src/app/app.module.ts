@@ -31,13 +31,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { PersonPhotosComponent } from './persons/person-photos/person-photos.component';
 import { PersonEditComponent } from './persons/person-edit/person-edit.component';
-import { PersonAwardsDailogComponent } from './persons/person-edit/person-awards/person-awards-dialog.component';
+import { PersonAwardsDialogComponent } from './persons/person-edit/person-awards/person-awards.dialog.component';
 import { FilmsService } from './films/services/films.service';
 import { FilmEditComponent } from './films/film-edit/film-edit.component';
 import { PhotosService } from './common/services/photos.service';
 import { FilmPhotosComponent } from './films/film-photos/film-photos.component';
 import { FilmAnotherNamesDialogComponent } from './films/film-edit/film-anotherNames-dialog.component';
 import { PersonAlternateNamesDailogComponent } from './persons/person-edit/person-alternate-names/person-alternate-names.dialog.component';
+import { FilmAwardsDialogComponent } from './films/film-edit/film-awards/film-awards.dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,11 +47,12 @@ import { PersonAlternateNamesDailogComponent } from './persons/person-edit/perso
     NavMenuComponent,
     PersonEditComponent,
     PersonPhotosComponent,
-    PersonAwardsDailogComponent,
+    PersonAwardsDialogComponent,
     FilmEditComponent,
     FilmPhotosComponent,
     FilmAnotherNamesDialogComponent,
-    PersonAlternateNamesDailogComponent
+    PersonAlternateNamesDailogComponent,
+    FilmAwardsDialogComponent
   ],
   imports: [
     BrowserModule,
