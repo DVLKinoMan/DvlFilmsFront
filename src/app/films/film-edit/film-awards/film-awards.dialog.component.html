@@ -16,7 +16,7 @@
                     <h4>{{det.awardDescription}}</h4>
                     <h5>{{det.awardDetailNote}}</h5>
                 <div *ngFor="let people in det.awardReceivers">
-                        <a [routerLink]="['/person', people.id]">{{people.name}}</a>
+                        <h3>{{people.name}}</h3>
                         <h3 *ngIf="people.description">{{people.description}}</h3>
                 </div>
                 </div>

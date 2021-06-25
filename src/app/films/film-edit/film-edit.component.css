@@ -12,11 +12,6 @@
   margin-bottom: 48px;
 }
 
-.person-card {
-  max-width: 70px;
-  cursor: pointer;
-}
-
 .mat-card-header-text {
   margin-left: 0;
 }
@@ -27,4 +22,35 @@
   margin-left: 0;
   margin-top: 0;
   margin-bottom: 0;
+}
+
+.imdb-logo{
+  width: 30px;
+  height: 22px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.imdb-rating {
+  display: flex;
+}
+
+.cast {
+  display: flex;
+}
+
+.cast-image {
+  width: 120px;
+  height: 160px;
+  margin: 5px 0px;
+}
+
+.cast-card {
+  width: 120px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.cast-footer{
+  margin: 0px;
 }

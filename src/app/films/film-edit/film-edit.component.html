@@ -3,166 +3,88 @@
     <div style="width: 100%;">
         <div id = "little-bios" style="display: flex;">
             <div id="little-bio" style="display: flex">
-                    <div id="photo">
-                            <!-- <mat-form-field appearance="fill"> -->
-                                <img 
-                                [src]="model.photo?.image" 
-                                [alt]="model.photo?.title"
-                                onerror="this.src='assets/DefaultMovie.png'">
-                            <!-- </mat-form-field> -->
+                    <div id="poster">
+                        <img [src]="model.photo?.image" 
+                        [alt]="model.photo?.title"
+                        onerror="this.src='assets/DefaultMovie.png'">
+                        <div class="imdb-rating">
+                            <a target="_blank" *ngIf="model.imdbPageUrl; else onlyLogo" href="{{model.imdbPageUrl}}">
+                                <img class="imdb-logo" src="assets/ImdbLogo.png">
+                            </a>
+                            <ng-template #onlyLogo><img class="imdb-logo" src="assets/ImdbLogo.png"></ng-template>
+                            <div *ngIf="model.imdbRating">
+                                <span>{{model.imdbRating}}</span>
+                                <span>{{' ('+model.imdbUserRatingsCount+') '}}</span>
+                            </div>
+                        </div>
                     </div>
                     <div id="little-stats">
-                        <div style="margin-left: 200px;">
+                        <div style="margin-left: 20px;">
                             <div>
-                                <mat-label>Name: </mat-label>
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Name:</mat-label>
-                                    <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="model.name">
-                                </mat-form-field>
+                                <span>{{model.name}} </span>
                                 <button mat-mini-fab 
                                         (click)="openAnotherNamesDialog()" 
                                         title="Film Another Names">
                                             <mat-icon>info</mat-icon>
-                                    </button>
-                            </div>
-                            <div>
-                                <a target="_blank" *ngIf="model.imdbPageUrl" href="{{model.imdbPageUrl}}">Visit Imdb Page</a>
+                                 </button>
                             </div>
                             <div *ngIf="model.description">
-                                <mat-label >Description: </mat-label><br>
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Description:</mat-label>
-                                    <textarea matInput type="text" class="matInput" [attr.disabled]="editMode ? null : ''"  cols="50" rows="10" 
-                                    [value]="model.description"></textarea>
-                                </mat-form-field>
-                            </div>
-                            <br>
-                            
-                            <div *ngIf="model.directors">
-                                <mat-label>Directors: </mat-label>
-                                <mat-label *ngFor="let director of model.directors"> 
-                                    <div *ngIf="director.id; else onlyName2">
-                                        <mat-card class="person-card" [routerLink]="['/person/'+director.id]"
-                                        [queryParams]="{flmCatName: 'director'}">
-                                            <mat-card-header>
-                                                <mat-card-title>{{director.name}}</mat-card-title>
-                                            </mat-card-header>
-                                            <img mat-card-image  
-                                            [src]="director.profilePicture?.imdbPageUrl" 
-                                                [title]="director.name"
-                                                (error)="setDefaultPersonPhoto($event, director)">
-                                        </mat-card>
-                                    </div> 
-                                    <ng-template #onlyName2>{{director.name}} </ng-template>
-                                </mat-label>
-                            </div>
-                            <div *ngIf="model.writers">
-                                <mat-label>Writers: </mat-label>
-                                <mat-label *ngFor="let writer of model.writers">
-                                    <div *ngIf="writer.id; else onlyName1">
-                                         <mat-card class="person-card" [routerLink]="['/person/'+writer.id]"
-                                        [queryParams]="{flmCatName: 'writer'}">
-                                            <mat-card-header>
-                                                <mat-card-title>{{writer.name}}</mat-card-title>
-                                            </mat-card-header>
-                                            <img mat-card-image  
-                                                [src]="writer.profilePicture?.imdbPageUrl" 
-                                                [title]="writer.name"
-                                                (error)="setDefaultPersonPhoto($event, writer)">
-                                        </mat-card>
-                                    </div> 
-                                    <ng-template #onlyName1>{{writer.name}} </ng-template>
-                                </mat-label>
-                            </div>
-                            
-                            <div *ngIf="cast" style="display: flex;">
-                                <mat-label>Cast: </mat-label>
-                                <div>
-                                    <button mat-mini-fab [disabled]="leftCastArrowDisabled" (click)="castPageArrowClicked(false)">
-                                        <mat-icon>keyboard_arrow_left</mat-icon>
-                                    </button>
-                                </div>
-                                <mat-label *ngFor="let castMember of cast"> 
-                                    <div>
-                                        <mat-card class="person-card" [routerLink]="castMember.id ? ['/person/'+castMember.id] : []">
-                                        <!-- [queryParams]="{flmCatName: 'director'}"> -->
-                                            <mat-card-header>
-                                                <mat-card-title>{{castMember.name}}</mat-card-title>
-                                                <mat-card-subtitle *ngFor="let character of castMember.characters">
-                                                    <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
-                                                        {{character?.name}}
-                                                    </a>
-                                                    <ng-template #chOnlyName>{{character?.name}}
-                                                        <p *ngIf="character.description"> ({{character.description}})</p>
-                                                    </ng-template>
-                                                </mat-card-subtitle>
-                                            </mat-card-header>
-                                            <img mat-card-image  
-                                                [src]="castMember.profilePicture?.image" 
-                                                [title]="castMember.name"
-                                                (error)="setDefaultProfilePicture($event, castMember)">
-                                        </mat-card>
-                                    </div> 
-                                </mat-label>
-                                 <div>
-                                    <button mat-mini-fab [disabled]="rightCastArrowDisabled" (click)="castPageArrowClicked(true)">
-                                        <mat-icon>keyboard_arrow_right</mat-icon>
-                                    </button>
-                                </div>
-                            </div>
-                            <span>{{castCurrPage + 1}}/{{castPagesLength}}</span>
-                            <div *ngIf="model.imdbRating">
-                                <mat-label>Imdb Rating: </mat-label>
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Imdb Rating: </mat-label>
-                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.imdbRating">
-                                </mat-form-field>
-                            </div>
-                            <div *ngIf="model.imdbUserRatingsCount">
-                                <mat-label>Imdb User Ratings Count: </mat-label>
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Imdb User Ratings Count: </mat-label>
-                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.imdbUserRatingsCount">
-                                </mat-form-field>
-                            </div>
-                            <div *ngIf="model.releaseDate">
-                                <mat-label>Release Date: </mat-label>
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Release Date: </mat-label>
-                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.releaseDate">
-                                </mat-form-field>
-                            </div>
-                            <div *ngIf="model.tagline">
-                                <mat-label>Tagline: </mat-label>
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Tagline: </mat-label>
-                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.tagline">
-                                </mat-form-field>
-                            </div>
-                            <div *ngIf="model.boxOffice">
-                                <mat-label>Budget: </mat-label>
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Budget: </mat-label>
-                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.boxOffice.budget">
-                                </mat-form-field>
-                                <mat-label>Gross: </mat-label>
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Gross: </mat-label>
-                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.boxOffice.gross">
-                                </mat-form-field>
-                                <mat-label>Opening Weekend: </mat-label>
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Opening Weekend: </mat-label>
-                                    <input matInput class="matInput" [disabled]='!editMode' [value]="model.boxOffice.openingWeekend">
-                                </mat-form-field>
-                            </div> 
-                            <div *ngIf="model.countries">
-                                <mat-label>Countries: </mat-label>
-                                <mat-label *ngFor="let country of model.countries">{{country}} </mat-label>
+                                {{model.description}}
                             </div>
                             <div *ngIf="model.genres">
                                 <mat-label>Genres: </mat-label>
                                 <mat-label *ngFor="let genre of model.genres">{{genre}} </mat-label>
+                            </div>
+                            <div *ngIf="model.releaseDate">
+                                {{model.releaseDate}}
+                            </div>
+                            <div *ngIf="model.countries">
+                                <mat-label>Countries: </mat-label>
+                                <mat-label *ngFor="let country of model.countries">{{country}} </mat-label>
+                            </div>
+                            
+                            <div *ngIf="model.tagline">
+                                <mat-label>Tagline: </mat-label>
+                                <mat-label>{{model.tagline}}</mat-label>
+                            </div>
+                            <div *ngIf="model.boxOffice" style="display: flex;">
+                                <div *ngIf="model.boxOffice.budget">
+                                    <mat-label>Budget: </mat-label>
+                                    <mat-label>{{model.boxOffice.budget}}</mat-label>
+                                </div>
+                                <div *ngIf="model.boxOffice.gross" style="margin-left: 20px;">
+                                    <mat-label>Gross: </mat-label>
+                                    <mat-label>{{model.boxOffice.gross}}</mat-label>
+                                </div>
+                                <div *ngIf="model.boxOffice.openingWeekend" style="margin-left: 20px;">
+                                    <mat-label>Opening Weekend: </mat-label>
+                                    <mat-label>{{model.boxOffice.openingWeekend}}</mat-label>
+                                </div>
+                            </div> 
+                            <div id="awards" style="display: flex">
+                                <span id="model-awards">
+                                    Award Information: {{model.awardsInformationString}}
+                                </span>
+                                <button mat-mini-fab 
+                                        (click)="openAwardsDialog()" 
+                                        title="Detailed Awards Information">
+                                            <mat-icon>info</mat-icon>
+                                </button>
+                                <!-- <div id="fetched-awards" *ngIf="fetched" style="margin-left: 100px;">
+                                    <mat-label>Award Information: </mat-label>
+                                    <h1>{{fetched.awardsInformationString}}</h1>
+                                </div> -->
+                            </div>
+                            <div id="photos" *ngIf="model.photos" style="display: block;">
+                                <div style="width: 100%; display: flex;">
+                                    <mat-label>Photos: </mat-label>
+                                    <div *ngFor="let photo of model.photos">
+                                                    <img [src]="photo?.image" 
+                                                    [title]="photo?.title"
+                                                    style="max-width: 200px;">
+                                    </div>
+                                    <a class="nav-link text-dark" [routerLink]="['/film/'+id+'/photos']">Show More</a>
+                                </div>   
                             </div>
                     </div>
                     </div>
@@ -267,35 +189,79 @@
                 </div>
             </div>
         </div>
-        <button mat-flat-button *ngIf="editMode" color="primary" type="submit">Save</button>
-        <div id="awards" style="display: flex">
-            <div id="model-awards" style="float:left">
-                <mat-label>Award Information: </mat-label>
-                <div style="display: inline;">
-                    <h1>{{model.awardsInformationString}}</h1>
-                    <!-- <a class="nav-link text-dark" [routerLink]="['/person/'+id+'/awards']">Show More</a> -->
+        <!-- <button mat-flat-button *ngIf="editMode" color="primary" type="submit">Save</button> -->
+     
+        <div style="display: flex;">
+            <div *ngIf="model.directors">
+                <span>Directors: </span>
+                <div class="cast"> 
+                    <mat-card 
+                    class="cast-card"
+                    *ngFor="let director of model.directors"
+                    [routerLink]="director.id ? ['/person/'+director.id] : []"
+                    [queryParams]="{flmCatName: 'director'}">
+                        <img   
+                        class="cast-image"
+                        [src]="director.profilePicture?.imdbPageUrl" 
+                            [title]="director.name"
+                            (error)="setDefaultPersonPhoto($event, director)">
+                        <mat-card-footer class="cast-footer">
+                            <mat-card-title>{{director.name}}</mat-card-title>
+                        </mat-card-footer>
+                    </mat-card>
                 </div>
             </div>
-            <button mat-mini-fab 
-                    (click)="openAwardsDialog()" 
-                    title="Detailed Awards Information">
-                        <mat-icon>info</mat-icon>
-            </button>
-            <div id="fetched-awards" *ngIf="fetched" style="margin-left: 100px;">
-                <mat-label>Award Information: </mat-label>
-                <h1>{{fetched.awardsInformationString}}</h1>
+            <div *ngIf="model.writers">
+                <span>Writers: </span>
+                <div class="cast">
+                        <mat-card *ngFor="let writer of model.writers"
+                        class="cast-card" 
+                        [routerLink]="writer.id ? ['/person/'+writer.id] : []"
+                        [queryParams]="{flmCatName: 'writer'}">
+                            <img  
+                                class="cast-image"
+                                [src]="writer.profilePicture?.imdbPageUrl" 
+                                [title]="writer.name"
+                                (error)="setDefaultPersonPhoto($event, writer)">
+                            <mat-card-footer class="cast-footer">
+                                <mat-card-title>{{writer.name}}</mat-card-title>
+                            </mat-card-footer>
+                        </mat-card>
+                </div>
             </div>
         </div>
-        <div id="photos" *ngIf="model.photos" style="display: block;">
-            <div style="width: 100%; display: flex;">
-                <mat-label>Photos: </mat-label>
-                <div *ngFor="let photo of model.photos">
-                                <img [src]="photo?.image" 
-                                [title]="photo?.title"
-                                style="max-width: 200px;">
-                </div>
-                <a class="nav-link text-dark" [routerLink]="['/film/'+id+'/photos']">Show More</a>
-            </div>   
+        <div *ngIf="cast">
+            <span style="margin-left: 45px;">Cast: </span>
+            <div class="cast">
+                <button mat-mini-fab [disabled]="leftCastArrowDisabled" 
+                (click)="castPageArrowClicked(false)">
+                    <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+                <mat-card *ngFor="let castMember of cast" class="cast-card" 
+                [routerLink]="castMember.id ? ['/person/'+castMember.id] : []">
+                    <img class="cast-image"
+                        [src]="castMember.profilePicture?.image" 
+                        [title]="castMember.name"
+                        (error)="setDefaultProfilePicture($event, castMember)">
+                    <mat-card-footer class="cast-footer">
+                        <mat-card-title>{{castMember.name}}</mat-card-title>
+                        <hr>
+                        <mat-card-subtitle *ngFor="let character of castMember.characters">
+                            <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
+                                {{character?.name}}
+                            </a>
+                            <ng-template #chOnlyName>{{character?.name}}
+                                <p *ngIf="character.description"> ({{character.description}})</p>
+                            </ng-template>
+                        </mat-card-subtitle>
+                    </mat-card-footer>
+                </mat-card>
+                <button mat-mini-fab [disabled]="rightCastArrowDisabled" 
+                (click)="castPageArrowClicked(true)">
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+            <span style="float: right">{{castCurrPage + 1}}/{{castPagesLength}}</span>
         </div>
         <!-- <div>
             <mat-tab-group>
