@@ -37,7 +37,7 @@ import { FilmEditComponent } from './films/film-edit/film-edit.component';
 import { PhotosService } from './common/services/photos.service';
 import { FilmPhotosComponent } from './films/film-photos/film-photos.component';
 import { FilmAnotherNamesDialogComponent } from './films/film-edit/film-anotherNames-dialog.component';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { PersonAlternateNamesDailogComponent } from './persons/person-edit/person-alternate-names/person-alternate-names.dialog.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
     PersonAwardsDailogComponent,
     FilmEditComponent,
     FilmPhotosComponent,
-    FilmAnotherNamesDialogComponent
+    FilmAnotherNamesDialogComponent,
+    PersonAlternateNamesDailogComponent
   ],
   imports: [
     BrowserModule,

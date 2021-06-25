@@ -20,6 +20,11 @@
                                     <mat-label>Name:</mat-label>
                                     <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="model.name">
                                 </mat-form-field>
+                                <button *ngIf="model.alternateNames && model.alternateNames.length > 0" mat-mini-fab 
+                                        (click)="openAlternateNamesDialog()" 
+                                        title="Person Alternate Names">
+                                            <mat-icon>info</mat-icon>
+                                    </button>
                             </div>
                             <div>
                                 <a target="_blank" href="{{model.imdbPageUrl}}">Visit Imdb Page</a>

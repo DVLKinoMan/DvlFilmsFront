@@ -1,0 +1,9 @@
+<h3 mat-dialog-title>{{data.personName}} Alternate Names</h3>
+<mat-dialog-content>
+  <div *ngFor="let alternateName of data.alternateNames">
+    <p>{{alternateName.name}}</p>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

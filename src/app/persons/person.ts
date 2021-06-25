@@ -20,6 +20,12 @@ export interface Person {
     zodiacSign?: ZodiacSign;
     filmographies?: Filmography[];
     photos?: Photo[];
+    alternateNames?: AlternateName[];
+}
+
+export interface AlternateName {
+    id?: string;
+    name: string;
 }
 
 export interface Filmography {

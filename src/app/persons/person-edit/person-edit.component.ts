@@ -7,6 +7,7 @@ import { Filmography, Person } from '../person';
 import { Gender, ZodiacSign } from '../person-query';
 import { PersonFetcherService } from '../services/person-fetcher.service';
 import { PersonsService } from '../services/persons.service';
+import { PersonAlternateNamesDailogComponent } from './person-alternate-names/person-alternate-names.dialog.component';
 import { PersonAwardsDailogComponent } from './person-awards/person-awards-dialog.component';
 
 @Component({
@@ -44,7 +45,9 @@ export class PersonEditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    public awardsDialog: MatDialog) { }
+    public awardsDialog: MatDialog,
+    public alternateNamesDialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.personForm = this.formBuilder.group({
@@ -77,6 +80,17 @@ export class PersonEditComponent implements OnInit {
     const dialogRef = this.awardsDialog.open(PersonAwardsDailogComponent, {
       width: '800px',
       data: { personId: this.id, personName: this.model.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  openAlternateNamesDialog() {
+    const dialogRef = this.alternateNamesDialog.open(PersonAlternateNamesDailogComponent, {
+      width: '400px',
+      data: { personName: this.model.name, alternateNames: this.model.alternateNames }
     });
 
     dialogRef.afterClosed().subscribe(result => {
