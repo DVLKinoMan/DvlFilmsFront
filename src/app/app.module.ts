@@ -31,7 +31,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { PersonPhotosComponent } from './persons/person-photos/person-photos.component';
 import { PersonEditComponent } from './persons/person-edit/person-edit.component';
-import { PersonAwardsComponent } from './persons/person-awards/person-awards.component';
+import { PersonAwardsDailogComponent } from './persons/person-edit/person-awards/person-awards-dialog.component';
 import { FilmsService } from './films/services/films.service';
 import { FilmEditComponent } from './films/film-edit/film-edit.component';
 import { PhotosService } from './common/services/photos.service';
@@ -46,7 +46,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
     NavMenuComponent,
     PersonEditComponent,
     PersonPhotosComponent,
-    PersonAwardsComponent,
+    PersonAwardsDailogComponent,
     FilmEditComponent,
     FilmPhotosComponent,
     FilmAnotherNamesDialogComponent
@@ -61,9 +61,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
       { path: 'person/:id', component: PersonEditComponent },
       { path: 'person/:id/photos', component: PersonPhotosComponent },
       { path: 'film/:id/photos', component: FilmPhotosComponent },
-      { path: 'person/:id/awards', component: PersonAwardsComponent },
+      // { path: 'person/:id/awards', component: PersonAwardsComponent },
       { path: 'film/:id', component: FilmEditComponent },
-      // { path: 'film/anotherNames', component: FilmAnotherNamesDialogComponent }
     ]),
     BrowserAnimationsModule,
     MatPaginatorModule,
@@ -96,6 +95,3 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));

@@ -4,13 +4,13 @@
         <div id = "little-bios" style="display: flex;">
             <div id="little-bio" style="display: flex">
                     <div id="profilePicture">
-                            <mat-form-field appearance="fill">
+                            <!-- <mat-form-field appearance="fill"> -->
                                 <img class="profile-photo-image"
                                 [src]="model.profilePicture.image" 
                                 *ngIf="model.profilePicture" 
                                 [title]="model.profilePicture.title"
                                 (error)="setDefaultProfilePicture($event)">
-                            </mat-form-field>
+                            <!-- </mat-form-field> -->
                     </div>
                     <div id="little-stats">
                         <div style="margin-left: 200px;">
@@ -123,11 +123,11 @@
             </div>
             <div id="little-bio-for-fetched" *ngIf = "fetched" style="margin-left:50px; display: flex"> 
                 <div id="profilePicture2">
-                        <mat-form-field appearance="fill">
+                        <!-- <mat-form-field appearance="fill"> -->
                             <img [src]="fetched.profilePicture.image" 
                             *ngIf="fetched.profilePicture" 
                             [alt]="fetched.profilePicture.title">
-                        </mat-form-field>
+                        <!-- </mat-form-field> -->
                 </div>
                 <div id="little-stats2">
                     <div style="margin-left: 200px;">
@@ -219,20 +219,24 @@
             </div>
         </div>
         <button mat-flat-button *ngIf="editMode" color="primary" type="submit">Save</button>
-        <div id="awards" style="display: inline-table">
+        <div id="awards" style="display: flex">
             <div id="model-awards" style="float:left">
                 <mat-label>Award Information: </mat-label>
                 <div style="display: inline;">
                     <h1>{{model.awardsInformationString}}</h1>
-                    <a class="nav-link text-dark" [routerLink]="['/person/'+id+'/awards']">Show More</a>
                 </div>
             </div>
+            <button mat-mini-fab 
+                    (click)="openAwardsDialog()" 
+                    title="Detailed Awards Information">
+                        <mat-icon>info</mat-icon>
+            </button>
             <div id="fetched-awards" *ngIf="fetched" style="margin-left: 100px;">
                 <mat-label>Award Information: </mat-label>
                 <h1>{{fetched.awardsInformationString}}</h1>
             </div>
         </div>
-        <div id="photos" *ngIf="model.photos" style="display: inline-table;">
+        <div id="photos" *ngIf="model.photos" style="display: block">
             <div style="width: 100%; display: flex;">
                 <mat-label>Photos: </mat-label>
                 <div *ngFor="let photo of model.photos">

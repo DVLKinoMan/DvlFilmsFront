@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhotosService } from 'src/app/common/services/photos.service';
 import { Filmography, Person } from '../person';
 import { Gender, ZodiacSign } from '../person-query';
 import { PersonFetcherService } from '../services/person-fetcher.service';
 import { PersonsService } from '../services/persons.service';
+import { PersonAwardsDailogComponent } from './person-awards/person-awards-dialog.component';
 
 @Component({
   selector: 'app-person-edit',
@@ -41,7 +43,8 @@ export class PersonEditComponent implements OnInit {
     private photosService: PhotosService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    public awardsDialog: MatDialog) { }
 
   ngOnInit(): void {
     this.personForm = this.formBuilder.group({
@@ -68,6 +71,17 @@ export class PersonEditComponent implements OnInit {
 
   save() {
     var val = this.model.zodiacSign;
+  }
+
+  openAwardsDialog() {
+    const dialogRef = this.awardsDialog.open(PersonAwardsDailogComponent, {
+      width: '800px',
+      data: { personId: this.id, personName: this.model.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
   sortingChanged() {
