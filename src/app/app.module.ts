@@ -30,7 +30,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { NgImageFullscreenViewModule } from 'ng-image-fullscreen-view';
 
-import { PersonPhotosComponent } from './persons/person-photos/person-photos.component';
 import { PersonComponent } from './persons/person-view/person.component';
 import { PersonAwardsDialogComponent } from './persons/person-edit/person-awards/person-awards.dialog.component';
 import { FilmsService } from './films/services/films.service';
@@ -42,6 +41,7 @@ import { FilmAwardsDialogComponent } from './films/film-edit/film-awards/film-aw
 import { FilmCastAndCrewDialogComponent } from './films/film-edit/film-cast-crew/film-cast-crew.dialog.component';
 import { PersonsComponent } from './persons/persons-list/persons.component';
 import { FilmPhotosDialogComponent } from './films/film-photos/film-photos.dialog.component';
+import { PersonPhotosDialogComponent } from './persons/person-photos/person-photos.dialog.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,7 @@ import { FilmPhotosDialogComponent } from './films/film-photos/film-photos.dialo
     PersonsComponent,
     NavMenuComponent,
     PersonComponent,
-    PersonPhotosComponent,
+    PersonPhotosDialogComponent,
     PersonAwardsDialogComponent,
     FilmComponent,
     FilmPhotosDialogComponent,
@@ -66,7 +66,6 @@ import { FilmPhotosDialogComponent } from './films/film-photos/film-photos.dialo
       { path: '', component: PersonsComponent, pathMatch: 'full' },
       { path: 'persons', component: PersonsComponent },
       { path: 'person/:id', component: PersonComponent },
-      { path: 'person/:id/photos', component: PersonPhotosComponent },
       // { path: 'person/:id/awards', component: PersonAwardsComponent },
       { path: 'film/:id', component: FilmComponent },
     ]),
