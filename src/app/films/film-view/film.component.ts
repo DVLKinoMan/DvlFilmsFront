@@ -2,23 +2,24 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { Person } from "src/app/persons/person";
-import { Gender } from "src/app/persons/person-query";
 import { PhotosService } from "src/app/common/services/photos.service";
 import { Film } from "../film";
 import { FilmsService } from "../services/films.service";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FilmAwardsDialogComponent } from "./film-awards/film-awards.dialog.component";
-import { FilmAnotherNamesDialogComponent } from "./film-another-names/film-anotherNames.dialog.component";
-import { FilmCastMember } from "./film-cast-crew/filmCastMember";
-import { FilmCastAndCrewDialogComponent } from "./film-cast-crew/film-cast-crew.dialog.component";
+import { formatDate } from "@angular/common";
+import { FilmCastMember } from "../film-edit/film-cast-crew/filmCastMember";
+import { FilmAnotherNamesDialogComponent } from "../film-edit/film-another-names/film-anotherNames.dialog.component";
+import { FilmAwardsDialogComponent } from "../film-edit/film-awards/film-awards.dialog.component";
+import { FilmCastAndCrewDialogComponent } from "../film-edit/film-cast-crew/film-cast-crew.dialog.component";
+import { Gender } from "src/app/persons/enums";
 
 @Component({
-    selector: 'app-film-edit',
-    templateUrl: './film-edit.component.html',
-    styleUrls: ['./film-edit.component.css']
+    selector: 'app-film',
+    templateUrl: './film.component.html',
+    styleUrls: ['./film.component.css']
 })
 
-export class FilmEditComponent implements OnInit {
+export class FilmComponent implements OnInit {
     id: number;
     model: Film;
     fetched?: Film;
@@ -26,7 +27,7 @@ export class FilmEditComponent implements OnInit {
     filmForm: FormGroup;
 
     cast: FilmCastMember[];
-    castItemsPerPage: number = 10;
+    castItemsPerPage: number = 5;
     castCurrPage: number = 0;
     castPagesLength: number = 0;
     allCast: FilmCastMember[];
@@ -124,6 +125,13 @@ export class FilmEditComponent implements OnInit {
             this.castCurrPage * this.castItemsPerPage + this.castItemsPerPage);
         this.leftCastArrowDisabled = this.castCurrPage < 1;
         this.rightCastArrowDisabled = this.castCurrPage >= this.castPagesLength - 1;
+    }
+
+    formatDate(dateTime: Date | undefined): string | undefined {
+        if (dateTime)
+            return formatDate(dateTime, 'yyyy-MM-dd', 'en-US');
+
+        return undefined;
     }
 
     loadCast() {

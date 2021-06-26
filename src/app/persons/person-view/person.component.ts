@@ -4,19 +4,20 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhotosService } from 'src/app/common/services/photos.service';
 import { Filmography, Person } from '../person';
-import { Gender, ZodiacSign } from '../person-query';
 import { PersonFetcherService } from '../services/person-fetcher.service';
 import { PersonsService } from '../services/persons.service';
-import { PersonAlternateNamesDailogComponent } from './person-alternate-names/person-alternate-names.dialog.component';
-import { PersonAwardsDialogComponent } from './person-awards/person-awards.dialog.component';
+import { PersonAlternateNamesDailogComponent } from '../person-edit/person-alternate-names/person-alternate-names.dialog.component';
+import { PersonAwardsDialogComponent } from '../person-edit/person-awards/person-awards.dialog.component';
+import { formatDate } from '@angular/common';
+import { Gender } from '../enums';
 
 @Component({
-  selector: 'app-person-edit',
-  templateUrl: './person-edit.component.html',
-  styleUrls: ['./person-edit.component.css']
+  selector: 'app-person',
+  templateUrl: './person.component.html',
+  styleUrls: ['./person.component.css']
 })
 
-export class PersonEditComponent implements OnInit {
+export class PersonComponent implements OnInit {
   model: Person;
   fetched?: Person;
   id: number;
@@ -183,10 +184,18 @@ export class PersonEditComponent implements OnInit {
     }, error => console.log(error));
   }
 
+  formatDate(dateTime: Date | undefined): string | undefined {
+    if (dateTime)
+      return formatDate(dateTime, 'yyyy-MM-dd', 'en-US');
+
+    return undefined;
+  }
+
   loadPerson() {
     this.service.getById(this.id).subscribe(result => {
       this.photosService.fixImage(result.profilePicture);
       this.model = result;
+
       this.photosService.getPersonPhotos(this.id, 0, this.showPhotos).subscribe(result => {
         this.photosService.fixImages(result);
         this.model.photos = result;

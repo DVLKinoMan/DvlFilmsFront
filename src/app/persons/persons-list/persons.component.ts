@@ -1,17 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Person } from './person';
 import {
-  AgeFilter, Filter, FilterOperator, Gender, GenderFilter, IdFilter, NameFilter,
-  PersonFilter, PersonOrderBy, PersonSelectControlFlags, PersonsQuery,
-  ZodiacSign, ZodiacSignFilter
+  AgeFilter, GenderFilter, IdFilter, NameFilter,
+  PersonFilter, PersonOrderBy, PersonSelectControlFlags, PersonsQuery, ZodiacSignFilter
 } from './person-query';
-import { PersonsService } from './services/persons.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
-import { PhotosService } from '../common/services/photos.service';
+import { Person } from '../person';
+import { Gender, ZodiacSign } from '../enums';
+import { PersonsService } from '../services/persons.service';
+import { PhotosService } from 'src/app/common/services/photos.service';
+import { FilterOperator } from 'src/app/common/filterOperator';
 
 @Component({
   selector: 'app-persons',

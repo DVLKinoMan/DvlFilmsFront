@@ -1,6 +1,6 @@
 import { Photo } from "src/app/common/photo";
+import { Gender } from "src/app/persons/enums";
 import { Character } from "src/app/persons/person";
-import { Gender } from "src/app/persons/person-query";
 
 export interface FilmCastMember {
     id?: number;

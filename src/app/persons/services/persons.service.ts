@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { FilmItem, Filmography, Person } from "../person";
 import { Observable } from "rxjs";
-import { PersonsQuery } from "../person-query";
+import { PersonsQuery } from "../persons-list/person-query";
 import { PersonAwardResult } from "../person-edit/person-awards/personAwardResult";
 
 @Injectable({

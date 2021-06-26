@@ -58,6 +58,23 @@
 .film-genre {
   margin-right: 5px;
 }
+
 .film-country {
+  margin-right: 5px;
+}
+
+.film-company {
+  margin-right: 5px;
+}
+
+.film-description {
+  width: 50%;
+}
+
+.film-photos {
+  display: flex;
+}
+
+.film-photo {
   margin-right: 5px;
 }

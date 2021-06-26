@@ -1,5 +1,4 @@
-import { Character, Person } from "../persons/person";
-import { Gender } from "../persons/person-query";
+import { Person } from "../persons/person";
 import { Photo } from "../common/photo";
 import { FilmAnotherName } from "./film-edit/film-another-names/filmAnotherName";
 
@@ -24,6 +23,7 @@ export interface Film {
     cast?: Person[];
     photos?: Photo[];
     anotherNames?: FilmAnotherName[];
+    companies?: Company[];
 }
 
 export interface Country {
@@ -35,4 +35,9 @@ export interface BoxOffice {
     budget?: number;
     gross?: number;
     openingWeekend?: number;
+}
+
+export interface Company {
+    id?: string;
+    name: string;
 }

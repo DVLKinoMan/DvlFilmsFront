@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { PersonsComponent } from './persons/persons.component';
 import { PersonsService } from './persons/services/persons.service';
 import { PersonFetcherService } from './persons/services/person-fetcher.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,26 +30,27 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 
 import { PersonPhotosComponent } from './persons/person-photos/person-photos.component';
-import { PersonEditComponent } from './persons/person-edit/person-edit.component';
+import { PersonComponent } from './persons/person-view/person.component';
 import { PersonAwardsDialogComponent } from './persons/person-edit/person-awards/person-awards.dialog.component';
 import { FilmsService } from './films/services/films.service';
-import { FilmEditComponent } from './films/film-edit/film-edit.component';
+import { FilmComponent } from './films/film-view/film.component';
 import { PhotosService } from './common/services/photos.service';
 import { FilmPhotosComponent } from './films/film-photos/film-photos.component';
 import { FilmAnotherNamesDialogComponent } from './films/film-edit/film-another-names/film-anotherNames.dialog.component';
 import { PersonAlternateNamesDailogComponent } from './persons/person-edit/person-alternate-names/person-alternate-names.dialog.component';
 import { FilmAwardsDialogComponent } from './films/film-edit/film-awards/film-awards.dialog.component';
 import { FilmCastAndCrewDialogComponent } from './films/film-edit/film-cast-crew/film-cast-crew.dialog.component';
+import { PersonsComponent } from './persons/persons-list/persons.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PersonsComponent,
     NavMenuComponent,
-    PersonEditComponent,
+    PersonComponent,
     PersonPhotosComponent,
     PersonAwardsDialogComponent,
-    FilmEditComponent,
+    FilmComponent,
     FilmPhotosComponent,
     FilmAnotherNamesDialogComponent,
     PersonAlternateNamesDailogComponent,
@@ -64,11 +64,11 @@ import { FilmCastAndCrewDialogComponent } from './films/film-edit/film-cast-crew
     RouterModule.forRoot([
       { path: '', component: PersonsComponent, pathMatch: 'full' },
       { path: 'persons', component: PersonsComponent },
-      { path: 'person/:id', component: PersonEditComponent },
+      { path: 'person/:id', component: PersonComponent },
       { path: 'person/:id/photos', component: PersonPhotosComponent },
       { path: 'film/:id/photos', component: FilmPhotosComponent },
       // { path: 'person/:id/awards', component: PersonAwardsComponent },
-      { path: 'film/:id', component: FilmEditComponent },
+      { path: 'film/:id', component: FilmComponent },
     ]),
     BrowserAnimationsModule,
     MatPaginatorModule,

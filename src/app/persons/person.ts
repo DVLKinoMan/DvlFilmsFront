@@ -1,5 +1,5 @@
 import { Photo } from "../common/photo";
-import { Gender, ZodiacSign } from "./person-query";
+import { Gender, ZodiacSign } from "./enums";
 
 export interface Person {
     id: number;

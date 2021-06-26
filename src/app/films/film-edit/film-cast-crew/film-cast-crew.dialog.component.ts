@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PhotosService } from 'src/app/common/services/photos.service';
-import { Gender } from 'src/app/persons/person-query';
+import { Gender } from 'src/app/persons/enums';
 import { FilmsService } from '../../services/films.service';
 import { FilmCastMember } from './filmCastMember';
 import { FilmCrewMember } from './filmCrewMember';

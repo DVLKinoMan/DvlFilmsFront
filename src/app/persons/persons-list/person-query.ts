@@ -1,3 +1,6 @@
+import { FilterOperator } from "src/app/common/filterOperator";
+import { Gender, PersonFilterType, ZodiacSign } from "../enums";
+
 export class Query {
     currentPage: number;
     pageSize: number;
@@ -60,45 +63,6 @@ export abstract class PersonFilter extends Filter {
     public abstract ToString(): string;
 }
 
-enum PersonFilterType {
-    Id,
-    Name,
-    Height,
-    OtherWork,
-    ZodiacSign,
-    Birth,
-    Death,
-    Age,
-    Gender,
-    Film
-}
-
-export enum FilterOperator {
-    None,
-    And,
-    Or
-}
-
-export enum Gender {
-    Unknown,
-    Male,
-    Female
-}
-
-export enum ZodiacSign {
-    Aquarius,
-    Pisces,
-    Aries,
-    Taurus,
-    Gemini,
-    Cancer,
-    Leo,
-    Virgo,
-    Libra,
-    Scorpio,
-    Sagittarius,
-    Capricorn
-}
 
 interface IPatternString {
     Value?: string;
