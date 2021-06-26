@@ -4,11 +4,13 @@ import { ActivatedRoute } from "@angular/router";
 import { Person } from "src/app/persons/person";
 import { Gender } from "src/app/persons/person-query";
 import { PhotosService } from "src/app/common/services/photos.service";
-import { Film, FilmCastMember } from "../film";
+import { Film } from "../film";
 import { FilmsService } from "../services/films.service";
-import { FilmAnotherNamesDialogComponent } from "./film-anotherNames-dialog.component";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FilmAwardsDialogComponent } from "./film-awards/film-awards.dialog.component";
+import { FilmAnotherNamesDialogComponent } from "./film-another-names/film-anotherNames.dialog.component";
+import { FilmCastMember } from "./film-cast-crew/filmCastMember";
+import { FilmCastAndCrewDialogComponent } from "./film-cast-crew/film-cast-crew.dialog.component";
 
 @Component({
     selector: 'app-film-edit',
@@ -38,7 +40,8 @@ export class FilmEditComponent implements OnInit {
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
         public anotherNamesDialog: MatDialog,
-        public awardsDialog: MatDialog) {
+        public awardsDialog: MatDialog,
+        public castAndCrewDialog: MatDialog) {
         this.route.params.subscribe(item => {
             this.id = item['id'];
             this.loadFilm();
@@ -53,14 +56,14 @@ export class FilmEditComponent implements OnInit {
 
     setDefaultProfilePicture(event: any, castMember: FilmCastMember) {
         if (typeof castMember.gender == "string")
-            event.target.src = castMember.gender == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
-        else event.target.src = castMember.gender == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
+            event.target.src = castMember.gender == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+        else event.target.src = castMember.gender == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
     }
 
     setDefaultPersonPhoto(event: any, person: Person) {
         if (typeof person.sex == "string")
-            event.target.src = person?.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
-        else event.target.src = person?.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
+            event.target.src = person?.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+        else event.target.src = person?.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
     }
 
     openAnotherNamesDialog(): void {
@@ -77,6 +80,17 @@ export class FilmEditComponent implements OnInit {
     openAwardsDialog() {
         const dialogRef = this.awardsDialog.open(FilmAwardsDialogComponent, {
             width: '800px',
+            data: { filmId: this.id, filmName: this.model.name }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+    }
+
+    openCastAndCrewDialog() {
+        const dialogRef = this.awardsDialog.open(FilmCastAndCrewDialogComponent, {
+            width: '900px',
             data: { filmId: this.id, filmName: this.model.name }
         });
 

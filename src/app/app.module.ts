@@ -28,6 +28,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { PersonPhotosComponent } from './persons/person-photos/person-photos.component';
 import { PersonEditComponent } from './persons/person-edit/person-edit.component';
@@ -36,9 +37,10 @@ import { FilmsService } from './films/services/films.service';
 import { FilmEditComponent } from './films/film-edit/film-edit.component';
 import { PhotosService } from './common/services/photos.service';
 import { FilmPhotosComponent } from './films/film-photos/film-photos.component';
-import { FilmAnotherNamesDialogComponent } from './films/film-edit/film-anotherNames-dialog.component';
+import { FilmAnotherNamesDialogComponent } from './films/film-edit/film-another-names/film-anotherNames.dialog.component';
 import { PersonAlternateNamesDailogComponent } from './persons/person-edit/person-alternate-names/person-alternate-names.dialog.component';
 import { FilmAwardsDialogComponent } from './films/film-edit/film-awards/film-awards.dialog.component';
+import { FilmCastAndCrewDialogComponent } from './films/film-edit/film-cast-crew/film-cast-crew.dialog.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,8 @@ import { FilmAwardsDialogComponent } from './films/film-edit/film-awards/film-aw
     FilmPhotosComponent,
     FilmAnotherNamesDialogComponent,
     PersonAlternateNamesDailogComponent,
-    FilmAwardsDialogComponent
+    FilmAwardsDialogComponent,
+    FilmCastAndCrewDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -86,7 +89,8 @@ import { FilmAwardsDialogComponent } from './films/film-edit/film-awards/film-aw
     MatCardModule,
     MatMenuModule,
     MatToolbarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatExpansionModule
   ],
   providers: [
     PersonsService,

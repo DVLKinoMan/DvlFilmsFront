@@ -235,8 +235,8 @@ export class PersonsComponent implements OnInit {
 
   setDefaultProfilePicture(event: any, person: Person) {
     if (typeof person.sex == "string")
-      event.target.src = person.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
-    else event.target.src = person.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.jpeg'
+      event.target.src = person.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+    else event.target.src = person.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
   }
 
   getPersonFilter(str: string): PersonFilter {

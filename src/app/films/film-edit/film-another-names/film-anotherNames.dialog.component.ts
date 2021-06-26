@@ -1,10 +1,10 @@
 import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { AnotherName } from "../film";
+import { FilmAnotherName } from "./filmAnotherName";
 
 @Component({
     selector: 'app-film-anotherNames-dialog',
-    templateUrl: './film-anotherNames-dialog.component.html',
+    templateUrl: './film-anotherNames.dialog.component.html',
 })
 
 export class FilmAnotherNamesDialogComponent {
@@ -15,5 +15,5 @@ export class FilmAnotherNamesDialogComponent {
 
 export interface DialogData {
     filmName: string;
-    anotherNames: AnotherName[];
+    anotherNames: FilmAnotherName[];
 }

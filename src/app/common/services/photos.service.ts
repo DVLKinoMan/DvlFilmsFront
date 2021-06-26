@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Photo } from "src/app/common/photo";
-import { FilmCastMember } from "../../films/film";
+import { FilmCastMember } from "src/app/films/film-edit/film-cast-crew/filmCastMember";
 import { Filmography } from "../../persons/person";
 
 @Injectable({

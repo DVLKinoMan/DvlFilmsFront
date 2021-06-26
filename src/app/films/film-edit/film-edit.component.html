@@ -33,14 +33,16 @@
                             </div>
                             <div *ngIf="model.genres">
                                 <mat-label>Genres: </mat-label>
-                                <mat-label *ngFor="let genre of model.genres">{{genre}} </mat-label>
+                                <button class="film-genre" *ngFor="let genre of model.genres" 
+                                mat-raised-button color="primary">{{genre}}</button>
                             </div>
                             <div *ngIf="model.releaseDate">
                                 {{model.releaseDate}}
                             </div>
                             <div *ngIf="model.countries">
                                 <mat-label>Countries: </mat-label>
-                                <mat-label *ngFor="let country of model.countries">{{country}} </mat-label>
+                                <button class="film-country" *ngFor="let country of model.countries" 
+                                 mat-stroked-button color="primary">{{country}}</button>
                             </div>
                             
                             <div *ngIf="model.tagline">
@@ -261,7 +263,14 @@
                     <mat-icon>keyboard_arrow_right</mat-icon>
                 </button>
             </div>
-            <span style="float: right">{{castCurrPage + 1}}/{{castPagesLength}}</span>
+            <div style="float: right">
+                <span>{{castCurrPage + 1}}/{{castPagesLength}}</span>
+                 <button mat-mini-fab 
+                    (click)="openCastAndCrewDialog()" 
+                    title="All Cast And Crew">
+                        <mat-icon>info</mat-icon>
+                </button>
+            </div>
         </div>
         <!-- <div>
             <mat-tab-group>

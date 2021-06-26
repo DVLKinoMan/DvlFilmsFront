@@ -1,0 +1,66 @@
+<h1 mat-dialog-title>{{data.filmName}} Cast and Crew</h1>
+<mat-dialog-content>
+       <mat-tab-group>
+           <mat-tab label="Cast">
+                <div *ngIf="cast; else loading" style="margin-top: 25px;">
+                    <mat-grid-list cols="7" rowHeight="1:2" gutterSize="10px">
+                        <mat-grid-tile
+                            *ngFor="let castMember of cast">
+                            <img class="cast-image"
+                            [src]="castMember.profilePicture?.image" 
+                            [title]="castMember.name"
+                            [routerLink]="castMember.id ? ['/person/'+castMember.id] : []"
+                            (error)="setDefaultProfilePicture($event, castMember)">
+                            <mat-grid-tile-footer style="display: block; height: 70px">
+                                <span>{{castMember.name}}</span>
+                                <div *ngFor="let character of castMember.characters">
+                                    <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
+                                        {{character?.name}}
+                                    </a>
+                                    <ng-template #chOnlyName>{{character?.name}}
+                                        <p *ngIf="character.description"> ({{character.description}})</p>
+                                    </ng-template>
+                                </div>
+                            </mat-grid-tile-footer>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </div>
+                <ng-template #loading>
+                    <mat-spinner #loading></mat-spinner>
+                </ng-template>
+           </mat-tab>
+           <mat-tab label="Crew">
+                <div *ngIf="groupedCrew; else loading" style="margin-top: 25px;">
+                    <div *ngFor="let grCrew of groupedCrew | keyvalue">
+                         <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>{{grCrew.key}}</mat-panel-title>
+                                <mat-panel-description>{{grCrew.value.length}} Crew Members</mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <mat-grid-list cols="7" rowHeight="1:2" gutterSize="10px">
+                                <mat-grid-tile *ngFor="let crewMember of grCrew.value">
+                                   <a target="_blank" 
+                                        [href]="crewMember.imdbPageUrl">
+                                        <img class="cast-image"
+                                        src="assets/DefaultPersonMale.png" 
+                                        [title]="crewMember.name">
+                                    </a>
+                                    <mat-grid-tile-footer style="display: block; height: 70px">
+                                        <span>{{crewMember.name}}</span>
+                                        <hr>
+                                        <span>{{crewMember.description}}</span>
+                                    </mat-grid-tile-footer>
+                                </mat-grid-tile>
+                            </mat-grid-list>
+                        </mat-expansion-panel>
+                    </div>
+                </div>
+                <ng-template #loading>
+                    <mat-spinner #loading></mat-spinner>
+                </ng-template>
+           </mat-tab>
+       </mat-tab-group>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

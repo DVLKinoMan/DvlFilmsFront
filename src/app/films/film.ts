@@ -1,7 +1,7 @@
 import { Character, Person } from "../persons/person";
 import { Gender } from "../persons/person-query";
 import { Photo } from "../common/photo";
-import { FormGroupDirective } from "@angular/forms";
+import { FilmAnotherName } from "./film-edit/film-another-names/filmAnotherName";
 
 export interface Film {
     id: number;
@@ -23,14 +23,7 @@ export interface Film {
     directors?: Person[];
     cast?: Person[];
     photos?: Photo[];
-    anotherNames?: AnotherName[];
-}
-
-export interface AnotherName {
-    id: string;
-    name: string;
-    description?: string;
-    country: Country;
+    anotherNames?: FilmAnotherName[];
 }
 
 export interface Country {
@@ -42,13 +35,4 @@ export interface BoxOffice {
     budget?: number;
     gross?: number;
     openingWeekend?: number;
-}
-
-export interface FilmCastMember {
-    id?: number;
-    name: string;
-    imdbPageUrl: string;
-    profilePicture: Photo;
-    characters: Character[];
-    gender: Gender;
 }
