@@ -12,6 +12,7 @@ import { FilmAnotherNamesDialogComponent } from "../film-edit/film-another-names
 import { FilmAwardsDialogComponent } from "../film-edit/film-awards/film-awards.dialog.component";
 import { FilmCastAndCrewDialogComponent } from "../film-edit/film-cast-crew/film-cast-crew.dialog.component";
 import { Gender } from "src/app/persons/enums";
+import { FilmPhotosDialogComponent } from "../film-photos/film-photos.dialog.component";
 
 @Component({
     selector: 'app-film',
@@ -42,7 +43,9 @@ export class FilmComponent implements OnInit {
         private formBuilder: FormBuilder,
         public anotherNamesDialog: MatDialog,
         public awardsDialog: MatDialog,
-        public castAndCrewDialog: MatDialog) {
+        public castAndCrewDialog: MatDialog,
+        public photosDialog: MatDialog
+    ) {
         this.route.params.subscribe(item => {
             this.id = item['id'];
             this.loadFilm();
@@ -92,6 +95,17 @@ export class FilmComponent implements OnInit {
     openCastAndCrewDialog() {
         const dialogRef = this.awardsDialog.open(FilmCastAndCrewDialogComponent, {
             width: '900px',
+            data: { filmId: this.id, filmName: this.model.name }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+    }
+
+    openPhotosDialog() {
+        const dialogRef = this.photosDialog.open(FilmPhotosDialogComponent, {
+            width: '1000px',
             data: { filmId: this.id, filmName: this.model.name }
         });
 

@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>{{data.filmName}} Photos</h1>
+<mat-dialog-content>
+    <!-- <div fxLayout="row wrap"> -->
+    <mat-grid-list *ngIf="photos; else loading" cols="10">
+        <mat-grid-tile *ngFor="let photo of photos; let i = index">
+            <img  class="film-item-image" 
+                [src]="photo?.image" 
+                [title]="photo?.title"
+                (click)="showLightbox(i)"
+                onerror="this.src='assets/DefaultMovie.png'">
+        </mat-grid-tile>
+    </mat-grid-list>
+    <!-- </div> -->
+    <ng-template #loading>
+        <mat-spinner></mat-spinner>
+    </ng-template>
+    <mat-paginator [length]="photosCount"
+                    [pageSize]="50" 
+                    (page)="pageChanged($event)"
+                    [pageSizeOptions]="[50, 100, 150]"
+                    showFirstLastButtons>
+    </mat-paginator>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
+
+<!-- ng-image-fullscreen-view  -->
+<ng-image-fullscreen-view
+        [images]="fullScreenPhotos"
+        [imageIndex]="currentIndex"
+        [show]="showFlag"
+        (close)="closeEventHandler()"></ng-image-fullscreen-view>

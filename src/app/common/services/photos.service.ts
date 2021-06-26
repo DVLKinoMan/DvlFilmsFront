@@ -20,6 +20,15 @@ export class PhotosService {
 
     }
 
+    getImdbFullScreenPhotos(photos: Photo[]): object[] {
+        var fullScreenPhotos = photos.map(function (ph) {
+            var str = ph.imdbPageUrl;
+            var url = str.substring(0, str.lastIndexOf("_V1_") + 4) + str.substring(str.lastIndexOf("."));
+            return { image: url, title: ph.title };
+        });
+        return fullScreenPhotos;
+    }
+
     fixImages(photos: Photo[]) {
         photos.forEach(function (photo) {
             if (photo?.image)

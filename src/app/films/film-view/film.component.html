@@ -268,7 +268,7 @@
         <div id="photos" *ngIf="model.photos" style="display: block;">
             <span>Photos: 
                 <button mat-mini-fab 
-                    [routerLink]="['/film/'+id+'/photos']"
+                    (click)="openPhotosDialog()"
                     title="More Photos">
                         <mat-icon>info</mat-icon>
                 </button>
