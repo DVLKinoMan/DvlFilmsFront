@@ -1,4 +1,4 @@
-import { Country } from "../../film";
+import { Country } from "src/app/common/country";
 
 export interface FilmAnotherName {
     id: string;

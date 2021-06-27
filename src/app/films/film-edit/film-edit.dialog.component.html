@@ -1,0 +1,145 @@
+<h1 mat-dialog-title>{{data.filmName}} Edit</h1>
+<mat-dialog-content>
+    <div id="poster">
+        <img class="poster"
+         [src]="model.photo?.image" 
+        [alt]="model.photo?.title"
+        onerror="this.src='assets/DefaultMovie.png'">
+        <button mat-mini-fab 
+                (click)="fileInput.click()"
+                title="Choose Poster">
+                    <mat-icon>edit</mat-icon>
+        </button>
+        <input hidden (change)="onFileSelected()" #fileInput type="file" id="file"
+        accept="image/x-png,image/gif,image/jpeg">
+        <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input matInput [value]="model.photo?.title">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Poster Imdb Url</mat-label>
+            <input matInput [value]="model.photo?.imdbPageUrl">
+        </mat-form-field>
+     </div>               
+    <div id="name">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput [value]="model.name">
+        </mat-form-field>
+        <mat-form-field style="margin-left: 10px;">
+            <mat-select (selectionChange)="model.name = $event.value ? $event.value : data.filmName">
+                <mat-option>None</mat-option>
+                <mat-option *ngFor="let altName of model.anotherNames" 
+                    [value]="altName.name">
+                    {{altName.name}}
+                </mat-option>
+            </mat-select>
+            <mat-label><i>choose from alternate names</i></mat-label>
+        </mat-form-field>
+    </div>
+    <div id="imdbPageUrl">
+        <mat-form-field appearance="outline">
+            <mat-label>Imdb Page Url</mat-label>
+            <input matInput [value]="model.imdbPageUrl">
+        </mat-form-field>
+    </div>
+    <div id="releaseDate">
+        <mat-form-field appearance="fill">
+            <mat-label>Release Date</mat-label>
+            <input matInput [matDatepicker]="picker" [value]="model.releaseDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+    </div>
+    <div id="description">
+        <mat-form-field class="description" appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea rows="8" matInput [value]="model.description"></textarea>
+        </mat-form-field>
+    </div>
+    <div id="awardsInfoString">
+        <mat-form-field class="awardsInfoString" appearance="outline">
+            <mat-label>Awards Information</mat-label>
+            <input matInput [value]="model.awardsInformationString">
+        </mat-form-field>
+    </div>
+    <div id="genres">
+        <mat-form-field style="width: 100%;">
+            <mat-label>Film Genres</mat-label>
+            <mat-chip-list #chipGenresList>
+                <mat-chip
+                    *ngFor="let genre of model.genres"
+                    (removed)="removeGenre(genre)">
+                    {{genre.name}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input
+                    placeholder="New Genre..."
+                    #genreInput
+                    [formControl]="genreCtrl"
+                    [matAutocomplete]="autoForGenre"
+                    [matChipInputFor]="chipGenresList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addGenre($event)">
+            </mat-chip-list>
+            <mat-autocomplete #autoForGenre="matAutocomplete" (optionSelected)="selectedGenre($event)">
+                <mat-option *ngFor="let genre of filteredGenres | async" [value]="genre.name">
+                {{genre.name}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div> <div id="companies">
+        <mat-form-field style="width: 100%;">
+            <mat-label>Film Companies</mat-label>
+            <mat-chip-list #chipCompaniesList>
+                <mat-chip
+                    *ngFor="let company of model.companies"
+                    (removed)="removeCompany(company)">
+                    {{company.name}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input
+                    placeholder="New Company..."
+                    #companyInput
+                    [formControl]="companyCtrl"
+                    [matAutocomplete]="autoForCompany"
+                    [matChipInputFor]="chipCompaniesList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addCompany($event)">
+            </mat-chip-list>
+            <mat-autocomplete #autoForCompany="matAutocomplete" (optionSelected)="selectedCompany($event)">
+                <mat-option *ngFor="let company of filteredCompanies | async" [value]="company.name">
+                {{company.name}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div> <div id="countries">
+        <mat-form-field style="width: 100%;">
+            <mat-label>Film Countries</mat-label>
+            <mat-chip-list #chipCountriesList>
+                <mat-chip
+                    *ngFor="let country of model.countries"
+                    (removed)="removeCountry(country)">
+                    {{country.name}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input
+                    placeholder="New Country..."
+                    #countryInput
+                    [formControl]="countryCtrl"
+                    [matAutocomplete]="autoForCountry"
+                    [matChipInputFor]="chipCountriesList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addCountry($event)">
+            </mat-chip-list>
+            <mat-autocomplete #autoForCountry="matAutocomplete" (optionSelected)="selectedCountry($event)">
+                <mat-option *ngFor="let country of filteredCountries | async" [value]="country.name">
+                {{country.name}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="onCloseClick()"></button>
+</mat-dialog-actions>

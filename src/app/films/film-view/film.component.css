@@ -78,3 +78,7 @@
 .film-photo {
   margin-right: 5px;
 }
+
+.poster {
+    max-width: 200px;
+}

@@ -1,6 +1,9 @@
 import { Person } from "../persons/person";
 import { Photo } from "../common/photo";
 import { FilmAnotherName } from "./film-edit/film-another-names/filmAnotherName";
+import { Company } from "../common/company";
+import { FilmGenre } from "./filmGenre";
+import { Country } from "../common/country";
 
 export interface Film {
     id: number;
@@ -16,8 +19,8 @@ export interface Film {
     tagline: string;
     photo?: Photo;
     boxOffice?: BoxOffice;
-    genres?: string[];
-    countries?: string[];
+    genres?: FilmGenre[];
+    countries?: Country[];
     writers?: Person[];
     directors?: Person[];
     cast?: Person[];
@@ -26,18 +29,8 @@ export interface Film {
     companies?: Company[];
 }
 
-export interface Country {
-    id: number;
-    name: string;
-}
-
 export interface BoxOffice {
     budget?: number;
     gross?: number;
     openingWeekend?: number;
-}
-
-export interface Company {
-    id?: string;
-    name: string;
 }

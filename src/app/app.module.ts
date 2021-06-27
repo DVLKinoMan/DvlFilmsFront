@@ -28,6 +28,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NgImageFullscreenViewModule } from 'ng-image-fullscreen-view';
 
 import { PersonComponent } from './persons/person-view/person.component';
@@ -42,6 +44,10 @@ import { FilmCastAndCrewDialogComponent } from './films/film-edit/film-cast-crew
 import { PersonsComponent } from './persons/persons-list/persons.component';
 import { FilmPhotosDialogComponent } from './films/film-photos/film-photos.dialog.component';
 import { PersonPhotosDialogComponent } from './persons/person-photos/person-photos.dialog.component';
+import { FilmEditDialogComponent } from './films/film-edit/film-edit.dialog.component';
+import { CountriesService } from './common/services/countries.service';
+import { CompaniesService } from './common/services/companies.service';
+import { GenresService } from './common/services/genres.service';
 
 @NgModule({
   declarations: [
@@ -56,7 +62,8 @@ import { PersonPhotosDialogComponent } from './persons/person-photos/person-phot
     FilmAnotherNamesDialogComponent,
     PersonAlternateNamesDailogComponent,
     FilmAwardsDialogComponent,
-    FilmCastAndCrewDialogComponent
+    FilmCastAndCrewDialogComponent,
+    FilmEditDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -90,6 +97,8 @@ import { PersonPhotosDialogComponent } from './persons/person-photos/person-phot
     MatToolbarModule,
     MatDialogModule,
     MatExpansionModule,
+    MatChipsModule,
+    MatAutocompleteModule,
     NgImageFullscreenViewModule
   ],
   providers: [
@@ -97,6 +106,9 @@ import { PersonPhotosDialogComponent } from './persons/person-photos/person-phot
     PersonFetcherService,
     FilmsService,
     PhotosService,
+    CountriesService,
+    CompaniesService,
+    GenresService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
   bootstrap: [AppComponent]

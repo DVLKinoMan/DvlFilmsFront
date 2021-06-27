@@ -4,7 +4,8 @@
         <div id = "little-bios" style="display: flex;">
             <div id="little-bio" style="display: flex">
                     <div id="poster">
-                        <img [src]="model.photo?.image" 
+                        <img class="poster"
+                        [src]="model.photo?.image" 
                         [alt]="model.photo?.title"
                         onerror="this.src='assets/DefaultMovie.png'">
                         <div class="imdb-rating">
@@ -27,11 +28,16 @@
                                             title="Film Another Names">
                                                 <mat-icon>info</mat-icon>
                                     </button>
+                                    <button mat-mini-fab 
+                                            (click)="openEditDialog()" 
+                                            title="Edit Film">
+                                                <mat-icon>edit</mat-icon>
+                                    </button>
                                 </h1>
                             </div>
                             <div *ngIf="model.genres">
                                 <button class="film-genre" *ngFor="let genre of model.genres" 
-                                mat-raised-button color="primary">{{genre}}</button>
+                                mat-raised-button color="primary">{{genre.name}}</button>
                             </div>
                             <div *ngIf="model.description" class="film-description">
                                 {{model.description}}
@@ -42,7 +48,7 @@
                             <div *ngIf="model.countries">
                                 <mat-label>Countries: </mat-label>
                                 <button class="film-country" *ngFor="let country of model.countries" 
-                                 mat-stroked-button color="primary">{{country}}</button>
+                                 mat-stroked-button color="primary">{{country.name}}</button>
                             </div>
                             <div *ngIf="model.companies">
                                 <mat-label>Companies: </mat-label>

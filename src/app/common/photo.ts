@@ -1,7 +1,7 @@
 
-export interface Photo {
+export class Photo {
     // Id: guid;
-    imdbPageUrl: string;
-    image: string;
-    title: string;
+    public imdbPageUrl: string;
+    public image: string;
+    public title: string;
 }
