@@ -51,6 +51,10 @@
   margin-right: 5px;
 }
 
+.cast-page-arrows {
+    float: right;
+}
+
 .cast-footer{
   margin: 0px;
 }

@@ -136,12 +136,28 @@
             </div>
         </div> 
         <div *ngIf="cast">
-            <span style="margin-left: 45px;">Cast: </span>
+            <!-- <span style="margin-left: 45px;">Cast: </span> -->
+            <div style="display: inline-table; width: 100%;">
+                <div style="float: left">Cast 
+                    <button mat-mini-fab 
+                        (click)="openCastAndCrewDialog()" 
+                        title="All Cast And Crew">
+                            <mat-icon>info</mat-icon>
+                    </button>
+                </div>
+                <div class="cast-page-arrows">
+                    <button mat-mini-fab [disabled]="leftCastArrowDisabled" 
+                    (click)="castPageArrowClicked(false)">
+                        <mat-icon>keyboard_arrow_left</mat-icon>
+                    </button>
+                    <span>{{castCurrPage + 1}}/{{castPagesLength}}</span>
+                    <button mat-mini-fab [disabled]="rightCastArrowDisabled" 
+                    (click)="castPageArrowClicked(true)">
+                        <mat-icon>keyboard_arrow_right</mat-icon>
+                    </button>
+                </div>
+            </div>
             <div class="cast">
-                <button mat-mini-fab [disabled]="leftCastArrowDisabled" 
-                (click)="castPageArrowClicked(false)">
-                    <mat-icon>keyboard_arrow_left</mat-icon>
-                </button>
                 <mat-card *ngFor="let castMember of cast" class="cast-card" 
                 [routerLink]="castMember.id ? ['/person/'+castMember.id] : []">
                     <img class="cast-image"
@@ -161,18 +177,6 @@
                         </mat-card-subtitle>
                     </mat-card-footer>
                 </mat-card>
-                <button mat-mini-fab [disabled]="rightCastArrowDisabled" 
-                (click)="castPageArrowClicked(true)">
-                    <mat-icon>keyboard_arrow_right</mat-icon>
-                </button>
-            </div>
-            <div style="float: right">
-                <span>{{castCurrPage + 1}}/{{castPagesLength}}</span>
-                <button mat-mini-fab 
-                    (click)="openCastAndCrewDialog()" 
-                    title="All Cast And Crew">
-                        <mat-icon>info</mat-icon>
-                </button>
             </div>
         </div>
     </div>
