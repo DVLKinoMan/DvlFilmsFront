@@ -1,10 +1,28 @@
-<h1 mat-dialog-title>{{data.filmName}}</h1>
+<h1 mat-dialog-title>{{data.filmName}} Another Names</h1>
 <mat-dialog-content>
-  <div *ngFor="let anotherName of data.anotherNames">
-    <p>{{anotherName.country.name}}: {{anotherName.name}}
+  <div *ngFor="let anotherName of anotherNames">
+    <p *ngIf="!data.editMode; else edit">{{anotherName.country.name}}: {{anotherName.name}}
       <span *ngIf="anotherName.description"> ({{anotherName.description}})</span>
     </p>
+    <ng-template #edit>
+      <mat-form-field>
+        <mat-select [(value)]="anotherName.country.id">
+          <mat-option *ngFor="let country of countries" [value]="country.id">
+            {{country.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput [value]="anotherName.name">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput [value]="anotherName.description">
+      </mat-form-field>
+    </ng-template>
   </div>
+  <mat-spinner *ngIf="loading"></mat-spinner>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Close</button>

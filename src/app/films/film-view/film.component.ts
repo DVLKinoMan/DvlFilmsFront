@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { Person } from "src/app/persons/person";
 import { PhotosService } from "src/app/common/services/photos.service";
@@ -25,8 +24,7 @@ export class FilmComponent implements OnInit {
     id: number;
     model: Film;
     fetched?: Film;
-    editMode: boolean = false;
-    filmForm: FormGroup;
+    loading: boolean = true;
 
     cast: FilmCastMember[];
     castItemsPerPage: number = 5;
@@ -41,7 +39,6 @@ export class FilmComponent implements OnInit {
     constructor(private service: FilmsService,
         private photosService: PhotosService,
         private route: ActivatedRoute,
-        private formBuilder: FormBuilder,
         public anotherNamesDialog: MatDialog,
         public awardsDialog: MatDialog,
         public castAndCrewDialog: MatDialog,
@@ -55,9 +52,7 @@ export class FilmComponent implements OnInit {
         });
     }
     ngOnInit(): void {
-        this.filmForm = this.formBuilder.group({
 
-        });
     }
 
     setDefaultProfilePicture(event: any, castMember: FilmCastMember) {
@@ -75,7 +70,7 @@ export class FilmComponent implements OnInit {
     openAnotherNamesDialog(): void {
         const dialogRef = this.anotherNamesDialog.open(FilmAnotherNamesDialogComponent, {
             width: '800px',
-            data: { filmName: this.model.name, anotherNames: this.model.anotherNames }
+            data: { filmName: this.model.name, filmId: this.id }
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -127,18 +122,11 @@ export class FilmComponent implements OnInit {
         });
     }
 
-    fetchFilmFromImdb() {
-
-    }
-
-    save() {
-
-    }
-
     loadFilm() {
         this.service.getById(this.id).subscribe(result => {
             this.photosService.fixImage(result.photo);
             this.model = result;
+            this.loading = false;
             this.photosService.getFilmPhotos(this.id, 0, this.showPhotos).subscribe(result => {
                 this.photosService.fixImages(result);
                 this.model.photos = result;

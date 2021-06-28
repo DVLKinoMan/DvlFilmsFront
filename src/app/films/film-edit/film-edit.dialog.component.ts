@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Company } from "src/app/common/company";
 import { Country } from "src/app/common/country";
 import { Photo } from "src/app/common/photo";
@@ -17,6 +17,8 @@ import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { Observable } from "rxjs";
 import { map, startWith } from 'rxjs/operators';
+import { FilmAnotherNamesDialogComponent } from "./film-another-names/film-anotherNames.dialog.component";
+import { FilmPhotosDialogComponent } from "../film-photos/film-photos.dialog.component";
 
 @Component({
     selector: 'app-film-edit',
@@ -26,6 +28,10 @@ import { map, startWith } from 'rxjs/operators';
 
 export class FilmEditDialogComponent {
     model: Film;
+    anotherNames: string[];
+
+    loading: boolean = true;
+    showPhotos: number = 5;
 
     separatorKeysCodes: number[] = [ENTER, COMMA];
 
@@ -51,7 +57,9 @@ export class FilmEditDialogComponent {
         private photosService: PhotosService,
         private companiesService: CompaniesService,
         private genresService: GenresService,
-        private countriesService: CountriesService
+        private countriesService: CountriesService,
+        public anotherNamesDialog: MatDialog,
+        public photosDialog: MatDialog
     ) {
         if (!data.film)
             this.loadFilm();
@@ -62,6 +70,28 @@ export class FilmEditDialogComponent {
         this.loadCompanies();
         this.loadCountries();
         this.loadGenres();
+    }
+
+    openAnotherNamesDialog() {
+        this.anotherNamesDialog.open(FilmAnotherNamesDialogComponent, {
+            width: '800px',
+            data: {
+                filmName: this.model.name,
+                filmId: this.model.id,
+                editMode: true
+            }
+        });
+    }
+
+    openPhotosDialog() {
+        const dialogRef = this.photosDialog.open(FilmPhotosDialogComponent, {
+            width: '1000px',
+            data: { filmId: this.model.id, filmName: this.model.name }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
     }
 
     onFileSelected() {
@@ -214,7 +244,21 @@ export class FilmEditDialogComponent {
                 this.photosService.fixImage(result.photo);
                 this.data.filmName = result.name;
                 this.model = result;
+                this.loading = false;
+                this.loadFilmAnotherNames();
+                this.photosService.getFilmPhotos(this.model.id, 0, this.showPhotos)
+                    .subscribe(result => {
+                        this.photosService.fixImages(result);
+                        this.model.photos = result;
+                    }, error => console.log(error));
             }, error => console.log(error));
+    }
+
+    loadFilmAnotherNames() {
+        this.filmService.getAnotherNames(this.model.id).subscribe(result => {
+            this.model.anotherNames = result;
+            this.anotherNames = [...new Set(result.map(item => item.name))];
+        }, error => console.log(error));
     }
 
     loadCountries() {
@@ -232,8 +276,9 @@ export class FilmEditDialogComponent {
             this.companies = result;
             this.filteredCompanies = this.companyCtrl.valueChanges.pipe(
                 startWith(null),
-                map((company: string | null) => company ? this._filterCompanies(company)
-                    : this.companies.slice()));
+                map((company: string | null) => company && company.length >= 4
+                    ? this._filterCompanies(company)
+                    : []));
         });
     }
 
@@ -251,5 +296,6 @@ export class FilmEditDialogComponent {
 export interface DialogData {
     filmId?: number;
     filmName: string;
+    //todo this film doesn't needed
     film?: Film;
 }

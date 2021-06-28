@@ -5,6 +5,7 @@ import { Film } from "../film";
 import { FilmCastMember } from "../film-edit/film-cast-crew/filmCastMember";
 import { FilmCrewMember } from "../film-edit/film-cast-crew/filmCrewMember";
 import { FilmAwardResult } from "../film-edit/film-awards/FilmAwardResult";
+import { FilmAnotherName } from "../film-edit/film-another-names/filmAnotherName";
 
 @Injectable({
     providedIn: 'root',
@@ -39,5 +40,11 @@ export class FilmsService {
         var url = this.baseUrl + "/Films/Get/" + filmId + "/Awards";
 
         return this.http.get<FilmAwardResult[]>(url);
+    }
+
+    getAnotherNames(filmId: number): Observable<FilmAnotherName[]> {
+        var url = this.baseUrl + "/Films/Get/" + filmId + "/AnotherNames";
+
+        return this.http.get<FilmAnotherName[]>(url);
     }
 }
