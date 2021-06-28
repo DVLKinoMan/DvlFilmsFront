@@ -19,6 +19,10 @@ import { Observable } from "rxjs";
 import { map, startWith } from 'rxjs/operators';
 import { FilmAnotherNamesDialogComponent } from "./film-another-names/film-anotherNames.dialog.component";
 import { FilmPhotosDialogComponent } from "../film-photos/film-photos.dialog.component";
+import { Person } from "src/app/persons/person";
+import { Gender } from "src/app/persons/enums";
+import { FilmCastAndCrewDialogComponent } from "./film-cast-crew/film-cast-crew.dialog.component";
+import { FilmCastMember } from "./film-cast-crew/filmCastMember";
 
 @Component({
     selector: 'app-film-edit',
@@ -29,6 +33,14 @@ import { FilmPhotosDialogComponent } from "../film-photos/film-photos.dialog.com
 export class FilmEditDialogComponent {
     model: Film;
     anotherNames: string[];
+
+    cast: FilmCastMember[];
+    castItemsPerPage: number = 5;
+    castCurrPage: number = 0;
+    castPagesLength: number = 0;
+    allCast: FilmCastMember[];
+    leftCastArrowDisabled: boolean = true;
+    rightCastArrowDisabled: boolean = false;
 
     loading: boolean = true;
     showPhotos: number = 5;
@@ -59,7 +71,8 @@ export class FilmEditDialogComponent {
         private genresService: GenresService,
         private countriesService: CountriesService,
         public anotherNamesDialog: MatDialog,
-        public photosDialog: MatDialog
+        public photosDialog: MatDialog,
+        public castAndCrewDialog: MatDialog
     ) {
         if (!data.film)
             this.loadFilm();
@@ -70,6 +83,29 @@ export class FilmEditDialogComponent {
         this.loadCompanies();
         this.loadCountries();
         this.loadGenres();
+    }
+
+    setDefaultPersonPhoto(event: any, person: Person) {
+        if (typeof person.sex == "string")
+            event.target.src = person?.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+        else event.target.src = person?.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+    }
+
+    setDefaultProfilePicture(event: any, castMember: FilmCastMember) {
+        if (typeof castMember.gender == "string")
+            event.target.src = castMember.gender == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+        else event.target.src = castMember.gender == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+    }
+
+    openCastAndCrewDialog() {
+        const dialogRef = this.castAndCrewDialog.open(FilmCastAndCrewDialogComponent, {
+            width: '900px',
+            data: { filmId: this.model.id, filmName: this.model.name }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
     }
 
     openAnotherNamesDialog() {
@@ -92,6 +128,40 @@ export class FilmEditDialogComponent {
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
         });
+    }
+
+    removeDirector(director: Person) {
+        if (!this.model.directors)
+            return;
+
+        var dir = this.model.directors.find(dir => dir.name == director.name);
+        if (!dir)
+            return;
+        const index = this.model.directors.indexOf(dir);
+
+        if (index >= 0)
+            this.model.directors.splice(index, 1);
+    }
+
+    removeWriter(director: Person) {
+        if (!this.model.writers)
+            return;
+
+        var dir = this.model.writers.find(dir => dir.name == director.name);
+        if (!dir)
+            return;
+        const index = this.model.writers.indexOf(dir);
+
+        if (index >= 0)
+            this.model.writers.splice(index, 1);
+    }
+
+    addDirectorClicked() {
+
+    }
+
+    addWriterClicked() {
+
     }
 
     onFileSelected() {
@@ -238,6 +308,14 @@ export class FilmEditDialogComponent {
         return this.countries.filter(country => country.name.toLowerCase().includes(filterValue));
     }
 
+    castPageArrowClicked(right: boolean) {
+        this.castCurrPage = right ? this.castCurrPage + 1 : this.castCurrPage - 1;
+        this.cast = this.allCast.slice(this.castCurrPage * this.castItemsPerPage,
+            this.castCurrPage * this.castItemsPerPage + this.castItemsPerPage);
+        this.leftCastArrowDisabled = this.castCurrPage < 1;
+        this.rightCastArrowDisabled = this.castCurrPage >= this.castPagesLength - 1;
+    }
+
     loadFilm() {
         if (this.data.filmId)
             this.filmService.getById(this.data.filmId).subscribe(result => {
@@ -246,12 +324,25 @@ export class FilmEditDialogComponent {
                 this.model = result;
                 this.loading = false;
                 this.loadFilmAnotherNames();
+                this.loadCast();
                 this.photosService.getFilmPhotos(this.model.id, 0, this.showPhotos)
                     .subscribe(result => {
                         this.photosService.fixImages(result);
                         this.model.photos = result;
                     }, error => console.log(error));
             }, error => console.log(error));
+    }
+
+    loadCast() {
+        this.filmService.getCast(this.model.id).subscribe(result => {
+            this.photosService.fixImagesForCast(result);
+            this.allCast = result;
+            this.cast = this.allCast.slice(0, this.castItemsPerPage);
+            this.castPagesLength = Math.floor(this.allCast.length / this.castItemsPerPage) +
+                (this.allCast.length % this.castItemsPerPage > 0 ? 1 : 0);
+            this.leftCastArrowDisabled = true;
+            this.rightCastArrowDisabled = this.castPagesLength <= 1;
+        }, error => console.log(error));
     }
 
     loadFilmAnotherNames() {

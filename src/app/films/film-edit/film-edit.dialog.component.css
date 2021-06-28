@@ -25,3 +25,24 @@
 .film-photo {
   margin-right: 5px;
 }
+
+.cast {
+  display: flex;
+}
+
+.cast-image {
+  width: 120px;
+  height: 160px;
+  margin: 5px 0px;
+}
+
+.cast-card {
+  width: 120px;
+  cursor: pointer;
+  margin-right: 5px;
+  margin-top: 10px;
+}
+
+.cast-page-arrows {
+    float: right;
+}

@@ -1,208 +1,319 @@
 <h1 mat-dialog-title>{{data.filmName}} Edit</h1>
 <mat-dialog-content>
-    <mat-spinner *ngIf="loading"></mat-spinner>
-    <div class="little-stats">
-        <div id="poster">
-            <img class="poster"
-            [src]="model.photo?.image" 
-            [alt]="model.photo?.title"
-            onerror="this.src='assets/DefaultMovie.png'">
-        </div>
-        <div style="margin-left: 20px;">
-            <div id="poster-things">
-                <button mat-mini-fab 
-                    (click)="fileInput.click()"
-                    title="Choose Poster">
-                        <mat-icon>edit</mat-icon>
-                </button>
-                <input hidden (change)="onFileSelected()" #fileInput type="file" id="file"
-                accept="image/x-png,image/gif,image/jpeg">
-                <mat-form-field appearance="outline">
-                    <mat-label>Title</mat-label>
-                    <input matInput [value]="model.photo?.title">
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label>Poster Imdb Url</mat-label>
-                    <input matInput [value]="model.photo?.imdbPageUrl">
-                </mat-form-field>
+    <mat-tab-group>
+        <mat-tab label="Main">
+            <mat-spinner *ngIf="loading"></mat-spinner>
+                <div class="little-stats">
+                    <div id="poster">
+                        <img class="poster"
+                        [src]="model.photo?.image" 
+                        [alt]="model.photo?.title"
+                        onerror="this.src='assets/DefaultMovie.png'">
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <div id="poster-things">
+                            <button mat-mini-fab 
+                                (click)="fileInput.click()"
+                                title="Choose Poster">
+                                    <mat-icon>edit</mat-icon>
+                            </button>
+                            <input hidden (change)="onFileSelected()" #fileInput type="file" id="file"
+                            accept="image/x-png,image/gif,image/jpeg">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Title</mat-label>
+                                <input matInput [value]="model.photo?.title">
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Poster Imdb Url</mat-label>
+                                <input matInput [value]="model.photo?.imdbPageUrl">
+                            </mat-form-field>
+                        </div>
+                        <div id="name">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Name</mat-label>
+                                <input matInput [value]="model.name">
+                            </mat-form-field>
+                            <mat-form-field style="margin-left: 10px;">
+                                <mat-select (selectionChange)="model.name = $event.value ? $event.value : data.filmName">
+                                    <mat-option>None</mat-option>
+                                    <mat-option *ngFor="let altName of anotherNames" 
+                                        [value]="altName">
+                                        {{altName}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-label><i>choose from alternate names</i></mat-label>
+                            </mat-form-field>
+                            <button mat-mini-fab 
+                                (click)="openAnotherNamesDialog()"
+                                title="Edit Another Names">
+                                    <mat-icon>edit</mat-icon>
+                            </button>
+                        </div>
+                        <div id="releaseDate">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Release Date</mat-label>
+                                <input matInput [matDatepicker]="picker" [value]="model.releaseDate">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div id="durationInMinutes">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Duration In Minutes</mat-label>
+                                <input matInput type="number" [value]="model.durationInMinutes">
+                            </mat-form-field>
+                        </div>
+                    </div>   
+                </div>
+                <div id="imdbStats">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Imdb Page Url</mat-label>
+                        <input matInput [value]="model.imdbPageUrl">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Imdb Rating</mat-label>
+                        <input matInput type="number" [value]="model.imdbRating">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Imdb User Ratings Count</mat-label>
+                        <input matInput type="number" [value]="model.imdbUserRatingsCount">
+                    </mat-form-field>
+                </div>
+                <div id="photos">
+                    <span>Photos: 
+                        <button mat-mini-fab 
+                            (click)="openPhotosDialog()"
+                            title="Edit Photos">
+                                <mat-icon>edit</mat-icon>
+                        </button>
+                    </span>
+                    <div class="film-photos">
+                        <div *ngFor="let photo of model.photos" class="film-photo">
+                                        <img [src]="photo?.image" 
+                                        [title]="photo?.title"
+                                        style="max-width: 200px;">
+                        </div>
+                    </div>   
+                </div>
+                <div id="description">
+                    <mat-form-field class="description" appearance="fill">
+                        <mat-label>Description</mat-label>
+                        <textarea rows="8" matInput [value]="model.description"></textarea>
+                    </mat-form-field>
+                </div>
+                <div id="genres">
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>Film Genres</mat-label>
+                        <mat-chip-list #chipGenresList>
+                            <mat-chip
+                                *ngFor="let genre of model.genres"
+                                (removed)="removeGenre(genre)">
+                                {{genre.name}}
+                                <mat-icon matChipRemove>cancel</mat-icon>
+                            </mat-chip>
+                            <input
+                                placeholder="New Genre..."
+                                #genreInput
+                                [formControl]="genreCtrl"
+                                [matAutocomplete]="autoForGenre"
+                                [matChipInputFor]="chipGenresList"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                (matChipInputTokenEnd)="addGenre($event)">
+                        </mat-chip-list>
+                        <mat-autocomplete #autoForGenre="matAutocomplete" (optionSelected)="selectedGenre($event)">
+                            <mat-option *ngFor="let genre of filteredGenres | async" [value]="genre.name">
+                            {{genre.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div> 
+                <div id="companies">
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>Film Companies</mat-label>
+                        <mat-chip-list #chipCompaniesList>
+                            <mat-chip
+                                *ngFor="let company of model.companies"
+                                (removed)="removeCompany(company)">
+                                {{company.name}}
+                                <mat-icon matChipRemove>cancel</mat-icon>
+                            </mat-chip>
+                            <input
+                                placeholder="New Company..."
+                                #companyInput
+                                [formControl]="companyCtrl"
+                                [matAutocomplete]="autoForCompany"
+                                [matChipInputFor]="chipCompaniesList"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                (matChipInputTokenEnd)="addCompany($event)">
+                        </mat-chip-list>
+                        <mat-autocomplete #autoForCompany="matAutocomplete" (optionSelected)="selectedCompany($event)">
+                            <mat-option *ngFor="let company of filteredCompanies | async" [value]="company.name">
+                            {{company.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div> 
+                <div id="countries">
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>Film Countries</mat-label>
+                        <mat-chip-list #chipCountriesList>
+                            <mat-chip
+                                *ngFor="let country of model.countries"
+                                (removed)="removeCountry(country)">
+                                {{country.name}}
+                                <mat-icon matChipRemove>cancel</mat-icon>
+                            </mat-chip>
+                            <input
+                                placeholder="New Country..."
+                                #countryInput
+                                [formControl]="countryCtrl"
+                                [matAutocomplete]="autoForCountry"
+                                [matChipInputFor]="chipCountriesList"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                (matChipInputTokenEnd)="addCountry($event)">
+                        </mat-chip-list>
+                        <mat-autocomplete #autoForCountry="matAutocomplete" (optionSelected)="selectedCountry($event)">
+                            <mat-option *ngFor="let country of filteredCountries | async" [value]="country.name">
+                            {{country.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div id="boxOfficeStats">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Budget</mat-label>
+                        <input matInput type="number" [value]="model.boxOffice?.budget">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Gross</mat-label>
+                        <input matInput type="number" [value]="model.boxOffice?.gross">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Opening Weekend</mat-label>
+                        <input matInput type="number" [value]="model.boxOffice?.openingWeekend">
+                    </mat-form-field>
+                </div>
+                <div id="awardsInfoString">
+                    <mat-form-field class="awardsInfoString" appearance="outline">
+                        <mat-label>Awards Information</mat-label>
+                        <input matInput [value]="model.awardsInformationString">
+                    </mat-form-field>
+                </div>
+                <div id="tagline">
+                    <mat-form-field class="tagline" appearance="outline">
+                        <mat-label>Tagline</mat-label>
+                        <input matInput [value]="model.tagline">
+                    </mat-form-field>
+                </div>
+        </mat-tab>
+        <mat-tab label="Cast & Crew">
+            <div style="display: flex;">
+                <div id="directors">
+                    <span>Directors: </span>
+                    <hr>
+                    <div class="cast"> 
+                        <mat-card 
+                        class="cast-card"
+                        *ngFor="let director of model.directors"
+                        [routerLink]="director.id ? ['/person/'+director.id] : []"
+                        [queryParams]="{flmCatName: 'director'}">
+                            <img   
+                            class="cast-image"
+                            [src]="director.profilePicture?.imdbPageUrl" 
+                                [title]="director.name"
+                                (error)="setDefaultPersonPhoto($event, director)">
+                            <mat-card-footer class="cast-footer">
+                                <mat-card-title>{{director.name}}</mat-card-title>
+                                <button mat-mini-fab
+                                title="Remove Director"
+                                (click)="removeDirector(director)">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                            </mat-card-footer>
+                        </mat-card>
+                        <button mat-mini-fab
+                        title="Add Director"
+                        (click)="addDirectorClicked()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <div id="writers">
+                    <span>Writers: </span>
+                    <hr>
+                    <div class="cast">
+                            <mat-card *ngFor="let writer of model.writers"
+                            class="cast-card" 
+                            [routerLink]="writer.id ? ['/person/'+writer.id] : []"
+                            [queryParams]="{flmCatName: 'writer'}">
+                                <img  
+                                    class="cast-image"
+                                    [src]="writer.profilePicture?.imdbPageUrl" 
+                                    [title]="writer.name"
+                                    (error)="setDefaultPersonPhoto($event, writer)">
+                                <mat-card-footer class="cast-footer">
+                                    <mat-card-title>{{writer.name}}</mat-card-title>
+                                <button mat-mini-fab
+                                title="Remove Writer"
+                                (click)="removeWriter(writer)">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                                </mat-card-footer>
+                            </mat-card>
+                        <button mat-mini-fab
+                        title="Add Writer"
+                        (click)="addWriterClicked()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                </div> 
             </div>
-            <div id="name">
-                <mat-form-field appearance="outline">
-                    <mat-label>Name</mat-label>
-                    <input matInput [value]="model.name">
-                </mat-form-field>
-                <mat-form-field style="margin-left: 10px;">
-                    <mat-select (selectionChange)="model.name = $event.value ? $event.value : data.filmName">
-                        <mat-option>None</mat-option>
-                        <mat-option *ngFor="let altName of anotherNames" 
-                            [value]="altName">
-                            {{altName}}
-                        </mat-option>
-                    </mat-select>
-                    <mat-label><i>choose from alternate names</i></mat-label>
-                </mat-form-field>
-                <button mat-mini-fab 
-                    (click)="openAnotherNamesDialog()"
-                    title="Edit Another Names">
-                        <mat-icon>edit</mat-icon>
-                </button>
+            <div id="cast">
+                <div style="display: inline-table; width: 100%;">
+                    <div style="float: left">Cast 
+                        <button mat-mini-fab 
+                            (click)="openCastAndCrewDialog()" 
+                            title="Edit Cast And Crew">
+                                <mat-icon>edit</mat-icon>
+                        </button>
+                    </div>
+                    <div class="cast-page-arrows">
+                        <button mat-mini-fab [disabled]="leftCastArrowDisabled" 
+                        (click)="castPageArrowClicked(false)">
+                            <mat-icon>keyboard_arrow_left</mat-icon>
+                        </button>
+                        <span>{{castCurrPage + 1}}/{{castPagesLength}}</span>
+                        <button mat-mini-fab [disabled]="rightCastArrowDisabled" 
+                        (click)="castPageArrowClicked(true)">
+                            <mat-icon>keyboard_arrow_right</mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <hr>
+                <div class="cast">
+                    <mat-card *ngFor="let castMember of cast" class="cast-card" 
+                    [routerLink]="castMember.id ? ['/person/'+castMember.id] : []">
+                        <img class="cast-image"
+                            [src]="castMember.profilePicture?.image" 
+                            [title]="castMember.name"
+                            (error)="setDefaultProfilePicture($event, castMember)">
+                        <mat-card-footer class="cast-footer">
+                            <mat-card-title>{{castMember.name}}</mat-card-title>
+                            <hr>
+                            <mat-card-subtitle *ngFor="let character of castMember.characters">
+                                <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
+                                    {{character?.name}}
+                                </a>
+                                <ng-template #chOnlyName>{{character?.name}}
+                                    <p *ngIf="character.description"> ({{character.description}})</p>
+                                </ng-template>
+                            </mat-card-subtitle>
+                        </mat-card-footer>
+                    </mat-card>
+                </div>
             </div>
-            <div id="releaseDate">
-                <mat-form-field appearance="fill">
-                    <mat-label>Release Date</mat-label>
-                    <input matInput [matDatepicker]="picker" [value]="model.releaseDate">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-            </div>
-            <div id="durationInMinutes">
-                <mat-form-field appearance="outline">
-                    <mat-label>Duration In Minutes</mat-label>
-                    <input matInput type="number" [value]="model.durationInMinutes">
-                </mat-form-field>
-            </div>
-        </div>   
-    </div>
-    <div id="imdbStats">
-        <mat-form-field appearance="outline">
-            <mat-label>Imdb Page Url</mat-label>
-            <input matInput [value]="model.imdbPageUrl">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Imdb Rating</mat-label>
-            <input matInput type="number" [value]="model.imdbRating">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Imdb User Ratings Count</mat-label>
-            <input matInput type="number" [value]="model.imdbUserRatingsCount">
-        </mat-form-field>
-    </div>
-    <div id="photos">
-        <span>Photos: 
-            <button mat-mini-fab 
-                (click)="openPhotosDialog()"
-                title="Edit Photos">
-                    <mat-icon>edit</mat-icon>
-            </button>
-        </span>
-        <div class="film-photos">
-            <div *ngFor="let photo of model.photos" class="film-photo">
-                            <img [src]="photo?.image" 
-                            [title]="photo?.title"
-                            style="max-width: 200px;">
-            </div>
-        </div>   
-    </div>
-    <div id="description">
-        <mat-form-field class="description" appearance="fill">
-            <mat-label>Description</mat-label>
-            <textarea rows="8" matInput [value]="model.description"></textarea>
-        </mat-form-field>
-    </div>
-    <div id="genres">
-        <mat-form-field style="width: 80%;">
-            <mat-label>Film Genres</mat-label>
-            <mat-chip-list #chipGenresList>
-                <mat-chip
-                    *ngFor="let genre of model.genres"
-                    (removed)="removeGenre(genre)">
-                    {{genre.name}}
-                    <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
-                <input
-                    placeholder="New Genre..."
-                    #genreInput
-                    [formControl]="genreCtrl"
-                    [matAutocomplete]="autoForGenre"
-                    [matChipInputFor]="chipGenresList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    (matChipInputTokenEnd)="addGenre($event)">
-            </mat-chip-list>
-            <mat-autocomplete #autoForGenre="matAutocomplete" (optionSelected)="selectedGenre($event)">
-                <mat-option *ngFor="let genre of filteredGenres | async" [value]="genre.name">
-                {{genre.name}}
-                </mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
-    </div> 
-    <div id="companies">
-        <mat-form-field style="width: 80%;">
-            <mat-label>Film Companies</mat-label>
-            <mat-chip-list #chipCompaniesList>
-                <mat-chip
-                    *ngFor="let company of model.companies"
-                    (removed)="removeCompany(company)">
-                    {{company.name}}
-                    <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
-                <input
-                    placeholder="New Company..."
-                    #companyInput
-                    [formControl]="companyCtrl"
-                    [matAutocomplete]="autoForCompany"
-                    [matChipInputFor]="chipCompaniesList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    (matChipInputTokenEnd)="addCompany($event)">
-            </mat-chip-list>
-            <mat-autocomplete #autoForCompany="matAutocomplete" (optionSelected)="selectedCompany($event)">
-                <mat-option *ngFor="let company of filteredCompanies | async" [value]="company.name">
-                {{company.name}}
-                </mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
-    </div> 
-    <div id="countries">
-        <mat-form-field style="width: 80%;">
-            <mat-label>Film Countries</mat-label>
-            <mat-chip-list #chipCountriesList>
-                <mat-chip
-                    *ngFor="let country of model.countries"
-                    (removed)="removeCountry(country)">
-                    {{country.name}}
-                    <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
-                <input
-                    placeholder="New Country..."
-                    #countryInput
-                    [formControl]="countryCtrl"
-                    [matAutocomplete]="autoForCountry"
-                    [matChipInputFor]="chipCountriesList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    (matChipInputTokenEnd)="addCountry($event)">
-            </mat-chip-list>
-            <mat-autocomplete #autoForCountry="matAutocomplete" (optionSelected)="selectedCountry($event)">
-                <mat-option *ngFor="let country of filteredCountries | async" [value]="country.name">
-                {{country.name}}
-                </mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
-    </div>
-    <div id="boxOfficeStats">
-        <mat-form-field appearance="outline">
-            <mat-label>Budget</mat-label>
-            <input matInput type="number" [value]="model.boxOffice?.budget">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Gross</mat-label>
-            <input matInput type="number" [value]="model.boxOffice?.gross">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Opening Weekend</mat-label>
-            <input matInput type="number" [value]="model.boxOffice?.openingWeekend">
-        </mat-form-field>
-    </div>
-    <div id="awardsInfoString">
-        <mat-form-field class="awardsInfoString" appearance="outline">
-            <mat-label>Awards Information</mat-label>
-            <input matInput [value]="model.awardsInformationString">
-        </mat-form-field>
-    </div>
-    <div id="tagline">
-        <mat-form-field class="tagline" appearance="outline">
-            <mat-label>Tagline</mat-label>
-            <input matInput [value]="model.tagline">
-        </mat-form-field>
-    </div>
+        </mat-tab>
+    </mat-tab-group>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button (click)="onCloseClick()"></button>

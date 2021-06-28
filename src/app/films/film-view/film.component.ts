@@ -90,7 +90,7 @@ export class FilmComponent implements OnInit {
     }
 
     openCastAndCrewDialog() {
-        const dialogRef = this.awardsDialog.open(FilmCastAndCrewDialogComponent, {
+        const dialogRef = this.castAndCrewDialog.open(FilmCastAndCrewDialogComponent, {
             width: '900px',
             data: { filmId: this.id, filmName: this.model.name }
         });
