@@ -7,7 +7,7 @@
                         <mat-grid-tile
                             *ngFor="let castMember of cast">
                             <img class="cast-image"
-                            [src]="castMember.profilePicture?.image" 
+                            [src]="'data:image/png;base64,' + castMember.profilePicture?.image" 
                             [title]="castMember.name"
                             [routerLink]="castMember.id ? ['/person/'+castMember.id] : []"
                             (error)="setDefaultProfilePicture($event, castMember)">

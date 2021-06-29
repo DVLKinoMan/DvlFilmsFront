@@ -124,11 +124,9 @@ export class FilmComponent implements OnInit {
 
     loadFilm() {
         this.service.getById(this.id).subscribe(result => {
-            this.photosService.fixImage(result.photo);
             this.model = result;
             this.loading = false;
             this.photosService.getFilmPhotos(this.id, 0, this.showPhotos).subscribe(result => {
-                this.photosService.fixImages(result);
                 this.model.photos = result;
             }, error => console.log(error));
         }, error => console.log(error));
@@ -151,7 +149,6 @@ export class FilmComponent implements OnInit {
 
     loadCast() {
         this.service.getCast(this.id).subscribe(result => {
-            this.photosService.fixImagesForCast(result);
             this.allCast = result;
             this.cast = this.allCast.slice(0, this.castItemsPerPage);
             this.castPagesLength = Math.floor(this.allCast.length / this.castItemsPerPage) +

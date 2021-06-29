@@ -97,4 +97,17 @@ export class PersonsService {
 
         return this.http.get<PersonAwardResult[]>(url);
     }
+
+    getPersons(name: string, take: number, exactMatch: boolean): Observable<Person[]> {
+        var url = this.baseUrl + "/Persons/Search";
+
+        var params = new HttpParams();
+        params = params.append("name", name);
+        params = params.append("take", take);
+        params = params.append("exactMatch", exactMatch);
+
+        return this.http.get<Person[]>(url, {
+            params: params
+        })
+    }
 }

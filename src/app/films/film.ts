@@ -4,6 +4,8 @@ import { FilmAnotherName } from "./film-edit/film-another-names/filmAnotherName"
 import { Company } from "../common/company";
 import { FilmGenre } from "./filmGenre";
 import { Country } from "../common/country";
+import { FilmCastMember } from "./film-edit/film-cast-crew/filmCastMember";
+import { FilmCrewMember } from "./film-edit/film-cast-crew/filmCrewMember";
 
 export interface Film {
     id: number;
@@ -23,7 +25,8 @@ export interface Film {
     countries?: Country[];
     writers?: Person[];
     directors?: Person[];
-    cast?: Person[];
+    cast?: FilmCastMember[];
+    crew?: FilmCrewMember[];
     photos?: Photo[];
     anotherNames?: FilmAnotherName[];
     companies?: Company[];

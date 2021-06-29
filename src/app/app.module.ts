@@ -48,6 +48,7 @@ import { FilmEditDialogComponent } from './films/film-edit/film-edit.dialog.comp
 import { CountriesService } from './common/services/countries.service';
 import { CompaniesService } from './common/services/companies.service';
 import { GenresService } from './common/services/genres.service';
+import { FilmPersonDialogComponent } from './films/film-edit/film-person/film-person.dialog.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { GenresService } from './common/services/genres.service';
     PersonAlternateNamesDailogComponent,
     FilmAwardsDialogComponent,
     FilmCastAndCrewDialogComponent,
-    FilmEditDialogComponent
+    FilmEditDialogComponent,
+    FilmPersonDialogComponent
   ],
   imports: [
     BrowserModule,

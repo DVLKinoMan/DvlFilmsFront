@@ -5,7 +5,7 @@
         <div id="little-bio" style="display: flex">
                 <div id="poster">
                     <img class="poster"
-                    [src]="model.photo?.image" 
+                    [src]="'data:image/png;base64,' + model.photo?.image" 
                     [alt]="model.photo?.title"
                     onerror="this.src='assets/DefaultMovie.png'">
                     <div class="imdb-rating">
@@ -161,7 +161,7 @@
                 <mat-card *ngFor="let castMember of cast" class="cast-card" 
                 [routerLink]="castMember.id ? ['/person/'+castMember.id] : []">
                     <img class="cast-image"
-                        [src]="castMember.profilePicture?.image" 
+                        [src]="'data:image/png;base64,' + castMember.profilePicture?.image" 
                         [title]="castMember.name"
                         (error)="setDefaultProfilePicture($event, castMember)">
                     <mat-card-footer class="cast-footer">
@@ -190,7 +190,7 @@
         </span>
         <div class="film-photos">
             <div *ngFor="let photo of model.photos" class="film-photo">
-                            <img [src]="photo?.image" 
+                            <img [src]="'data:image/png;base64,' + photo?.image" 
                             [title]="photo?.title"
                             style="max-width: 200px;">
             </div>

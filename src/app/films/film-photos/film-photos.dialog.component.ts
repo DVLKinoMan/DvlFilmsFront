@@ -50,7 +50,6 @@ export class FilmPhotosDialogComponent {
         var take = this.pageEvent.pageSize;
 
         this.photosService.getFilmPhotos(this.data.filmId, skip, take).subscribe(result => {
-            this.photosService.fixImages(result);
             this.photos = result;
             this.fullScreenPhotos = this.photosService.getImdbFullScreenPhotos(result);
         });

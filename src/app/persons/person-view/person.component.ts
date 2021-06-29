@@ -206,16 +206,13 @@ export class PersonComponent implements OnInit {
 
   loadPerson() {
     this.service.getById(this.id).subscribe(result => {
-      this.photosService.fixImage(result.profilePicture);
       this.model = result;
 
       this.photosService.getPersonPhotos(this.id, 0, this.showPhotos).subscribe(result => {
-        this.photosService.fixImages(result);
         this.model.photos = result;
       }, error => console.log(error));
 
       this.service.getFilmographies(this.id).subscribe(result => {
-        this.photosService.fixImagesForFilmographies(result);
         this.model.filmographies = result;
         this.loadFilmCategories();
         this.loadFilmItems();

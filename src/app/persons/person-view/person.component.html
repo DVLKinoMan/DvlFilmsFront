@@ -6,7 +6,7 @@
                     <div id="profilePicture">
                             <!-- <mat-form-field appearance="fill"> -->
                                 <img class="profile-photo-image"
-                                [src]="model.profilePicture.image" 
+                                [src]="'data:image/png;base64,' + model.profilePicture?.image" 
                                 *ngIf="model.profilePicture" 
                                 [title]="model.profilePicture.title"
                                 (error)="setDefaultProfilePicture($event)">
@@ -67,7 +67,7 @@
             <div id="little-bio-for-fetched" *ngIf = "fetched" style="margin-left:50px; display: flex"> 
                 <div id="profilePicture2">
                         <!-- <mat-form-field appearance="fill"> -->
-                            <img [src]="fetched.profilePicture.image" 
+                            <img [src]="'data:image/png;base64,' + fetched.profilePicture.image" 
                             *ngIf="fetched.profilePicture" 
                             [alt]="fetched.profilePicture.title">
                         <!-- </mat-form-field> -->
@@ -189,7 +189,7 @@
                 </span>
             <div class="person-photos">
                 <div *ngFor="let photo of model.photos" class="person-photo">
-                                <img [src]="photo?.image" 
+                                <img [src]="'data:image/png;base64,' + photo?.image" 
                                 [title]="photo?.title"
                                 style="max-width: 200px;">
                 </div>
@@ -231,7 +231,7 @@
                     *ngFor="let filmography of filmographies">
                 <a [routerLink]="filmography.filmItem?.id ? ['/film', filmography.filmItem?.id] : []">
                     <img class="film-item-image" 
-                    [src]="filmography.filmItem?.photo?.image" 
+                    [src]="'data:image/png;base64,' + filmography.filmItem?.photo?.image" 
                     [title]="filmography.filmItem?.photo?.title"
                     onerror="this.src='assets/DefaultMovie.png'">
                 </a>

@@ -285,7 +285,6 @@ export class PersonsComponent implements OnInit {
     this.filters = query.personFilters;
 
     this.service.getList(query).subscribe(result => {
-      this.photosService.fixImages(result.map(function (p) { return p.profilePicture; }))
       this.persons = result;
     }, error => console.error(error));
   }

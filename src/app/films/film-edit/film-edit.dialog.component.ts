@@ -23,6 +23,8 @@ import { Person } from "src/app/persons/person";
 import { Gender } from "src/app/persons/enums";
 import { FilmCastAndCrewDialogComponent } from "./film-cast-crew/film-cast-crew.dialog.component";
 import { FilmCastMember } from "./film-cast-crew/filmCastMember";
+import { FilmCrewMember } from "./film-cast-crew/filmCrewMember";
+import { FilmPersonDialogComponent } from "./film-person/film-person.dialog.component";
 
 @Component({
     selector: 'app-film-edit',
@@ -33,6 +35,8 @@ import { FilmCastMember } from "./film-cast-crew/filmCastMember";
 export class FilmEditDialogComponent {
     model: Film;
     anotherNames: string[];
+
+    crew: FilmCrewMember[];
 
     cast: FilmCastMember[];
     castItemsPerPage: number = 5;
@@ -72,7 +76,8 @@ export class FilmEditDialogComponent {
         private countriesService: CountriesService,
         public anotherNamesDialog: MatDialog,
         public photosDialog: MatDialog,
-        public castAndCrewDialog: MatDialog
+        public castAndCrewDialog: MatDialog,
+        public personDialog: MatDialog
     ) {
         if (!data.film)
             this.loadFilm();
@@ -100,7 +105,12 @@ export class FilmEditDialogComponent {
     openCastAndCrewDialog() {
         const dialogRef = this.castAndCrewDialog.open(FilmCastAndCrewDialogComponent, {
             width: '900px',
-            data: { filmId: this.model.id, filmName: this.model.name }
+            data: {
+                filmId: this.model.id,
+                filmName: this.model.name,
+                cast: this.model.cast,
+                crew: this.model.crew
+            }
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -157,11 +167,25 @@ export class FilmEditDialogComponent {
     }
 
     addDirectorClicked() {
+        const dialogRef = this.personDialog.open(FilmPersonDialogComponent, {
+            width: '500px',
+            data: { title: "Add Director" }
+        });
 
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
     }
 
     addWriterClicked() {
+        const dialogRef = this.personDialog.open(FilmPersonDialogComponent, {
+            width: '500px',
+            data: { title: "Add Writer" }
+        });
 
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
     }
 
     onFileSelected() {
@@ -319,15 +343,14 @@ export class FilmEditDialogComponent {
     loadFilm() {
         if (this.data.filmId)
             this.filmService.getById(this.data.filmId).subscribe(result => {
-                this.photosService.fixImage(result.photo);
                 this.data.filmName = result.name;
                 this.model = result;
                 this.loading = false;
                 this.loadFilmAnotherNames();
                 this.loadCast();
+                this.loadCrew();
                 this.photosService.getFilmPhotos(this.model.id, 0, this.showPhotos)
                     .subscribe(result => {
-                        this.photosService.fixImages(result);
                         this.model.photos = result;
                     }, error => console.log(error));
             }, error => console.log(error));
@@ -335,7 +358,6 @@ export class FilmEditDialogComponent {
 
     loadCast() {
         this.filmService.getCast(this.model.id).subscribe(result => {
-            this.photosService.fixImagesForCast(result);
             this.allCast = result;
             this.cast = this.allCast.slice(0, this.castItemsPerPage);
             this.castPagesLength = Math.floor(this.allCast.length / this.castItemsPerPage) +
@@ -343,6 +365,13 @@ export class FilmEditDialogComponent {
             this.leftCastArrowDisabled = true;
             this.rightCastArrowDisabled = this.castPagesLength <= 1;
         }, error => console.log(error));
+    }
+
+    loadCrew() {
+        this.filmService.getCrew(this.model.id).subscribe(result => {
+            this.crew = result;
+            this.model.crew = result;
+        }, error => console.error(error));
     }
 
     loadFilmAnotherNames() {

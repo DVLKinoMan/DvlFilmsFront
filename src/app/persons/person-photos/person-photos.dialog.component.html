@@ -4,7 +4,7 @@
     <mat-grid-list *ngIf="photos; else loading" cols="10">
         <mat-grid-tile *ngFor="let photo of photos; let i = index">
             <img  class="person-item-image" 
-                [src]="photo?.image" 
+                [src]="'data:image/png;base64,' + photo?.image" 
                 [title]="photo?.title"
                 (click)="showLightbox(i)"
                 onerror="this.src='assets/DefaultPersonMale.png'">

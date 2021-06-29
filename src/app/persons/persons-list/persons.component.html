@@ -140,7 +140,7 @@
         <td>{{person.id}}</td>
         <td>
             <img class="person-image" 
-            [src]="person.profilePicture.image" 
+            [src]="'data:image/png;base64,' + person.profilePicture.image" 
             *ngIf="person.profilePicture" 
             [alt]="person.profilePicture.title" 
             (error)="setDefaultProfilePicture($event, person)">

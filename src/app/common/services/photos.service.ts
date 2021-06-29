@@ -29,32 +29,6 @@ export class PhotosService {
         return fullScreenPhotos;
     }
 
-    fixImages(photos: Photo[]) {
-        photos.forEach(function (photo) {
-            if (photo?.image)
-                photo.image = 'data:image/png;base64,' + photo.image;
-        })
-    }
-
-    fixImage(photo?: Photo) {
-        if (photo?.image)
-            photo.image = 'data:image/png;base64,' + photo.image;
-    }
-
-    fixImagesForCast(castMembers?: FilmCastMember[]) {
-        castMembers?.forEach(function (cast) {
-            if (cast.profilePicture?.image)
-                cast.profilePicture.image = 'data:image/png;base64,' + cast.profilePicture.image;
-        })
-    }
-
-    fixImagesForFilmographies(filmographies?: Filmography[]) {
-        filmographies?.forEach(function (value) {
-            if (value.filmItem?.photo?.image)
-                value.filmItem.photo.image = 'data:image/png;base64,' + value.filmItem.photo.image;
-        });
-    }
-
     getPersonPhotos(personId: number, skip?: number, take?: number): Observable<Photo[]> {
         var url = this.baseUrl + "/Persons/Get/" + personId + "/Photos";
         var params = new HttpParams();

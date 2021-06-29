@@ -51,7 +51,6 @@ export class PersonPhotosDialogComponent {
         var take = this.pageEvent.pageSize;
 
         this.photosService.getPersonPhotos(this.data.personId, skip, take).subscribe(result => {
-            this.photosService.fixImages(result);
             this.photos = result;
             this.fullScreenPhotos = this.photosService.getImdbFullScreenPhotos(result);
         });
