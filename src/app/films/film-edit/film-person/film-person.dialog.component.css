@@ -5,3 +5,7 @@
 .person-image {
     max-width: 30px;
 }
+
+.picture-things {
+    display: flex;
+}

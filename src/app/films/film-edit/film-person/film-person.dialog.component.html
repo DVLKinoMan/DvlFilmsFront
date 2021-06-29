@@ -1,13 +1,23 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <mat-dialog-content>
-    <mat-form-field>
-        <input matInput placeholder="Add Existed Person"
-        [formControl]="personsCtrl"
-        [matAutocomplete]="autoForPersons">
-    </mat-form-field>
-    <mat-autocomplete #autoForPersons="matAutocomplete">
+    <div>
+        <mat-form-field>
+            <input matInput
+            #personInput 
+            placeholder="Choose Existed Person"
+            [formControl]="personsCtrl"
+            [matAutocomplete]="autoForPersons">
+            <mat-icon>search</mat-icon>
+        </mat-form-field>
+          <button mat-mini-fab
+                title="Reset"
+                (click)="model=undefined; canEdit=true;">
+                    <mat-icon>remove</mat-icon>
+          </button>                      
+    </div>
+    <mat-autocomplete #autoForPersons="matAutocomplete" (optionSelected)="selectedPerson($event)">
         <mat-option *ngFor="let person of filteredPersons | async"
-            [value]="person.name">
+            [value]="person">
             <img class="person-image" 
             [src]="'data:image/png;base64,' + person.profilePicture?.image" 
             [alt]="person.profilePicture?.title" 
@@ -15,31 +25,35 @@
             {{person.name}}
         </mat-option>
     </mat-autocomplete>
-    <div id="profilePicture">
+    <div class="picture-things">
         <img class="profilePicture"
         [src]="'data:image/png;base64,' + model?.profilePicture?.image" 
         [alt]="model?.profilePicture?.title"
         onerror="this.src='assets/DefaultPersonMale.png'">
-    </div>
-    <div style="margin-left: 20px;">
-        <div id="photo-things">
-            <button mat-mini-fab 
-                (click)="fileInput.click()"
-                *ngIf="!model"
-                title="Choose Photo">
-                    <mat-icon>add</mat-icon>
-            </button>
-            <input hidden (change)="onFileSelected()" #fileInput type="file" id="file"
-            accept="image/x-png,image/gif,image/jpeg">
-            <mat-form-field appearance="outline">
-                <mat-label>Title</mat-label>
-                <input matInput [value]="model?.profilePicture?.title">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Profile Picture Imdb Url</mat-label>
-                <input matInput [value]="model?.profilePicture?.imdbPageUrl">
-            </mat-form-field>
+        <div style="margin-left: 20px;">
+            <div id="photo-title">
+                <mat-form-field appearance="outline">
+                    <mat-label>Title</mat-label>
+                    <input matInput disabled [value]="model?.profilePicture?.title">
+                </mat-form-field>
+            </div>
+            <div id="photo-url">
+                <mat-form-field appearance="outline">
+                    <mat-label>Profile Picture Imdb Url</mat-label>
+                    <input matInput disabled [value]="model?.profilePicture?.imdbPageUrl">
+                </mat-form-field>
+            </div>
         </div>
+    </div>
+    <div id="person-stats">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput [disabled]="!canEdit" [value]="model?.name">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Imdb Page Url</mat-label>
+            <input matInput [disabled]="!canEdit" [value]="model?.imdbPageUrl">
+        </mat-form-field>
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>
