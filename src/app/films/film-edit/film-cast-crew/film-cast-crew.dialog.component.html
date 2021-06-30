@@ -3,9 +3,16 @@
        <mat-tab-group>
            <mat-tab label="Cast">
                 <div *ngIf="cast; else loading" style="margin-top: 25px;">
-                    <mat-grid-list cols="7" rowHeight="1:2" gutterSize="10px">
+                    <mat-grid-list cols="6" rowHeight="1:2" gutterSize="10px">
                         <mat-grid-tile
                             *ngFor="let castMember of cast">
+                            <mat-grid-tile-header *ngIf="data.editMode">
+                                <button mat-mini-fab
+                                [title]="'Remove '+castMember.name"
+                                (click)="removeCastMember(castMember)">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                            </mat-grid-tile-header>
                             <img class="cast-image"
                             [src]="'data:image/png;base64,' + castMember.profilePicture?.image" 
                             [title]="castMember.name"
@@ -38,8 +45,15 @@
                                 <mat-panel-title>{{grCrew.key}}</mat-panel-title>
                                 <mat-panel-description>{{grCrew.value.length}} Crew Members</mat-panel-description>
                             </mat-expansion-panel-header>
-                            <mat-grid-list cols="7" rowHeight="1:2" gutterSize="10px">
+                            <mat-grid-list cols="6" rowHeight="1:2" gutterSize="10px">
                                 <mat-grid-tile *ngFor="let crewMember of grCrew.value">
+                                <mat-grid-tile-header *ngIf="data.editMode">
+                                    <button mat-mini-fab
+                                    [title]="'Remove '+crewMember.name"
+                                    (click)="removeCrewMember(grCrew.key, crewMember)">
+                                        <mat-icon>remove</mat-icon>
+                                    </button>
+                                </mat-grid-tile-header>
                                    <a target="_blank" 
                                         [href]="crewMember.imdbPageUrl">
                                         <img class="cast-image"
@@ -63,5 +77,6 @@
        </mat-tab-group>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>Close</button>
+  <button mat-button (click)="onCloseClick()">Close</button>
+  <button mat-button *ngIf="data.editMode" [mat-dialog-close]="{cast: cast, crew: crew}" cdkFocusInitial>Save</button>
 </mat-dialog-actions>

@@ -109,12 +109,20 @@ export class FilmEditDialogComponent {
                 filmId: this.model.id,
                 filmName: this.model.name,
                 cast: this.model.cast,
-                crew: this.model.crew
+                crew: this.model.crew,
+                editMode: true
             }
         });
 
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
+            if (result) {
+                this.allCast = result.cast;
+                this.model.cast = result.cast;
+                this.crew = result.crew;
+                this.model.crew = result.crew;
+                this.loadCastPage();
+            }
         });
     }
 
@@ -144,10 +152,7 @@ export class FilmEditDialogComponent {
         if (!this.model.directors)
             return;
 
-        var dir = this.model.directors.find(dir => dir.name == director.name);
-        if (!dir)
-            return;
-        const index = this.model.directors.indexOf(dir);
+        const index = this.model.directors.indexOf(director);
 
         if (index >= 0)
             this.model.directors.splice(index, 1);
@@ -363,12 +368,16 @@ export class FilmEditDialogComponent {
     loadCast() {
         this.filmService.getCast(this.model.id).subscribe(result => {
             this.allCast = result;
-            this.cast = this.allCast.slice(0, this.castItemsPerPage);
-            this.castPagesLength = Math.floor(this.allCast.length / this.castItemsPerPage) +
-                (this.allCast.length % this.castItemsPerPage > 0 ? 1 : 0);
-            this.leftCastArrowDisabled = true;
-            this.rightCastArrowDisabled = this.castPagesLength <= 1;
+            this.loadCastPage();
         }, error => console.log(error));
+    }
+
+    loadCastPage() {
+        this.cast = this.allCast.slice(0, this.castItemsPerPage);
+        this.castPagesLength = Math.floor(this.allCast.length / this.castItemsPerPage) +
+            (this.allCast.length % this.castItemsPerPage > 0 ? 1 : 0);
+        this.leftCastArrowDisabled = true;
+        this.rightCastArrowDisabled = this.castPagesLength <= 1;
     }
 
     loadCrew() {

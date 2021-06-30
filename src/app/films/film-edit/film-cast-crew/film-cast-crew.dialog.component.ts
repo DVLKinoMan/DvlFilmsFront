@@ -37,10 +37,37 @@ export class FilmCastAndCrewDialogComponent implements OnInit {
     ngOnInit(): void {
     }
 
+    onCloseClick() {
+        this.dialogRef.close();
+    }
+
     setDefaultProfilePicture(event: any, castMember: FilmCastMember) {
         if (typeof castMember.gender == "string")
             event.target.src = castMember.gender == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
         else event.target.src = castMember.gender == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+    }
+
+    removeCastMember(member: FilmCastMember) {
+        if (!this.cast)
+            return;
+
+        const index = this.cast.indexOf(member);
+
+        if (index >= 0)
+            this.cast.splice(index, 1);
+    }
+
+    removeCrewMember(key: string, member: FilmCrewMember) {
+        if (!this.crew)
+            return;
+
+        const index = this.crew.indexOf(member);
+        const index2 = this.groupedCrew.get(key)?.indexOf(member);
+
+        if (index >= 0)
+            this.crew.splice(index, 1);
+        if (index2 != undefined && index2 >= 0)
+            this.groupedCrew.get(key)?.splice(index2, 1);
     }
 
     setGroupedCrew() {
@@ -73,4 +100,5 @@ export interface DialogData {
     filmName: string;
     cast?: FilmCastMember[];
     crew?: FilmCrewMember[];
+    editMode?: boolean;
 }
