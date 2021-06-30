@@ -174,6 +174,8 @@ export class FilmEditDialogComponent {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
+            if (result)
+                this.model.directors?.push(result);
         });
     }
 
@@ -185,6 +187,8 @@ export class FilmEditDialogComponent {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
+            if (result)
+                this.model.writers?.push(result);
         });
     }
 

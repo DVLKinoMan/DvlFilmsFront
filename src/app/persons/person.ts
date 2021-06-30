@@ -1,7 +1,7 @@
 import { Photo } from "../common/photo";
 import { Gender, ZodiacSign } from "./enums";
 
-export interface Person {
+export class Person {
     id: number;
     name: string;
     awardsInformationString?: string;
@@ -48,3 +48,11 @@ export interface Character {
     imdbPageUrl?: string;
     description?: string;
 }
+
+// export class PersonItem {
+//     id?: number;
+//     name: string;
+//     imdbPageUrl: string;
+//     profilePicture?: Photo;
+//     sex?: Gender;
+// }

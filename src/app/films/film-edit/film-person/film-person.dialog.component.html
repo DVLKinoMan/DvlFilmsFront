@@ -11,7 +11,7 @@
         </mat-form-field>
           <button mat-mini-fab
                 title="Reset"
-                (click)="model=undefined; canEdit=true;">
+                (click)="resetButtonClick()">
                     <mat-icon>remove</mat-icon>
           </button>                      
     </div>
@@ -48,13 +48,15 @@
     <div id="person-stats">
         <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput [disabled]="!canEdit" [value]="model?.name">
+            <input matInput [disabled]="!canEdit" [(ngModel)]="model.name">
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Imdb Page Url</mat-label>
-            <input matInput [disabled]="!canEdit" [value]="model?.imdbPageUrl">
+            <input matInput [disabled]="!canEdit" [(ngModel)]="model.imdbPageUrl">
         </mat-form-field>
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>
+  <button mat-button (click)="onCloseClick()">Close</button>
+  <button mat-button [mat-dialog-close]="model" cdkFocusInitial>Save</button>
 </mat-dialog-actions>

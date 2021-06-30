@@ -4,7 +4,6 @@ import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { debounceTime, startWith, switchMap } from "rxjs/operators";
-import { Photo } from "src/app/common/photo";
 import { Gender } from "src/app/persons/enums";
 import { Person } from "src/app/persons/person";
 import { PersonsService } from "src/app/persons/services/persons.service";
@@ -17,7 +16,7 @@ import { PersonsService } from "src/app/persons/services/persons.service";
 
 export class FilmPersonDialogComponent {
     filteredPersons: Observable<Person[]>;
-    model: Person | undefined;
+    model: Person = new Person;
     personsCtrl = new FormControl();
     showPersons = 10;
     canEdit: boolean = true;
@@ -40,6 +39,15 @@ export class FilmPersonDialogComponent {
         if (typeof person.sex == "string")
             event.target.src = person.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
         else event.target.src = person.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+    }
+
+    resetButtonClick() {
+        this.model = new Person;
+        this.canEdit = true;
+    }
+
+    onCloseClick(): void {
+        this.dialogRef.close();
     }
 
     selectedPerson(event: MatAutocompleteSelectedEvent): void {
