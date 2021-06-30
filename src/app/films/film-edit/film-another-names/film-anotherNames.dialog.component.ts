@@ -12,6 +12,8 @@ import { FilmAnotherName } from "./filmAnotherName";
 
 export class FilmAnotherNamesDialogComponent {
     anotherNames: FilmAnotherName[];
+    newAnotherName: FilmAnotherName;
+    showNewAnotherName: boolean = false;
     countries: Country[];
     loading: boolean = true;
 
@@ -38,6 +40,11 @@ export class FilmAnotherNamesDialogComponent {
 
         if (index >= 0)
             this.anotherNames.splice(index, 1);
+    }
+
+    addAnotherName() {
+        this.anotherNames.push(this.newAnotherName);
+        this.showNewAnotherName = false;
     }
 
     loadAnotherNames() {

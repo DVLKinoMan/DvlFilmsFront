@@ -1,5 +1,33 @@
 <h1 mat-dialog-title>{{data.filmName}} Another Names</h1>
 <mat-dialog-content>
+  <button *ngIf="data.editMode && !showNewAnotherName" mat-mini-fab
+        title="Show Form"
+        (click)="showNewAnotherName=true">
+            <mat-icon>add</mat-icon>
+  </button>     
+  <div *ngIf="showNewAnotherName" id="newAnotherName">
+      <mat-form-field>
+        <mat-select [(ngModel)]="newAnotherName.country.id">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let country of countries" [value]="country.id">
+            {{country.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="newAnotherName.name">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput [(ngModel)]="newAnotherName.description">
+      </mat-form-field>
+      <button mat-mini-fab
+        title="Add"
+        (click)="addAnotherName()">
+            <mat-icon>add</mat-icon>
+      </button>  
+  </div>
   <div *ngFor="let anotherName of anotherNames">
     <p *ngIf="!data.editMode; else edit">{{anotherName.country.name}}: {{anotherName.name}}
       <span *ngIf="anotherName.description"> ({{anotherName.description}})</span>
