@@ -20,10 +20,16 @@
         <mat-label>Description</mat-label>
         <input matInput [value]="anotherName.description">
       </mat-form-field>
+       <button mat-mini-fab
+        title="Remove"
+        (click)="removeAnotherName(anotherName)">
+            <mat-icon>remove</mat-icon>
+       </button>
     </ng-template>
   </div>
   <mat-spinner *ngIf="loading"></mat-spinner>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>Close</button>
+   <button mat-button (click)="onCloseClick()">Close</button>
+   <button mat-button *ngIf="data.editMode" [mat-dialog-close]="anotherNames" cdkFocusInitial>Save</button>
 </mat-dialog-actions>

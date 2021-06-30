@@ -22,7 +22,22 @@ export class FilmAnotherNamesDialogComponent {
         @Inject(MAT_DIALOG_DATA) public data: DialogData) {
         if (data.editMode)
             this.loadCountries();
-        this.loadAnotherNames();
+        if (data.anotherNames) {
+            this.anotherNames = data.anotherNames;
+            this.loading = false;
+        }
+        else this.loadAnotherNames();
+    }
+
+    onCloseClick() {
+        this.dialogRef.close();
+    }
+
+    removeAnotherName(name: FilmAnotherName) {
+        var index = this.anotherNames.indexOf(name);
+
+        if (index >= 0)
+            this.anotherNames.splice(index, 1);
     }
 
     loadAnotherNames() {
@@ -43,4 +58,5 @@ export interface DialogData {
     filmId: number;
     filmName: string;
     editMode?: boolean;
+    anotherNames?: FilmAnotherName[];
 }

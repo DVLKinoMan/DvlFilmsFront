@@ -108,8 +108,8 @@ export class FilmEditDialogComponent {
             data: {
                 filmId: this.model.id,
                 filmName: this.model.name,
-                cast: this.model.cast,
-                crew: this.model.crew,
+                cast: JSON.parse(JSON.stringify(this.model.cast)),
+                crew: JSON.parse(JSON.stringify(this.model.crew)),
                 editMode: true
             }
         });
@@ -127,12 +127,19 @@ export class FilmEditDialogComponent {
     }
 
     openAnotherNamesDialog() {
-        this.anotherNamesDialog.open(FilmAnotherNamesDialogComponent, {
+        const dialogRef = this.anotherNamesDialog.open(FilmAnotherNamesDialogComponent, {
             width: '800px',
             data: {
                 filmName: this.model.name,
                 filmId: this.model.id,
-                editMode: true
+                editMode: true,
+                anotherNames: JSON.parse(JSON.stringify(this.model.anotherNames)),
+            }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.model.anotherNames = result;
+                this.anotherNames = [...new Set(this.model.anotherNames?.map(item => item.name))];
             }
         });
     }
@@ -368,6 +375,7 @@ export class FilmEditDialogComponent {
     loadCast() {
         this.filmService.getCast(this.model.id).subscribe(result => {
             this.allCast = result;
+            this.model.cast = result;
             this.loadCastPage();
         }, error => console.log(error));
     }
