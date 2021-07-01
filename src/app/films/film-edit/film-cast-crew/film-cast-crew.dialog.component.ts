@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { Gender } from 'src/app/persons/enums';
 import { FilmsService } from '../../services/films.service';
+import { FilmCastEditDialogComponent } from './film-cast-edit.dialog.component';
 import { FilmCastMember } from './filmCastMember';
 import { FilmCrewMember } from './filmCrewMember';
 
@@ -19,7 +21,9 @@ export class FilmCastAndCrewDialogComponent implements OnInit {
     constructor(
         public dialogRef: MatDialogRef<FilmCastAndCrewDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
-        private filmsService: FilmsService
+        private filmsService: FilmsService,
+        private addEditCastDialog: MatDialog,
+        private router: Router
     ) {
         if (data.cast)
             this.cast = data.cast;
@@ -39,6 +43,38 @@ export class FilmCastAndCrewDialogComponent implements OnInit {
 
     onCloseClick() {
         this.dialogRef.close();
+    }
+
+    onClickAddCastMember() {
+        const dialogRef = this.addEditCastDialog.open(FilmCastEditDialogComponent, {
+            width: '800px'
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log("Cast member dialog closed");
+            if (result)
+                this.cast.push(result);
+        });
+    }
+
+    onClickCastMember(member: FilmCastMember) {
+        if (this.data.editMode) {
+            const dialogRef = this.addEditCastDialog.open(FilmCastEditDialogComponent, {
+                width: '800px',
+                data: { model: JSON.parse(JSON.stringify(member)) }
+            });
+
+            dialogRef.afterClosed().subscribe(result => {
+                console.log("Cast member dialog closed");
+                if (result) {
+                    const index = this.cast.indexOf(member);
+                    if (index >= 0)
+                        this.cast[index] = result;
+                }
+            });
+        }
+        else if (member.id)
+            this.router.navigate(['/person/' + member.id]);
     }
 
     setDefaultProfilePicture(event: any, castMember: FilmCastMember) {

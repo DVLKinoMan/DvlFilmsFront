@@ -43,7 +43,7 @@ export interface FilmItem {
     photo?: Photo;
 }
 
-export interface Character {
+export class Character {
     name: string;
     imdbPageUrl?: string;
     description?: string;

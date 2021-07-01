@@ -1,0 +1,107 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+    <div>
+        <mat-form-field>
+            <input matInput
+            #personInput 
+            placeholder="Choose Existed Person"
+            [formControl]="personsCtrl"
+            [matAutocomplete]="autoForPersons">
+            <mat-icon>search</mat-icon>
+        </mat-form-field>
+          <button mat-mini-fab
+                title="Reset"
+                (click)="resetButtonClick()">
+                    <mat-icon>remove</mat-icon>
+          </button>                      
+    </div>
+    <mat-autocomplete #autoForPersons="matAutocomplete" (optionSelected)="selectedPerson($event)">
+        <mat-option *ngFor="let person of filteredPersons | async"
+            [value]="person">
+            <img class="person-image" 
+            [src]="'data:image/png;base64,' + person.profilePicture?.image" 
+            [alt]="person.profilePicture?.title" 
+            (error)="setDefaultProfilePicture($event, person)">
+            {{person.name}}
+        </mat-option>
+    </mat-autocomplete>
+    <div class="picture-things">
+        <img class="profilePicture"
+        [src]="'data:image/png;base64,' + person?.profilePicture?.image" 
+        [alt]="person?.profilePicture?.title"
+        onerror="this.src='assets/DefaultPersonMale.png'">
+        <div style="margin-left: 20px;">
+            <div id="photo-title">
+                <mat-form-field appearance="outline">
+                    <mat-label>Title</mat-label>
+                    <input matInput disabled [value]="person?.profilePicture?.title">
+                </mat-form-field>
+            </div>
+            <div id="photo-url">
+                <mat-form-field appearance="outline">
+                    <mat-label>Profile Picture Imdb Url</mat-label>
+                    <input matInput disabled [value]="person?.profilePicture?.imdbPageUrl">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div id="person-stats">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput [disabled]="!canEditPerson" [(ngModel)]="model.name">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Imdb Page Url</mat-label>
+            <input matInput [disabled]="!canEditPerson" [(ngModel)]="model.imdbPageUrl">
+        </mat-form-field>
+    </div>
+    <p>Characters:</p>
+    <hr>
+    <button mat-mini-fab
+        title="Add"
+        (click)="showAddCharacter=true">
+            <mat-icon>add</mat-icon>
+    </button>
+    <div *ngIf="showAddCharacter" id="newCharacter">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="newCharacter.name">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Imdb Page Url</mat-label>
+            <input matInput [(ngModel)]="newCharacter.imdbPageUrl">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input matInput [(ngModel)]="newCharacter.description">
+        </mat-form-field>
+        <button mat-mini-fab
+            title="Add Character"
+            (click)="addCharacter()">
+                <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <div *ngFor="let character of model.characters">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="character.name">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Imdb Page Url</mat-label>
+            <input matInput [(ngModel)]="character.imdbPageUrl">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input matInput [(ngModel)]="character.description">
+        </mat-form-field>
+        <button mat-mini-fab
+            title="Remove"
+            (click)="removeCharacter(character)">
+                <mat-icon>remove</mat-icon>
+        </button>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCloseClick()">Close</button>
+  <button mat-button [mat-dialog-close]="model" cdkFocusInitial>Save</button>
+</mat-dialog-actions>

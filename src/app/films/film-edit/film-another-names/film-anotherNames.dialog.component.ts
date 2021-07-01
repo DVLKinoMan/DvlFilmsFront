@@ -12,7 +12,7 @@ import { FilmAnotherName } from "./filmAnotherName";
 
 export class FilmAnotherNamesDialogComponent {
     anotherNames: FilmAnotherName[];
-    newAnotherName: FilmAnotherName;
+    newAnotherName: FilmAnotherName = new FilmAnotherName;
     showNewAnotherName: boolean = false;
     countries: Country[];
     loading: boolean = true;
@@ -45,6 +45,8 @@ export class FilmAnotherNamesDialogComponent {
     addAnotherName() {
         this.anotherNames.push(this.newAnotherName);
         this.showNewAnotherName = false;
+        this.newAnotherName = new FilmAnotherName;
+        this.newAnotherName.country = this.countries[0];
     }
 
     loadAnotherNames() {
@@ -57,6 +59,7 @@ export class FilmAnotherNamesDialogComponent {
     loadCountries() {
         this.countriesService.getAllCountries().subscribe(result => {
             this.countries = result;
+            this.newAnotherName.country = this.countries[0];
         }, error => console.log(error));
     }
 }

@@ -8,7 +8,6 @@
   <div *ngIf="showNewAnotherName" id="newAnotherName">
       <mat-form-field>
         <mat-select [(ngModel)]="newAnotherName.country.id">
-          <mat-option>None</mat-option>
           <mat-option *ngFor="let country of countries" [value]="country.id">
             {{country.name}}
           </mat-option>

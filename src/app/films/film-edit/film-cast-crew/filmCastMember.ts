@@ -2,7 +2,7 @@ import { Photo } from "src/app/common/photo";
 import { Gender } from "src/app/persons/enums";
 import { Character } from "src/app/persons/person";
 
-export interface FilmCastMember {
+export class FilmCastMember {
     id?: number;
     name: string;
     imdbPageUrl: string;
