@@ -24,6 +24,12 @@ export class FilmsService {
         return this.http.get<Film>(url);
     }
 
+    update(film: Film): Observable<Film> {
+        var url = this.baseUrl + "/Films/Update";
+
+        return this.http.post<Film>(url, film);
+    }
+
     getCast(filmId: number): Observable<FilmCastMember[]> {
         var url = this.baseUrl + "/Films/Get/" + filmId + "/Cast";
 

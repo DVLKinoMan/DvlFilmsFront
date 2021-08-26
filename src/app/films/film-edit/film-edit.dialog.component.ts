@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
-import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Company } from "src/app/common/company";
 import { Country } from "src/app/common/country";
 import { Photo } from "src/app/common/photo";
@@ -19,7 +19,6 @@ import { Observable } from "rxjs";
 import { map, startWith } from 'rxjs/operators';
 import { FilmAnotherNamesDialogComponent } from "./film-another-names/film-anotherNames.dialog.component";
 import { FilmPhotosDialogComponent } from "../film-photos/film-photos.dialog.component";
-import { Person } from "src/app/persons/person";
 import { Gender } from "src/app/persons/enums";
 import { FilmCastAndCrewDialogComponent } from "./film-cast-crew/film-cast-crew.dialog.component";
 import { FilmCastMember } from "./film-cast-crew/filmCastMember";
@@ -69,6 +68,7 @@ export class FilmEditDialogComponent {
     @ViewChild('countryInput') countryInput: ElementRef<HTMLInputElement>;
 
     constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData,
+        public dialogRef: MatDialogRef<FilmEditDialogComponent>,
         private filmService: FilmsService,
         private photosService: PhotosService,
         private companiesService: CompaniesService,
@@ -244,7 +244,19 @@ export class FilmEditDialogComponent {
     }
 
     onCloseClick() {
+        this.dialogRef.close();
+    }
 
+    onSaveClick() {
+        this.loading = true;
+        this.filmService.update(this.model)
+            .subscribe(res => {
+                this.loading = true;
+                this.onCloseClick();
+            }, error => {
+                this.loading = false;
+                console.log(error);
+            });
     }
 
     addGenreToModel(value: string) {
