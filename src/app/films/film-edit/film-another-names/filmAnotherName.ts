@@ -5,4 +5,5 @@ export class FilmAnotherName {
     name: string;
     description?: string;
     country: Country;
+    filmId: number;
 }

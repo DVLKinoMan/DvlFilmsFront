@@ -1,6 +1,7 @@
+import { FormGroupDirective } from "@angular/forms";
 
 export class Photo {
-    // Id: guid;
+    public id?: string;
     public imdbPageUrl: string;
     public image: string;
     get imageString(): string {

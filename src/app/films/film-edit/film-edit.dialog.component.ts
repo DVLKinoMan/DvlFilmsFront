@@ -7,7 +7,7 @@ import { CompaniesService } from "src/app/common/services/companies.service";
 import { CountriesService } from "src/app/common/services/countries.service";
 import { GenresService } from "src/app/common/services/genres.service";
 import { PhotosService } from "src/app/common/services/photos.service";
-import { Film } from "../film";
+import { Film, FilmPerson } from "../film";
 import { FilmGenre } from "../filmGenre";
 import { FilmsService } from "../services/films.service";
 
@@ -90,7 +90,7 @@ export class FilmEditDialogComponent {
         this.loadGenres();
     }
 
-    setDefaultPersonPhoto(event: any, person: Person) {
+    setDefaultPersonPhoto(event: any, person: FilmPerson) {
         if (typeof person.sex == "string")
             event.target.src = person?.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
         else event.target.src = person?.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
@@ -155,7 +155,7 @@ export class FilmEditDialogComponent {
         });
     }
 
-    removeDirector(director: Person) {
+    removeDirector(director: FilmPerson) {
         if (!this.model.directors)
             return;
 
@@ -165,7 +165,7 @@ export class FilmEditDialogComponent {
             this.model.directors.splice(index, 1);
     }
 
-    removeWriter(director: Person) {
+    removeWriter(director: FilmPerson) {
         if (!this.model.writers)
             return;
 
@@ -186,8 +186,18 @@ export class FilmEditDialogComponent {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
-            if (result)
+            if (result) {
+                const p: FilmPerson = {
+                    id: result.id,
+                    name: result.name,
+                    filmId: this.model.id,
+                    imdbPageUrl: result.imdbPageUrl,
+                    profilePicture: result.profilePicture,
+                    sex: result.sex
+                };
+
                 this.model.directors?.push(result);
+            }
         });
     }
 
@@ -199,8 +209,18 @@ export class FilmEditDialogComponent {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
-            if (result)
-                this.model.writers?.push(result);
+            if (result) {
+                const p: FilmPerson = {
+                    id: result.id,
+                    name: result.name,
+                    filmId: this.model.id,
+                    imdbPageUrl: result.imdbPageUrl,
+                    profilePicture: result.profilePicture,
+                    sex: result.sex
+                };
+
+                this.model.writers?.push(p);
+            }
         });
     }
 

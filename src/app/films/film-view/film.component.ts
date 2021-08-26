@@ -1,8 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Person } from "src/app/persons/person";
 import { PhotosService } from "src/app/common/services/photos.service";
-import { Film } from "../film";
+import { Film, FilmPerson } from "../film";
 import { FilmsService } from "../services/films.service";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { formatDate } from "@angular/common";
@@ -61,7 +60,7 @@ export class FilmComponent implements OnInit {
         else event.target.src = castMember.gender == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
     }
 
-    setDefaultPersonPhoto(event: any, person: Person) {
+    setDefaultPersonPhoto(event: any, person: FilmPerson) {
         if (typeof person.sex == "string")
             event.target.src = person?.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
         else event.target.src = person?.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
