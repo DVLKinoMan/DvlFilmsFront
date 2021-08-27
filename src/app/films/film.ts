@@ -71,4 +71,5 @@ export class FilmPerson {
     imdbPageUrl: string;
     profilePicture: Photo;
     sex?: Gender;
+    personItemWithNameAndUrlId?: string;
 }
