@@ -117,6 +117,8 @@ export class FilmComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
+            if (result == true)
+                window.location.reload();
             console.log('The dialog was closed');
         });
     }
