@@ -44,6 +44,9 @@ export interface FilmItem {
 }
 
 export class Character {
+    id?: string;
+    filmCastMemberId?: string;
+    filmCharacterId?: string;
     name: string;
     imdbPageUrl?: string;
     description?: string;

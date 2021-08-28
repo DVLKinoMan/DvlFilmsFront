@@ -39,9 +39,9 @@ export class FilmCastEditDialogComponent {
         if (data?.model) {
             this.model = data.model;
             this.editMode = true;
-            if (this.model.id) {
+            if (this.model.personId) {
                 this.person = new Person;
-                this.person.id = this.model.id;
+                this.person.id = this.model.personId;
                 this.person.name = this.model.name;
                 this.person.profilePicture = this.model.profilePicture;
                 this.canEditPerson = false;
@@ -80,6 +80,7 @@ export class FilmCastEditDialogComponent {
     addCharacter() {
         if (!this.model.characters)
             this.model.characters = [];
+        this.newCharacter.filmCastMemberId = this.model.id;
         this.model.characters.push(this.newCharacter);
         this.showAddCharacter = false;
         this.newCharacter = new Character;
@@ -93,7 +94,7 @@ export class FilmCastEditDialogComponent {
     }
 
     setModel(person: Person) {
-        this.model.id = person.id;
+        this.model.personId = person.id;
         if (person.sex)
             this.model.gender = person.sex;
         this.model.name = person.name;

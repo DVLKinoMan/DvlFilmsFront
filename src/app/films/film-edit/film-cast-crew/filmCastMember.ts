@@ -3,7 +3,11 @@ import { Gender } from "src/app/persons/enums";
 import { Character } from "src/app/persons/person";
 
 export class FilmCastMember {
-    id?: number;
+    id?: string;
+    personId?: number;
+    filmId: number;
+    personItemWithNameAndUrlId?: string;
+    episodesNumberInformation?: string;
     name: string;
     imdbPageUrl: string;
     profilePicture: Photo;
