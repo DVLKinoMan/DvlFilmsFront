@@ -1,262 +1,151 @@
 
-<form [formGroup]="personForm" (ngSubmit)="save()" style="width: 100%;" >
-    <div style="width: 100%;">
-        <div id = "little-bios" style="display: flex;">
-            <div id="little-bio" style="display: flex">
-                    <div id="profilePicture">
-                            <!-- <mat-form-field appearance="fill"> -->
-                                <img class="profile-photo-image"
-                                [src]="'data:image/png;base64,' + model.profilePicture?.image" 
-                                *ngIf="model.profilePicture" 
-                                [title]="model.profilePicture.title"
-                                (error)="setDefaultProfilePicture($event)">
-                            <!-- </mat-form-field> -->
-                    </div>
-                    <div id="little-stats">
-                        <div style="margin-left: 20px;">
-                            <div>
-                                 <h1>{{model.name}} 
-                                    <button *ngIf="model.alternateNames && model.alternateNames.length > 0" mat-mini-fab 
-                                        (click)="openAlternateNamesDialog()" 
-                                        title="Person Alternate Names">
-                                            <mat-icon>info</mat-icon>
-                                    </button>
-                                    <button mat-mini-fab 
-                                            (click)="openEditDialog()" 
-                                            title="Edit Film">
-                                                <mat-icon>edit</mat-icon>
-                                    </button>
-                                </h1>
-                            </div>
-                            <div>
-                                <a target="_blank" href="{{model.imdbPageUrl}}">Visit Imdb Page</a>
-                            </div>
-                            <div *ngIf="model.biographyString" class="person-biography">
-                                {{model.biographyString}}
-                            </div>
-                            <br>
-                            <div *ngIf="model.sex">
-                                <mat-label>Sex: </mat-label>
-                                <mat-label>{{model.sex}}</mat-label>
-                            </div>
-                            <div *ngIf="model.birthDate">
-                                <span>Birth: {{formatDate(model.birthDate)}} (Age {{model.age}}) 
-                                    <span *ngIf="model.birthPlace">in {{model.birthPlace}}</span>
-                                </span>
-                            </div> 
-                            <div *ngIf="model.zodiacSign">
-                                <mat-label>Zodiac Sign: {{model.zodiacSign}}</mat-label>
-                            </div>
-                            <div *ngIf="model.deathDate">
-                                <span>Death: {{formatDate(model.deathDate)}} 
-                                    <span *ngIf="model.deathPlace">in {{model.deathPlace}}</span>
-                                </span>
-                            </div>
-                            <div *ngIf="model.heightInMeters">
-                                <mat-label>Height: {{model.heightInMeters}}m</mat-label>
-                            </div>
-                            <div *ngIf="model.otherWork">
-                                <mat-label>Other Work: {{model.otherWork}}</mat-label>
-                            </div>
-                    </div>
-                    </div>
-                    <div id="edit-fetch-buttons">
-                        <button mat-flat-button color="primary" (click)="editMode=!editMode">
-                            {{editMode ? "View Mode" : "Edit Mode"}}
-                        </button>
-                        <button mat-flat-button color="primary" (click)="fetchPersonFromImdb()">
-                            Fetch Person From Imdb
-                        </button>
-                    </div>
-            </div>
-            <div id="little-bio-for-fetched" *ngIf = "fetched" style="margin-left:50px; display: flex"> 
-                <div id="profilePicture2">
+<div style="width: 100%;">
+    <div id = "little-bios" style="display: flex;">
+        <div id="little-bio" style="display: flex">
+                <div id="profilePicture">
                         <!-- <mat-form-field appearance="fill"> -->
-                            <img [src]="'data:image/png;base64,' + fetched.profilePicture.image" 
-                            *ngIf="fetched.profilePicture" 
-                            [alt]="fetched.profilePicture.title">
+                            <img class="profile-photo-image"
+                            [src]="'data:image/png;base64,' + model.profilePicture?.image" 
+                            *ngIf="model.profilePicture" 
+                            [title]="model.profilePicture.title"
+                            (error)="setDefaultProfilePicture($event)">
                         <!-- </mat-form-field> -->
                 </div>
-                <div id="little-stats2">
-                    <div style="margin-left: 200px;">
+                <div id="little-stats">
+                    <div style="margin-left: 20px;">
                         <div>
-                            <mat-label *ngIf="editMode">Name: </mat-label>
-                            <mat-form-field appearance="fill">
-                                <mat-label>Name:</mat-label>
-                                <input matInput class="matInput" [attr.disabled]="editMode ? null : ''" [value]="fetched.name">
-                            </mat-form-field>
+                                <h1>{{model.name}} 
+                                <button *ngIf="model.alternateNames && model.alternateNames.length > 0" mat-mini-fab 
+                                    (click)="openAlternateNamesDialog()" 
+                                    title="Person Alternate Names">
+                                        <mat-icon>info</mat-icon>
+                                </button>
+                                <button mat-mini-fab 
+                                        (click)="openEditDialog()" 
+                                        title="Edit Film">
+                                            <mat-icon>edit</mat-icon>
+                                </button>
+                            </h1>
                         </div>
                         <div>
-                            <a target="_blank" href="{{fetched.imdbPageUrl}}">Visit Imdb Page</a>
+                            <a target="_blank" href="{{model.imdbPageUrl}}">Visit Imdb Page</a>
                         </div>
-                        <div>
-                            <mat-label *ngIf="editMode">Biography: </mat-label><br>
-                            <mat-form-field>
-                                <mat-label>Biography:</mat-label>
-                                <textarea matInput type="text" class="matInput" [attr.disabled]="editMode ? null : ''"  cols="50" rows="10" 
-                                [value]="fetched.biographyString"></textarea>
-                            </mat-form-field>
+                        <div *ngIf="model.biographyString" class="person-biography">
+                            {{model.biographyString}}
                         </div>
                         <br>
-                        <div *ngIf="fetched.sex">
+                        <div *ngIf="model.sex">
                             <mat-label>Sex: </mat-label>
-                            <mat-form-field appearance="fill" class="mat-form">
-                                <mat-label>Sex:</mat-label>
-                                <mat-select [disabled]="!editMode"  panelClass="example-panel-black" [(value)]="fetched.sex">
-                                   <mat-option *ngFor="let gender of genders" [value]="gender.name">
-                                        {{gender.name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                            <mat-label>{{model.sex}}</mat-label>
                         </div>
-                        <div *ngIf="fetched.age">
-                            <mat-label>Age: {{fetched.age}} </mat-label>
-                        </div>
-                        <div *ngIf="fetched.zodiacSign">
-                            <mat-label>Zodiac Sign: {{fetched.zodiacSign}}</mat-label>
-                        </div>
-                        <div *ngIf="fetched.birthDate">
-                            <mat-label>Birth Date: </mat-label>
-                            <mat-form-field appearance="fill">
-                                <mat-label>Birth Date: </mat-label>
-                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.birthDate">
-                            </mat-form-field>
+                        <div *ngIf="model.birthDate">
+                            <span>Birth: {{formatDate(model.birthDate)}} (Age {{model.age}}) 
+                                <span *ngIf="model.birthPlace">in {{model.birthPlace}}</span>
+                            </span>
                         </div> 
-                        <div *ngIf="fetched.birthPlace">
-                            <mat-label>Birth Place: </mat-label>
-                            <mat-form-field appearance="fill">
-                                <mat-label>Birth Place:</mat-label>
-                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.birthPlace">
-                            </mat-form-field>
+                        <div *ngIf="model.zodiacSign">
+                            <mat-label>Zodiac Sign: {{model.zodiacSign}}</mat-label>
                         </div>
-                        <div *ngIf="fetched.deathDate">
-                            <mat-label>Death Date: </mat-label>
-                            <mat-form-field appearance="fill">
-                                <mat-label>Death Date: </mat-label>
-                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.deathDate">
-                            </mat-form-field>
+                        <div *ngIf="model.deathDate">
+                            <span>Death: {{formatDate(model.deathDate)}} 
+                                <span *ngIf="model.deathPlace">in {{model.deathPlace}}</span>
+                            </span>
                         </div>
-                        <div *ngIf="fetched.deathPlace">
-                            <mat-label>Death Place: </mat-label>
-                            <mat-form-field appearance="fill">
-                                <mat-label>Death Place:</mat-label>
-                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.deathPlace">
-                            </mat-form-field>
+                        <div *ngIf="model.heightInMeters">
+                            <mat-label>Height: {{model.heightInMeters}}m</mat-label>
                         </div>
-                        <div *ngIf="fetched.heightInMeters">
-                            <mat-label>Height: </mat-label>
-                            <mat-form-field appearance="fill">
-                                <mat-label>Height:</mat-label>
-                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.heightInMeters">
-                            </mat-form-field>
+                        <div *ngIf="model.otherWork">
+                            <mat-label>Other Work: {{model.otherWork}}</mat-label>
                         </div>
-                        <div *ngIf="fetched.otherWork">
-                            <mat-label>Other Work: </mat-label>
-                            <mat-form-field appearance="fill">
-                                <mat-label>Other Work:</mat-label>
-                                <input matInput class="matInput" [disabled]='!editMode' [value]="fetched.otherWork">
-                            </mat-form-field>
-                        </div>
-                    </div>
                 </div>
-                <div id="remove-button">
-                    <button mat-flat-button color="primary" (click)="fetched=undefined">
-                                Remove Fetched Result
-                    </button>
                 </div>
-            </div>
         </div>
-        <button mat-flat-button *ngIf="editMode" color="primary" type="submit">Save</button>
-        <div id="awards" style="display: flex">
-            <div id="model-awards" style="float:left">
-                <mat-label>Award Information: </mat-label>
-                <div style="display: inline;">
-                    <h1>{{model.awardsInformationString}}</h1>
-                </div>
-            </div>
-            <button mat-mini-fab 
-                    (click)="openAwardsDialog()" 
-                    title="Detailed Awards Information">
-                        <mat-icon>info</mat-icon>
-            </button>
-            <div id="fetched-awards" *ngIf="fetched" style="margin-left: 100px;">
-                <mat-label>Award Information: </mat-label>
-                <h1>{{fetched.awardsInformationString}}</h1>
-            </div>
-        </div>
-        <div id="photos" *ngIf="model.photos" style="display: block">
-                <span>Photos: 
-                     <button mat-mini-fab 
-                        (click) = "openPhotosDialog()"
-                        title="More Photos">
-                            <mat-icon>info</mat-icon>
-                    </button>
-                </span>
-            <div class="person-photos">
-                <div *ngFor="let photo of model.photos" class="person-photo">
-                                <img [src]="'data:image/png;base64,' + photo?.image" 
-                                [title]="photo?.title"
-                                style="max-width: 200px;">
-                </div>
-            </div>   
-        </div>
-        <div *ngIf="filmographies"  style="width: 100%; margin-top: 50px; display: inline-table">
-            <div style="float: left">
-                <h1>Movies:</h1>
-            </div>
-            <!-- dropdown for filmography Categories -->
-            <div id="categories-dropdown"style="float: right; margin-left: 25px">
-                <mat-form-field appearance="fill" class="mat-form">
-                    <mat-label>Filmography Category:</mat-label>
-                    <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFilmographyCatName">
-                        <mat-option *ngFor="let categoryName of filmographyCategoryNames" [value]="categoryName">
-                            {{categoryName}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <!-- Dropdown for filmography Sorting -->
-            <div id="sorting-dropdown" style="float: right;">
-                <img [src] = "sortAscending ? 'assets/AscendingIcon.png' : 'assets/DescendingIcon.png'"
-                (click) = "sortingChanged()" style="width: 25px;">
-                <mat-form-field appearance="fill" class="mat-form">
-                    <mat-label>Sort By:</mat-label>
-                    <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFlmSortBy">
-                        <mat-option *ngFor="let sortChoice of sortChoicesForFilms" [value]="sortChoice">
-                            {{sortChoice}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-        </div>
-        <!-- Filmographies Grid-List -->
-        <div *ngIf="filmographies" style="margin-top: 25px;">
-            <mat-grid-list cols="10" rowHeight="1:2">
-                <mat-grid-tile
-                    *ngFor="let filmography of filmographies">
-                <a [routerLink]="filmography.filmItem?.id ? ['/film', filmography.filmItem?.id] : []">
-                    <img class="film-item-image" 
-                    [src]="'data:image/png;base64,' + filmography.filmItem?.photo?.image" 
-                    [title]="filmography.filmItem?.photo?.title"
-                    onerror="this.src='assets/DefaultMovie.png'">
-                </a>
-                <mat-grid-tile-footer style="display: block; height: 70px">
-                    <div>{{filmography.filmItem?.name}}({{filmography.year}})</div>
-                    <div *ngFor="let character of filmography.characters">
-                        <div *ngIf="character.imdbPageUrl; else justCharName">
-                            <a  target="_blank" 
-                            href="{{character.imdbPageUrl}}">
-                                {{character.name}}
-                            </a>
-                        </div>
-                        <ng-template #justCharName>
-                            <mat-label *ngFor="let character of filmography.characters">{{character.name}}</mat-label>
-                        </ng-template>
-                    </div>
-                </mat-grid-tile-footer>
-                </mat-grid-tile>
-            </mat-grid-list>
-        </div>
-        <mat-spinner *ngIf="!filmographies"></mat-spinner>
     </div>
-</form>
+    <div id="awards" style="display: flex">
+        <div id="model-awards" style="float:left">
+            <mat-label>Award Information: </mat-label>
+            <div style="display: inline;">
+                <h1>{{model.awardsInformationString}}</h1>
+            </div>
+        </div>
+        <button mat-mini-fab 
+                (click)="openAwardsDialog()" 
+                title="Detailed Awards Information">
+                    <mat-icon>info</mat-icon>
+        </button>
+    </div>
+    <div id="photos" *ngIf="model.photos" style="display: block">
+            <span>Photos: 
+                    <button mat-mini-fab 
+                    (click) = "openPhotosDialog()"
+                    title="More Photos">
+                        <mat-icon>info</mat-icon>
+                </button>
+            </span>
+        <div class="person-photos">
+            <div *ngFor="let photo of model.photos" class="person-photo">
+                            <img [src]="'data:image/png;base64,' + photo?.image" 
+                            [title]="photo?.title"
+                            style="max-width: 200px;">
+            </div>
+        </div>   
+    </div>
+    <div *ngIf="filmographies"  style="width: 100%; margin-top: 50px; display: inline-table">
+        <div style="float: left">
+            <h1>Movies:</h1>
+        </div>
+        <!-- dropdown for filmography Categories -->
+        <div id="categories-dropdown"style="float: right; margin-left: 25px">
+            <mat-form-field appearance="fill" class="mat-form">
+                <mat-label>Filmography Category:</mat-label>
+                <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFilmographyCatName">
+                    <mat-option *ngFor="let categoryName of filmographyCategoryNames" [value]="categoryName">
+                        {{categoryName}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <!-- Dropdown for filmography Sorting -->
+        <div id="sorting-dropdown" style="float: right;">
+            <img [src] = "sortAscending ? 'assets/AscendingIcon.png' : 'assets/DescendingIcon.png'"
+            (click) = "sortingChanged()" style="width: 25px;">
+            <mat-form-field appearance="fill" class="mat-form">
+                <mat-label>Sort By:</mat-label>
+                <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFlmSortBy">
+                    <mat-option *ngFor="let sortChoice of sortChoicesForFilms" [value]="sortChoice">
+                        {{sortChoice}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <!-- Filmographies Grid-List -->
+    <div *ngIf="filmographies" style="margin-top: 25px;">
+        <mat-grid-list cols="10" rowHeight="1:2">
+            <mat-grid-tile
+                *ngFor="let filmography of filmographies">
+            <a [routerLink]="filmography.filmItem?.id ? ['/film', filmography.filmItem?.id] : []">
+                <img class="film-item-image" 
+                [src]="'data:image/png;base64,' + filmography.filmItem?.photo?.image" 
+                [title]="filmography.filmItem?.photo?.title"
+                onerror="this.src='assets/DefaultMovie.png'">
+            </a>
+            <mat-grid-tile-footer style="display: block; height: 70px">
+                <div>{{filmography.filmItem?.name}}({{filmography.year}})</div>
+                <div *ngFor="let character of filmography.characters">
+                    <div *ngIf="character.imdbPageUrl; else justCharName">
+                        <a  target="_blank" 
+                        href="{{character.imdbPageUrl}}">
+                            {{character.name}}
+                        </a>
+                    </div>
+                    <ng-template #justCharName>
+                        <mat-label *ngFor="let character of filmography.characters">{{character.name}}</mat-label>
+                    </ng-template>
+                </div>
+            </mat-grid-tile-footer>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <mat-spinner *ngIf="!filmographies"></mat-spinner>
+</div>

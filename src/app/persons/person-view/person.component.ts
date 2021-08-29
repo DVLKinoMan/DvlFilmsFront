@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhotosService } from 'src/app/common/services/photos.service';
 import { Filmography, Person } from '../person';
-import { PersonFetcherService } from '../services/person-fetcher.service';
 import { PersonsService } from '../services/persons.service';
 import { PersonAlternateNamesDailogComponent } from '../person-edit/person-alternate-names/person-alternate-names.dialog.component';
 import { PersonAwardsDialogComponent } from '../person-edit/person-awards/person-awards.dialog.component';
@@ -21,10 +19,8 @@ import { PersonEditDialogComponent } from '../person-edit/person-edit.dialog.com
 
 export class PersonComponent implements OnInit {
   model: Person;
-  fetched?: Person;
   id: number;
   selectedZodiacSign: string;
-  personForm: FormGroup;
   editMode: boolean = false;
 
   selectedFilmographyCatName: string = "";
@@ -43,9 +39,7 @@ export class PersonComponent implements OnInit {
   showPhotos: number = 5;
 
   constructor(private service: PersonsService,
-    private fetcherService: PersonFetcherService,
     private photosService: PhotosService,
-    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     public awardsDialog: MatDialog,
@@ -55,9 +49,6 @@ export class PersonComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.personForm = this.formBuilder.group({
-      sign: ''
-    });
     this.route.queryParams.subscribe(
       params => {
         this.selectedFilmographyCatName = params['flmCatName'];
@@ -75,10 +66,6 @@ export class PersonComponent implements OnInit {
     if (typeof this.model.sex == "string")
       event.target.src = this.model.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
     else event.target.src = this.model.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
-  }
-
-  save() {
-    var val = this.model.zodiacSign;
   }
 
   openAwardsDialog() {
@@ -172,42 +159,6 @@ export class PersonComponent implements OnInit {
       this.filmographies = items;
       this.changeQueryParams();
     }
-  }
-
-  fetchPersonFromImdb() {
-    this.fetcherService.getByUrl(this.model.imdbPageUrl).subscribe(result => {
-      this.fetched = result;
-      this.model.filmographies = this.fetched.filmographies;
-      let imdbPageUrls: string[] = [];
-      this.fetched.filmographies?.forEach(function (value) {
-        if (value.filmItem)
-          imdbPageUrls.push(value.filmItem.imdbPageUrl);
-      });
-
-      var batch = 30;
-      for (var i = 0; i < imdbPageUrls.length; i += batch)
-        this.service.getPersonFilmItems(imdbPageUrls.slice(i, i + batch > imdbPageUrls.length ?
-          imdbPageUrls.length - 1 : i + batch - 1
-        )).subscribe(result => {
-          if (this.model.filmographies)
-            this.model.filmographies.forEach(function (value) {
-              if (value.filmItem) {
-                result.forEach(function (res) {
-                  if (res.imdbPageUrl == value.filmItem?.imdbPageUrl) {
-                    value.filmItem.id = res.id;
-                    value.filmItem.photo = res.photo;
-                    //todo use somehow photosService
-                    if (value.filmItem.photo)
-                      value.filmItem.photo.image = 'data:image/png;base64,'
-                        + value.filmItem.photo.image;
-                  }
-                });
-              }
-            });
-          this.loadFilmCategories();
-          this.loadFilmItems();
-        }, error => console.log(error));
-    }, error => console.log(error));
   }
 
   formatDate(dateTime: Date | undefined): string | undefined {
