@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
-    IdFilter, NameFilter
+    FilmOrderBy,
+    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery
 } from './film-query';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
@@ -10,7 +11,6 @@ import { HttpParams } from '@angular/common/http';
 import { PhotosService } from 'src/app/common/services/photos.service';
 import { FilterOperator } from 'src/app/common/filter';
 import { Film } from '../film';
-import { FilmFilter, FilmOrderBy, FilmSelectControlFlags, FilmsQuery } from './film-query';
 import { FilmsService } from '../services/films.service';
 
 @Component({
@@ -84,6 +84,8 @@ export class FilmsComponent implements OnInit {
             case 'name': return FilmOrderBy.Name;
             case 'releaseDate': return FilmOrderBy.ReleaseDate;
             case 'imdbRating': return FilmOrderBy.IMDBRating;
+            case 'durationInMinutes': return FilmOrderBy.DurationInMinutes;
+            case 'imdbUserRatingsCount': return FilmOrderBy.ImdbUserRatingsCount;
             default: return FilmOrderBy.Id;
         }
     }

@@ -27,7 +27,9 @@ export enum FilmOrderBy {
     Id,
     Name,
     ReleaseDate,
-    IMDBRating
+    IMDBRating,
+    DurationInMinutes,
+    ImdbUserRatingsCount
 }
 
 export abstract class FilmFilter extends Filter {

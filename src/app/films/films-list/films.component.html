@@ -74,7 +74,10 @@
         <th mat-sort-header = "name">Name</th>
         <th mat-sort-header = "releaseDate">ReleaseDate</th>
         <th  mat-sort-header="imdbRating">ImdbRating</th>
+        <th  mat-sort-header="durationInMinutes">Duration</th>
+        <th mat-sort-header="imdbUserRatingsCount">ImdbUserRatingsCount</th>
         <th>AwardsInformationString</th>
+        <th>Tagline</th>
     </tr>
     <tr *ngFor="let film of films">
         <td>{{film.id}}</td>
@@ -89,7 +92,10 @@
         </td> 
         <td>{{film.releaseDate}}</td>
         <td>{{film.imdbRating}}</td>
+        <td>{{film.durationInMinutes}}min</td>
+        <td>{{film.imdbUserRatingsCount}}</td>
         <td>{{film.awardsInformationString}}</td>
+        <td>{{film.tagline}}</td>
     </tr>  
 </table>
 <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
