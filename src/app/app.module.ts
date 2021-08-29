@@ -51,6 +51,7 @@ import { GenresService } from './common/services/genres.service';
 import { FilmPersonDialogComponent } from './films/film-edit/film-person/film-person.dialog.component';
 import { FilmCastEditDialogComponent } from './films/film-edit/film-cast-crew/film-cast-edit.dialog.component';
 import { FilmsComponent } from './films/films-list/films.component';
+import { PersonEditDialogComponent } from './persons/person-edit/person-edit.dialog.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { FilmsComponent } from './films/films-list/films.component';
     FilmEditDialogComponent,
     FilmPersonDialogComponent,
     FilmCastEditDialogComponent,
-    FilmsComponent
+    FilmsComponent,
+    PersonEditDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,48 @@
+.profilePicture {
+    max-width: 200px;
+}
+
+.biography {
+    width: 80%;
+}
+
+.awardsInfoString {
+    width: 80%;
+}
+
+.otherWork {
+    width: 80%;
+}
+
+.little-stats {
+    display: flex;
+}
+
+.person-photos {
+  display: flex;
+}
+
+.person-photo {
+  margin-right: 5px;
+}
+
+.filmography {
+  display: flex;
+}
+
+.filmography-image {
+  width: 120px;
+  height: 160px;
+  margin: 5px 0px;
+}
+
+.filmography-card {
+  width: 120px;
+  cursor: pointer;
+  margin-right: 5px;
+  margin-top: 10px;
+}
+
+.filmography-page-arrows {
+    float: right;
+}

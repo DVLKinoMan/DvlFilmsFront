@@ -11,6 +11,7 @@ import { PersonAwardsDialogComponent } from '../person-edit/person-awards/person
 import { formatDate } from '@angular/common';
 import { Gender } from '../enums';
 import { PersonPhotosDialogComponent } from '../person-photos/person-photos.dialog.component';
+import { PersonEditDialogComponent } from '../person-edit/person-edit.dialog.component';
 
 @Component({
   selector: 'app-person',
@@ -49,6 +50,7 @@ export class PersonComponent implements OnInit {
     private router: Router,
     public awardsDialog: MatDialog,
     public alternateNamesDialog: MatDialog,
+    public personEditDialog: MatDialog,
     public photosDialog: MatDialog
   ) { }
 
@@ -94,6 +96,17 @@ export class PersonComponent implements OnInit {
     const dialogRef = this.alternateNamesDialog.open(PersonAlternateNamesDailogComponent, {
       width: '400px',
       data: { personName: this.model.name, alternateNames: this.model.alternateNames }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  openEditDialog() {
+    const dialogRef = this.personEditDialog.open(PersonEditDialogComponent, {
+      width: '1000px',
+      data: { personName: this.model.name, personId: this.model.id }
     });
 
     dialogRef.afterClosed().subscribe(result => {

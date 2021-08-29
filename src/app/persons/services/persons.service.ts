@@ -70,6 +70,12 @@ export class PersonsService {
         return this.http.get<Person>(url);
     }
 
+    update(person: Person): Observable<Person> {
+        var url = this.baseUrl + "/Persons/Update";
+
+        return this.http.post<Person>(url, person);
+    }
+
     getFilmographies(personId: number): Observable<Filmography[]> {
         var url = this.baseUrl + "/Persons/Get/" + personId + "/Filmographies";
 

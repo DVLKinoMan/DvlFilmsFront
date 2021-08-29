@@ -21,11 +21,11 @@
                             accept="image/x-png,image/gif,image/jpeg">
                             <mat-form-field appearance="outline">
                                 <mat-label>Title</mat-label>
-                                <input matInput [value]="model.photo?.title">
+                                <input matInput [(ngModel)]="model.photo.title">
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                                 <mat-label>Poster Imdb Url</mat-label>
-                                <input matInput [value]="model.photo?.imdbPageUrl">
+                                <input matInput [(ngModel)]="model.photo.imdbPageUrl">
                             </mat-form-field>
                         </div>
                         <div id="name">

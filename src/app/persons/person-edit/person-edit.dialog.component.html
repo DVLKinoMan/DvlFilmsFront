@@ -1,0 +1,184 @@
+<h1 mat-dialog-title>{{data.personName}} Edit</h1>
+<mat-dialog-content>
+    <mat-tab-group>
+        <mat-tab label="Main">
+            <mat-spinner *ngIf="loading"></mat-spinner>
+                <div class="little-stats">
+                    <div id="poster">
+                        <img class="profilePicture"
+                                [src]="'data:image/png;base64,' + model.profilePicture.image" 
+                                *ngIf="model.profilePicture" 
+                                [title]="model.profilePicture.title"
+                                (error)="setDefaultProfilePicture($event)">
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <div id="poster-things">
+                            <button mat-mini-fab 
+                                (click)="fileInput.click()"
+                                title="Choose Poster">
+                                    <mat-icon>edit</mat-icon>
+                            </button>
+                            <input hidden (change)="onFileSelected()" #fileInput type="file" id="file"
+                            accept="image/x-png,image/gif,image/jpeg">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Title</mat-label>
+                                <input matInput [(ngModel)]="model.profilePicture.title">
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Profile Picutre Imdb Url</mat-label>
+                                <input matInput [(ngModel)]="model.profilePicture.imdbPageUrl">
+                            </mat-form-field>
+                        </div>
+                        <div id="name">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Name</mat-label>
+                                <input matInput [(ngModel)]="model.name">
+                            </mat-form-field>
+                            <mat-form-field style="margin-left: 10px;">
+                                <mat-select (selectionChange)="model.name = $event.value ? $event.value : data.personName">
+                                    <mat-option>None</mat-option>
+                                    <mat-option *ngFor="let altName of alternateNames" 
+                                        [value]="altName">
+                                        {{altName}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-label><i>choose from alternate names</i></mat-label>
+                            </mat-form-field>
+                            <button mat-mini-fab 
+                                (click)="openAlternateNamesDialog()"
+                                title="Edit Another Names">
+                                    <mat-icon>edit</mat-icon>
+                            </button>
+                        </div>
+                        <div id="birthInfo">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Birth Date</mat-label>
+                                <input matInput [matDatepicker]="picker" [(ngModel)]="model.birthDate">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Birth Place</mat-label>
+                                <input matInput [(ngModel)]="model.birthPlace">
+                            </mat-form-field>
+                        </div>
+                        <div id="deathInfo">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Death Date</mat-label>
+                                <input matInput [matDatepicker]="picker2" [(ngModel)]="model.deathDate">
+                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Death Place</mat-label>
+                                <input matInput [(ngModel)]="model.deathPlace">
+                            </mat-form-field>
+                        </div>
+                        <div id="otherInfo">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Sex</mat-label>
+                                <mat-select [(ngModel)]="model.sex">
+                                    <mat-option *ngFor="let gender of genders" 
+                                        [value]="gender">
+                                        {{gender}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Height in Meters</mat-label>
+                                <input matInput type="number" [(ngModel)]="model.heightInMeters">
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Imdb Page Url</mat-label>
+                                <input matInput [(ngModel)]="model.imdbPageUrl">
+                            </mat-form-field>
+                        </div>
+                    </div>   
+                </div>
+                <div id="photos">
+                    <span>Photos: 
+                        <button mat-mini-fab 
+                            (click)="openPhotosDialog()"
+                            title="Edit Photos">
+                                <mat-icon>edit</mat-icon>
+                        </button>
+                    </span>
+                    <div class="person-photos">
+                        <div *ngFor="let photo of model.photos" class="person-photo">
+                                        <img [src]="'data:image/png;base64,' + photo.image" 
+                                        [title]="photo.title"
+                                        style="max-width: 200px;">
+                        </div>
+                    </div>   
+                </div>
+                <div id="biography">
+                    <mat-form-field class="biography" appearance="fill">
+                        <mat-label>Biography</mat-label>
+                        <textarea rows="8" matInput [(ngModel)]="model.biographyString"></textarea>
+                    </mat-form-field>
+                </div>
+                <div id="awardsInfoString">
+                    <mat-form-field class="awardsInfoString" appearance="outline">
+                        <mat-label>Awards Information</mat-label>
+                        <input matInput [(ngModel)]="model.awardsInformationString">
+                    </mat-form-field>
+                </div>
+                <div id="otherWork">
+                    <mat-form-field class="otherWork" appearance="fill">
+                        <mat-label>Other Work</mat-label>
+                        <input matInput [(ngModel)]="model.otherWork">
+                    </mat-form-field>
+                </div>
+        </mat-tab>
+        <mat-tab label="Filmography">
+            <div id="filmography">
+                <div style="display: inline-table; width: 100%;">
+                    <div style="float: left">Filmography 
+                        <button mat-mini-fab 
+                            (click)="openFilmographyDialog()" 
+                            title="Edit Filmography">
+                                <mat-icon>edit</mat-icon>
+                        </button>
+                    </div>
+                    <div class="filmography-page-arrows">
+                        <button mat-mini-fab [disabled]="leftFilmographyArrowDisabled" 
+                        (click)="filmographyPageArrowClicked(false)">
+                            <mat-icon>keyboard_arrow_left</mat-icon>
+                        </button>
+                        <span>{{filmographyCurrPage + 1}}/{{filmographyPagesLength}}</span>
+                        <button mat-mini-fab [disabled]="rightFilmographyArrowDisabled" 
+                        (click)="filmographyPageArrowClicked(true)">
+                            <mat-icon>keyboard_arrow_right</mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <hr>
+                <div class="filmography">
+                    <mat-card *ngFor="let filmography of filmography" class="filmography-card" 
+                    [routerLink]="filmography.filmItem.id ? ['/film/'+filmography.filmItem.id] : []">
+                        <img class="cast-image"
+                            [src]="'data:image/png;base64,' + filmography.filmItem.photo.image" 
+                            [title]="filmography.categoryName"
+                            onerror="this.src='assets/DefaultMovie.png'">
+                        <mat-card-footer class="filmography-footer">
+                            <mat-card-title>{{filmography.categoryName}}</mat-card-title>
+                            <hr>
+                            <mat-card-subtitle *ngFor="let character of filmography.characters">
+                                <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
+                                    {{character.name}}
+                                </a>
+                                <ng-template #chOnlyName>{{character.name}}
+                                    <p *ngIf="character.description"> ({{character.description}})</p>
+                                </ng-template>
+                            </mat-card-subtitle>
+                        </mat-card-footer>
+                    </mat-card>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCloseClick()">Close</button>
+  <button mat-button [mat-dialog-close]="true" (click)="onSaveClick()" cdkFocusInitial>Save</button>
+</mat-dialog-actions>
