@@ -11,6 +11,8 @@ import { PersonsService } from '../../services/persons.service';
 })
 
 export class PersonAlternateNamesDailogComponent implements OnInit {
+    showNewAlternateName: boolean = false;
+    newAlternateName: AlternateName = new AlternateName;
 
     constructor(
         public dialogRef: MatDialogRef<PersonAlternateNamesDailogComponent>,
@@ -22,9 +24,27 @@ export class PersonAlternateNamesDailogComponent implements OnInit {
     ngOnInit(): void {
 
     }
+
+    addAlternateName() {
+        this.data.alternateNames.push(this.newAlternateName);
+        this.newAlternateName = new AlternateName;
+        this.showNewAlternateName = false;
+    }
+
+    removeAlternateName(altName: AlternateName) {
+        var index = this.data.alternateNames.indexOf(altName);
+
+        if (index >= 0)
+            this.data.alternateNames.splice(index, 1);
+    }
+
+    onCloseClick() {
+        this.dialogRef.close();
+    }
 }
 
 export interface DialogData {
     personName: string;
     alternateNames: AlternateName[];
+    editMode: boolean;
 }

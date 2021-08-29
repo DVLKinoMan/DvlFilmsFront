@@ -23,7 +23,7 @@ export class Person {
     alternateNames?: AlternateName[];
 }
 
-export interface AlternateName {
+export class AlternateName {
     id?: string;
     name: string;
 }

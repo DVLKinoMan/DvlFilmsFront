@@ -41,11 +41,11 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
-        <input matInput [value]="anotherName.name">
+        <input matInput [(ngModel)]="anotherName.name">
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Description</mat-label>
-        <input matInput [value]="anotherName.description">
+        <input matInput [(ngModel)]="anotherName.description">
       </mat-form-field>
        <button mat-mini-fab
         title="Remove"

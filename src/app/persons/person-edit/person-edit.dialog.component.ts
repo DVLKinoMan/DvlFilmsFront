@@ -65,10 +65,9 @@ export class PersonEditDialogComponent {
         const dialogRef = this.alternateNamesDialog.open(PersonAlternateNamesDailogComponent, {
             width: '800px',
             data: {
-                filmName: this.model.name,
-                filmId: this.model.id,
+                personName: this.model.name,
                 editMode: true,
-                anotherNames: JSON.parse(JSON.stringify(this.model.alternateNames)),
+                alternateNames: JSON.parse(JSON.stringify(this.model.alternateNames)),
             }
         });
         dialogRef.afterClosed().subscribe(result => {

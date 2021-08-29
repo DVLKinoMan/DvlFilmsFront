@@ -1,9 +1,39 @@
 <h3 mat-dialog-title>{{data.personName}} Alternate Names</h3>
 <mat-dialog-content>
+  <button *ngIf="data.editMode && !showNewAlternateName" mat-mini-fab
+        title="Show Form"
+        (click)="showNewAlternateName=true">
+            <mat-icon>add</mat-icon>
+  </button>  
+  <div *ngIf="showNewAlternateName" id="newAlternateName">
+      <mat-form-field appearance="outline">
+        <mat-label>Alternate Name</mat-label>
+        <input matInput [(ngModel)]="newAlternateName.name">
+      </mat-form-field>
+      <button mat-mini-fab
+        title="Add"
+        (click)="addAlternateName()">
+            <mat-icon>add</mat-icon>
+      </button>  
+  </div> 
   <div *ngFor="let alternateName of data.alternateNames">
-    <p>{{alternateName.name}}</p>
+    <p *ngIf="!data.editMode; else edit">
+      {{alternateName.name}}
+    </p>
+    <ng-template #edit>
+    <mat-form-field appearance="outline">
+        <mat-label>Alternate Name</mat-label>
+        <input matInput [(ngModel)]="alternateName.name">
+    </mat-form-field>
+       <button mat-mini-fab
+        title="Remove"
+        (click)="removeAlternateName(alternateName)">
+            <mat-icon>remove</mat-icon>
+       </button>
+    </ng-template>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>Close</button>
+   <button mat-button (click)="onCloseClick()">Close</button>
+   <button mat-button *ngIf="data.editMode" [mat-dialog-close]="data.alternateNames" cdkFocusInitial>Save</button>
 </mat-dialog-actions>
