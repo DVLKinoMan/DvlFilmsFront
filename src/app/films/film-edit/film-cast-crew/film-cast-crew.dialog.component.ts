@@ -73,8 +73,8 @@ export class FilmCastAndCrewDialogComponent implements OnInit {
                 }
             });
         }
-        else if (member.id)
-            this.router.navigate(['/person/' + member.id]);
+        else if (member.personId)
+            this.router.navigate(['/person/' + member.personId]);
     }
 
     setDefaultProfilePicture(event: any, castMember: FilmCastMember) {

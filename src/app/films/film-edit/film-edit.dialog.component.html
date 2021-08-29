@@ -292,7 +292,7 @@
                 <hr>
                 <div class="cast">
                     <mat-card *ngFor="let castMember of cast" class="cast-card" 
-                    [routerLink]="castMember.id ? ['/person/'+castMember.id] : []">
+                    [routerLink]="castMember.personId ? ['/person/'+castMember.personId] : []">
                         <img class="cast-image"
                             [src]="'data:image/png;base64,' + castMember.profilePicture?.image" 
                             [title]="castMember.name"

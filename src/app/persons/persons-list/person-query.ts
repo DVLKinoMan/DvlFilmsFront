@@ -1,14 +1,6 @@
-import { FilterOperator } from "src/app/common/filterOperator";
+import { Filter, FilterOperator } from "src/app/common/filter";
+import { Query } from "src/app/common/query";
 import { Gender, PersonFilterType, ZodiacSign } from "../enums";
-
-export class Query {
-    currentPage: number;
-    pageSize: number;
-    constructor(currPage: number = 1, pageSize: number = 10) {
-        this.currentPage = currPage;
-        this.pageSize = pageSize;
-    }
-}
 
 export class PersonsQuery extends Query {
     selectControlFlags: PersonSelectControlFlags;
@@ -46,13 +38,6 @@ export enum PersonOrderBy {
     Age
 }
 
-export class Filter {
-    filterOperator: FilterOperator;
-    constructor(filterOperator: FilterOperator) {
-        this.filterOperator = filterOperator;
-    }
-}
-
 export abstract class PersonFilter extends Filter {
     filterType: PersonFilterType;
     constructor(filterType: PersonFilterType, filterOperator: FilterOperator) {
@@ -61,12 +46,6 @@ export abstract class PersonFilter extends Filter {
     }
 
     public abstract ToString(): string;
-}
-
-
-interface IPatternString {
-    Value?: string;
-    Pattern?: string;
 }
 
 export class IdFilter extends PersonFilter {

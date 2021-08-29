@@ -12,7 +12,7 @@ import { Person } from '../person';
 import { Gender, ZodiacSign } from '../enums';
 import { PersonsService } from '../services/persons.service';
 import { PhotosService } from 'src/app/common/services/photos.service';
-import { FilterOperator } from 'src/app/common/filterOperator';
+import { FilterOperator } from 'src/app/common/filter';
 
 @Component({
   selector: 'app-persons',

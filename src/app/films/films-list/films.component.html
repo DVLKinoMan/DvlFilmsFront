@@ -1,0 +1,99 @@
+<h1>Films</h1>
+<p>Here's a list of Films: feel free to play with it.</p>
+<p *ngIf="!films"><em>Loading...</em></p>
+<h4>Filter</h4>
+<table>
+    <tr>
+        <td style="width: 200px;">
+            <mat-form-field appearance="fill" class="mat-form">
+                <mat-label>Filter</mat-label><br>
+                <mat-select [(value)]="selectedFilter" 
+                    (selectionChange)="filterChanged($event.value)" panelClass="example-panel-black">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let filter of filterNames" [value]="filter">{{filter}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </td>
+        <td>
+            <form [formGroup]="idFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Id'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="id">Id:</mat-label>
+                    <input id="id" formControlName="id" type="number" matInput placeholder="Id Value Here">
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
+            <form [formGroup]="nameFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Name'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="value">Exact Name:</mat-label>
+                    <input id="value" formControlName="value" matInput>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="pattern">Name Contains:</mat-label>
+                    <input id="pattern" formControlName="pattern" matInput>
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
+        </td>
+        <td style="float: right;">
+            <button mat-flat-button color="primary" (click)="searchButtonClick()">Search</button><br><br>
+        </td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td *ngFor="let filter of filters; let i = index">
+            {{filter.ToString()}} 
+            <button *ngIf='filter' mat-mini-fab (click)="deleteFilter(i)" color="primary" aria-label="Delete This Filter">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </td>
+        <td style = "float: right;" *ngIf="filters.length > 0">
+            <button mat-flat-button color="warn" (click)="clearFilters()">Clear All Filters</button>
+        </td>
+    </tr>
+</table>
+<mat-spinner *ngIf="!films"></mat-spinner>
+<table matSort (matSortChange)="sortChanged($event)">
+    <tr>
+        <th mat-sort-header = "id">ID</th>
+        <th>Photo</th>
+        <th mat-sort-header = "name">Name</th>
+        <th mat-sort-header = "releaseDate">ReleaseDate</th>
+        <th  mat-sort-header="imdbRating">ImdbRating</th>
+        <th>AwardsInformationString</th>
+    </tr>
+    <tr *ngFor="let film of films">
+        <td>{{film.id}}</td>
+        <td>
+            <img class="film-image" 
+            [src]="'data:image/png;base64,' + film.photo?.image" 
+            [title]="film.photo?.title" 
+            onerror="this.src='assets/DefaultMovie.png'">
+        </td>
+        <td>
+            <a [routerLink]="['/film', film.id]">{{film.name}}</a>
+        </td> 
+        <td>{{film.releaseDate}}</td>
+        <td>{{film.imdbRating}}</td>
+        <td>{{film.awardsInformationString}}</td>
+    </tr>  
+</table>
+<!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
+<!-- Pagination directive -->
+<mat-paginator [hidden]="!films" [pageSize]="10" (page)="pageEvent = pageChanged($event)"
+    [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>

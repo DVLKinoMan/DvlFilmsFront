@@ -50,6 +50,7 @@ import { CompaniesService } from './common/services/companies.service';
 import { GenresService } from './common/services/genres.service';
 import { FilmPersonDialogComponent } from './films/film-edit/film-person/film-person.dialog.component';
 import { FilmCastEditDialogComponent } from './films/film-edit/film-cast-crew/film-cast-edit.dialog.component';
+import { FilmsComponent } from './films/films-list/films.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { FilmCastEditDialogComponent } from './films/film-edit/film-cast-crew/fi
     FilmCastAndCrewDialogComponent,
     FilmEditDialogComponent,
     FilmPersonDialogComponent,
-    FilmCastEditDialogComponent
+    FilmCastEditDialogComponent,
+    FilmsComponent
   ],
   imports: [
     BrowserModule,
@@ -75,6 +77,7 @@ import { FilmCastEditDialogComponent } from './films/film-edit/film-cast-crew/fi
     HttpClientModule,
     RouterModule.forRoot([
       { path: '', component: PersonsComponent, pathMatch: 'full' },
+      { path: 'films', component: FilmsComponent },
       { path: 'persons', component: PersonsComponent },
       { path: 'person/:id', component: PersonComponent },
       // { path: 'person/:id/awards', component: PersonAwardsComponent },
