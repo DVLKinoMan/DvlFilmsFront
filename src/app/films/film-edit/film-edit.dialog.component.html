@@ -52,7 +52,7 @@
                         <div id="releaseDate">
                             <mat-form-field appearance="fill">
                                 <mat-label>Release Date</mat-label>
-                                <input matInput [matDatepicker]="picker" [value]="model.releaseDate">
+                                <input matInput [matDatepicker]="picker" [(ngModel)]="model.releaseDate">
                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-datepicker #picker></mat-datepicker>
                             </mat-form-field>
@@ -60,7 +60,7 @@
                         <div id="durationInMinutes">
                             <mat-form-field appearance="outline">
                                 <mat-label>Duration In Minutes</mat-label>
-                                <input matInput type="number" [value]="model.durationInMinutes">
+                                <input matInput type="number" [(ngModel)]="model.durationInMinutes">
                             </mat-form-field>
                         </div>
                     </div>   
@@ -68,15 +68,15 @@
                 <div id="imdbStats">
                     <mat-form-field appearance="outline">
                         <mat-label>Imdb Page Url</mat-label>
-                        <input matInput [value]="model.imdbPageUrl">
+                        <input matInput [(ngModel)]="model.imdbPageUrl">
                     </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Imdb Rating</mat-label>
-                        <input matInput type="number" [value]="model.imdbRating">
+                        <input matInput type="number" [(ngModel)]="model.imdbRating">
                     </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Imdb User Ratings Count</mat-label>
-                        <input matInput type="number" [value]="model.imdbUserRatingsCount">
+                        <input matInput type="number" [(ngModel)]="model.imdbUserRatingsCount">
                     </mat-form-field>
                 </div>
                 <div id="photos">
@@ -98,7 +98,7 @@
                 <div id="description">
                     <mat-form-field class="description" appearance="fill">
                         <mat-label>Description</mat-label>
-                        <textarea rows="8" matInput [value]="model.description"></textarea>
+                        <textarea rows="8" matInput [(ngModel)]="model.description"></textarea>
                     </mat-form-field>
                 </div>
                 <div id="genres">
@@ -182,27 +182,27 @@
                 <div id="boxOfficeStats">
                     <mat-form-field appearance="outline">
                         <mat-label>Budget</mat-label>
-                        <input matInput type="number" [value]="model.boxOffice?.budget">
+                        <input matInput type="number"  [(ngModel)]="model.boxOffice.budget">
                     </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Gross</mat-label>
-                        <input matInput type="number" [value]="model.boxOffice?.gross">
+                        <input matInput type="number" [(ngModel)]="model.boxOffice.gross">
                     </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Opening Weekend</mat-label>
-                        <input matInput type="number" [value]="model.boxOffice?.openingWeekend">
+                        <input matInput type="number" [(ngModel)]="model.boxOffice.openingWeekend">
                     </mat-form-field>
                 </div>
                 <div id="awardsInfoString">
                     <mat-form-field class="awardsInfoString" appearance="outline">
                         <mat-label>Awards Information</mat-label>
-                        <input matInput [value]="model.awardsInformationString">
+                        <input matInput [(ngModel)]="model.awardsInformationString">
                     </mat-form-field>
                 </div>
                 <div id="tagline">
                     <mat-form-field class="tagline" appearance="outline">
                         <mat-label>Tagline</mat-label>
-                        <input matInput [value]="model.tagline">
+                        <input matInput [(ngModel)]="model.tagline">
                     </mat-form-field>
                 </div>
         </mat-tab>
