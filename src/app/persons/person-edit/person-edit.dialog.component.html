@@ -149,10 +149,10 @@
                             <mat-panel-description>{{grFilm.value.length}} Films</mat-panel-description>
                         </mat-expansion-panel-header>
                         <mat-grid-list cols="6" rowHeight="1:2" gutterSize="10px">
-                            <mat-grid-tile *ngFor="let filmography of grFilm.value">
+                            <mat-grid-tile *ngFor="let filmography of grFilm.value; let i = index">
                             <mat-grid-tile-header>
                                 <button mat-mini-fab 
-                                    (click)="openEditFilmographyDialog(filmography)"
+                                    (click)="openEditFilmographyDialog(i, filmography)"
                                     title="'Edit '+ filmography.filmItem?.name">
                                         <mat-icon>edit</mat-icon>
                                 </button>

@@ -38,21 +38,21 @@ export class PersonFilmographyDialogComponent {
             debounceTime(400),
             switchMap((film: string) => this.filmsService.getFilmItems(film, this.showFilms, false))
         );
-        if (this.data.filmography) {
-            this.model = JSON.parse(JSON.stringify(this.data.filmography));
-            this.editMode = true;
-        }
-        else {
-            this.model.filmItem = new FilmItem;
-        }
+        this.resetButtonClick();
     }
 
     resetButtonClick() {
-        if (this.data.filmography)
+        if (this.data.filmography) {
             this.model = JSON.parse(JSON.stringify(this.data.filmography));
+            this.editMode = true;
+            if (!this.model.year && this.model.filmItem?.year)
+                this.model.year = this.model.filmItem.year;
+        }
         else {
             this.model = new Filmography;
+            this.model.personId = this.data.personId;
             this.model.filmItem = new FilmItem;
+            this.model.characters = [];
         }
     }
 
@@ -64,9 +64,12 @@ export class PersonFilmographyDialogComponent {
         this.filmInput.nativeElement.value = '';
         this.filmsCtrl.setValue(null);
         this.model.filmItem = event.option.value;
+        this.model.year = this.model.filmItem.year;
     }
 
     addNewCharacter() {
+        if (this.model.id)
+            this.newCharacter.personFilmogbraphyId = this.model.id;
         this.model.characters.push(this.newCharacter);
         this.newCharacter = new Character;
         this.showNewCharacter = false;
@@ -81,5 +84,6 @@ export class PersonFilmographyDialogComponent {
 export class DialogData {
     title: string;
     filmography?: Filmography;
+    personId: number;
     categoryNames: string[] = [];
 }

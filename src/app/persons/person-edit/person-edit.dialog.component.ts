@@ -107,7 +107,8 @@ export class PersonEditDialogComponent {
             width: '1000px',
             data: {
                 title: "Add Filmography Item",
-                categoryNames: Array.from(this.groupedFilmography.keys())
+                categoryNames: Array.from(this.groupedFilmography.keys()),
+                personId: this.model.id
             }
         });
 
@@ -120,19 +121,25 @@ export class PersonEditDialogComponent {
         });
     }
 
-    openEditFilmographyDialog(filmography: Filmography) {
+    openEditFilmographyDialog(index: number, filmography: Filmography) {
         const dialogRef = this.photosDialog.open(PersonFilmographyDialogComponent, {
             width: '1000px',
             data: {
                 title: "Edit " + filmography.filmItem?.name,
                 filmography: filmography,
-                categoryNames: Array.from(this.groupedFilmography.keys())
+                categoryNames: Array.from(this.groupedFilmography.keys()),
+                personId: this.model.id
             }
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            if (result)
-                filmography = result;
+            if (result) {
+                var ind = this.allFilmography.indexOf(this.groupedFilmography.get(filmography.categoryName)[index]);
+                if (ind >= 0) {
+                    this.allFilmography[ind] = result;
+                    this.setGroupedFilmography();
+                }
+            }
             console.log('The dialog was closed');
         });
     }
@@ -172,6 +179,7 @@ export class PersonEditDialogComponent {
 
     onSaveClick() {
         this.loading = true;
+        this.model.filmographies = this.allFilmography;
         this.personService.update(this.model)
             .subscribe(res => {
                 this.loading = false;

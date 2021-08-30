@@ -60,7 +60,7 @@
             <div id="year-description">
                 <mat-form-field appearance="outline">
                     <mat-label>Year</mat-label>
-                    <input matInput type="number" [disabled]="model.filmItem.year==undefined" [(ngModel)]="model.year">
+                    <input matInput type="number" [disabled]="model.filmItem.year!=undefined" [(ngModel)]="model.year">
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Description</mat-label>
