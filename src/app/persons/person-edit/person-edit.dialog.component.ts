@@ -1,14 +1,9 @@
-import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Photo } from "src/app/common/photo";
 import { PhotosService } from "src/app/common/services/photos.service";
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from "@angular/material/chips";
-import { FormControl } from "@angular/forms";
-import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { Observable } from "rxjs";
-import { map, startWith } from 'rxjs/operators';
 import { Gender } from "src/app/persons/enums";
 import { Filmography, Person } from "../person";
 import { PersonsService } from "../services/persons.service";
@@ -26,13 +21,9 @@ export class PersonEditDialogComponent {
     alternateNames: string[];
     genders: any[] = ["Unknown", "Male", "Female"];
 
-    filmography: Filmography[];
-    filmographyItemsPerPage: number = 5;
-    filmographyCurrPage: number = 0;
-    filmographyPagesLength: number = 0;
+    groupedFilmography: Map<string, Filmography[]>;
+
     allFilmography: Filmography[];
-    leftFilmographyArrowDisabled: boolean = true;
-    rightFilmographyArrowDisabled: boolean = false;
 
     loading: boolean = true;
     showPhotos: number = 5;
@@ -52,6 +43,8 @@ export class PersonEditDialogComponent {
         else {
             this.model = data.person;
             this.data.personName = data.person.name;
+            this.allFilmography = data.person.filmographies;
+            this.setGroupedFilmography();
         }
     }
 
@@ -112,6 +105,39 @@ export class PersonEditDialogComponent {
 
     }
 
+    openEditFilmographyDialog(filmography: Filmography) {
+
+    }
+
+    resetFilmography() {
+        this.allFilmography = JSON.parse(JSON.stringify(this.model.filmographies));
+        this.setGroupedFilmography();
+    }
+
+    removeFilmography(key: string, member: Filmography) {
+        if (!this.allFilmography)
+            return;
+
+        const index = this.allFilmography.indexOf(member);
+        const index2 = this.groupedFilmography.get(key)?.indexOf(member);
+
+        if (index >= 0)
+            this.allFilmography.splice(index, 1);
+        if (index2 != undefined && index2 >= 0)
+            this.groupedFilmography.get(key)?.splice(index2, 1);
+    }
+
+    setGroupedFilmography() {
+        var map = new Map<string, Filmography[]>();
+        this.allFilmography.forEach(function (member) {
+            var arr = map.get(member.categoryName);
+            if (arr)
+                arr.push(member);
+            else map.set(member.categoryName, [member]);
+        });
+        this.groupedFilmography = map;
+    }
+
     onCloseClick() {
         this.dialogRef.close();
     }
@@ -120,20 +146,12 @@ export class PersonEditDialogComponent {
         this.loading = true;
         this.personService.update(this.model)
             .subscribe(res => {
-                this.loading = true;
+                this.loading = false;
                 this.onCloseClick();
             }, error => {
                 this.loading = false;
                 console.log(error);
             });
-    }
-
-    filmographyPageArrowClicked(right: boolean) {
-        this.filmographyCurrPage = right ? this.filmographyCurrPage + 1 : this.filmographyCurrPage - 1;
-        this.filmography = this.allFilmography.slice(this.filmographyCurrPage * this.filmographyItemsPerPage,
-            this.filmographyCurrPage * this.filmographyItemsPerPage + this.filmographyItemsPerPage);
-        this.leftFilmographyArrowDisabled = this.filmographyCurrPage < 1;
-        this.rightFilmographyArrowDisabled = this.filmographyCurrPage >= this.filmographyPagesLength - 1;
     }
 
     loadPerson() {
@@ -143,6 +161,7 @@ export class PersonEditDialogComponent {
                 this.model = result;
                 this.loading = false;
                 this.alternateNames = [...new Set(result.alternateNames.map(item => item.name))];
+                this.loadFilmography();
                 this.photosService.getPersonPhotos(this.model.id, 0, this.showPhotos)
                     .subscribe(result => {
                         this.model.photos = result;
@@ -151,19 +170,11 @@ export class PersonEditDialogComponent {
     }
 
     loadFilmography() {
-        this.personService.getFilmographies(this.model.id).subscribe(result => {
-            this.allFilmography = result;
+        this.personService.getFilmographies(this.data.personId).subscribe(result => {
+            this.allFilmography = JSON.parse(JSON.stringify(result));
             this.model.filmographies = result;
-            this.loadFilmographyPage();
+            this.setGroupedFilmography();
         }, error => console.log(error));
-    }
-
-    loadFilmographyPage() {
-        this.filmography = this.allFilmography.slice(0, this.filmographyItemsPerPage);
-        this.filmographyPagesLength = Math.floor(this.allFilmography.length / this.filmographyItemsPerPage) +
-            (this.allFilmography.length % this.filmographyItemsPerPage > 0 ? 1 : 0);
-        this.leftFilmographyArrowDisabled = true;
-        this.rightFilmographyArrowDisabled = this.filmographyPagesLength <= 1;
     }
 }
 

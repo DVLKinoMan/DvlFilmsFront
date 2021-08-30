@@ -31,18 +31,7 @@
 }
 
 .filmography-image {
-  width: 120px;
-  height: 160px;
+  width: 140px;
+  height: 180px;
   margin: 5px 0px;
-}
-
-.filmography-card {
-  width: 120px;
-  cursor: pointer;
-  margin-right: 5px;
-  margin-top: 10px;
-}
-
-.filmography-page-arrows {
-    float: right;
 }

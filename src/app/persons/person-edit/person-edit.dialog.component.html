@@ -131,50 +131,71 @@
                 </div>
         </mat-tab>
         <mat-tab label="Filmography">
-            <div id="filmography">
-                <div style="display: inline-table; width: 100%;">
-                    <div style="float: left">Filmography 
-                        <button mat-mini-fab 
-                            (click)="openFilmographyDialog()" 
-                            title="Edit Filmography">
-                                <mat-icon>edit</mat-icon>
-                        </button>
-                    </div>
-                    <div class="filmography-page-arrows">
-                        <button mat-mini-fab [disabled]="leftFilmographyArrowDisabled" 
-                        (click)="filmographyPageArrowClicked(false)">
-                            <mat-icon>keyboard_arrow_left</mat-icon>
-                        </button>
-                        <span>{{filmographyCurrPage + 1}}/{{filmographyPagesLength}}</span>
-                        <button mat-mini-fab [disabled]="rightFilmographyArrowDisabled" 
-                        (click)="filmographyPageArrowClicked(true)">
-                            <mat-icon>keyboard_arrow_right</mat-icon>
-                        </button>
-                    </div>
-                </div>
-                <hr>
-                <div class="filmography">
-                    <mat-card *ngFor="let filmography of filmography" class="filmography-card" 
-                    [routerLink]="filmography.filmItem.id ? ['/film/'+filmography.filmItem.id] : []">
-                        <img class="cast-image"
-                            [src]="'data:image/png;base64,' + filmography.filmItem.photo.image" 
-                            [title]="filmography.categoryName"
-                            onerror="this.src='assets/DefaultMovie.png'">
-                        <mat-card-footer class="filmography-footer">
-                            <mat-card-title>{{filmography.categoryName}}</mat-card-title>
-                            <hr>
-                            <mat-card-subtitle *ngFor="let character of filmography.characters">
-                                <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
-                                    {{character.name}}
+            <button mat-mini-fab
+                [title]="'Add new Filmography'"
+                (click)="openFilmographyDialog()">
+                    <mat-icon>add</mat-icon>
+            </button>
+            <button mat-mini-fab
+                [title]="'Reset Filmographies'"
+                (click)="resetFilmography()">
+                    <mat-icon>restore</mat-icon>
+            </button>
+            <div *ngIf="groupedFilmography; else loadingSpinner" style="margin-top: 25px;">
+                <div *ngFor="let grFilm of groupedFilmography | keyvalue">
+                        <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>{{grFilm.key}}</mat-panel-title>
+                            <mat-panel-description>{{grFilm.value.length}} Films</mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <mat-grid-list cols="6" rowHeight="1:2" gutterSize="10px">
+                            <mat-grid-tile *ngFor="let filmography of grFilm.value">
+                            <mat-grid-tile-header>
+                                <button mat-mini-fab 
+                                    (click)="openEditFilmographyDialog(filmography)"
+                                    title="'Edit '+ filmography.filmItem?.name">
+                                        <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-mini-fab
+                                [title]="'Remove '+filmography.filmItem?.name"
+                                (click)="removeFilmography(grFilm.key, filmography)">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                            </mat-grid-tile-header>
+                                <a [routerLink]="filmography.filmItem?.id ? ['/film', filmography.filmItem?.id] : []">
+                                    <img class="filmography-image"
+                                        [src]="'data:image/png;base64,' + filmography.filmItem?.photo?.image" 
+                                        [title]="filmography.filmItem?.name"
+                                        onerror="this.src='assets/DefaultMovie.png'">
                                 </a>
-                                <ng-template #chOnlyName>{{character.name}}
-                                    <p *ngIf="character.description"> ({{character.description}})</p>
-                                </ng-template>
-                            </mat-card-subtitle>
-                        </mat-card-footer>
-                    </mat-card>
+                                <mat-grid-tile-footer style="display: block; height: 70px">
+                                    <span>{{filmography.filmItem?.name}} ({{filmography.year}})</span>
+                                    <hr>
+                                     <div *ngIf="filmography.characters.length != 0; else description">
+                                         <div *ngFor="let character of filmography.characters">
+                                            <div *ngIf="character.imdbPageUrl; else justCharName">
+                                                <a  target="_blank" 
+                                                href="{{character.imdbPageUrl}}">
+                                                    {{character.name}}
+                                                </a>
+                                            </div>
+                                            <ng-template #justCharName>
+                                                <mat-label *ngFor="let character of filmography.characters">{{character.name}}</mat-label>
+                                            </ng-template>
+                                        </div>
+                                     </div> 
+                                    <ng-template #description>
+                                        <span>{{filmography.description}}</span>
+                                    </ng-template>
+                                </mat-grid-tile-footer>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                    </mat-expansion-panel>
                 </div>
             </div>
+            <ng-template #loadingSpinner>
+                <mat-spinner #loadingSpinner></mat-spinner>
+            </ng-template>
         </mat-tab>
     </mat-tab-group>
 </mat-dialog-content>
