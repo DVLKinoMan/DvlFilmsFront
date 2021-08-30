@@ -21,14 +21,25 @@ export class Person {
     filmographies?: Filmography[];
     photos?: Photo[];
     alternateNames?: AlternateName[];
+
+    imdbpageMoreAwardsUrl?: string;
+    imdbpageMoreBiographyUrl?: string;
+    imdbpageRelatedNewsArticlesUrl?: string;
+    imdbpageMorePhotosUrl?: string;
+    imdbpageMoreOfficialSitesUrl?: string;
+    imdbpageMoreOtherWorksUrl?: string;
+    imdbpageMorePublicityListingsUrl?: string;
 }
 
 export class AlternateName {
     id?: string;
     name: string;
+    personId: number;
 }
 
-export interface Filmography {
+export class Filmography {
+    id?: string;
+    personId: number;
     year?: number;
     categoryName: string;
     description?: string;
@@ -36,17 +47,20 @@ export interface Filmography {
     characters?: Character[];
 }
 
-export interface FilmItem {
-    id: number;
+export class FilmItem {
+    id?: number;
     name: string;
     imdbPageUrl: string;
     photo?: Photo;
+    year?: number;
+    filmItemWithNameAndUrlId?: string;
 }
 
 export class Character {
     id?: string;
     filmCastMemberId?: string;
     filmCharacterId?: string;
+    personFilmogbraphyId?: string;
     name: string;
     imdbPageUrl?: string;
     description?: string;

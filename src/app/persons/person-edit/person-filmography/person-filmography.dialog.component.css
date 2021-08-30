@@ -1,0 +1,11 @@
+.photo {
+    max-width: 200px;
+}
+
+.film-image {
+    max-width: 30px;
+}
+
+.photo-things {
+    display: flex;
+}

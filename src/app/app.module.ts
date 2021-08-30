@@ -52,6 +52,7 @@ import { FilmPersonDialogComponent } from './films/film-edit/film-person/film-pe
 import { FilmCastEditDialogComponent } from './films/film-edit/film-cast-crew/film-cast-edit.dialog.component';
 import { FilmsComponent } from './films/films-list/films.component';
 import { PersonEditDialogComponent } from './persons/person-edit/person-edit.dialog.component';
+import { PersonFilmographyDialogComponent } from './persons/person-edit/person-filmography/person-filmography.dialog.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { PersonEditDialogComponent } from './persons/person-edit/person-edit.dia
     FilmPersonDialogComponent,
     FilmCastEditDialogComponent,
     FilmsComponent,
-    PersonEditDialogComponent
+    PersonEditDialogComponent,
+    PersonFilmographyDialogComponent
   ],
   imports: [
     BrowserModule,

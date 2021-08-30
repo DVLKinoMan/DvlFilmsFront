@@ -7,6 +7,7 @@ import { FilmCrewMember } from "../film-edit/film-cast-crew/filmCrewMember";
 import { FilmAwardResult } from "../film-edit/film-awards/FilmAwardResult";
 import { FilmAnotherName } from "../film-edit/film-another-names/filmAnotherName";
 import { FilmsQuery } from "../films-list/film-query";
+import { FilmItem } from "src/app/persons/person";
 
 @Injectable({
     providedIn: 'root',
@@ -93,5 +94,18 @@ export class FilmsService {
         var url = this.baseUrl + "/Films/Get/" + filmId + "/AnotherNames";
 
         return this.http.get<FilmAnotherName[]>(url);
+    }
+
+    getFilmItems(name: string, take: number, exactMatch: boolean): Observable<FilmItem[]> {
+        var url = this.baseUrl + "/Films/Search/FilmItem";
+
+        var params = new HttpParams();
+        params = params.append("name", name);
+        params = params.append("take", take);
+        params = params.append("exactMatch", exactMatch);
+
+        return this.http.get<FilmItem[]>(url, {
+            params: params
+        })
     }
 }

@@ -1,0 +1,133 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<mat-dialog-content>
+    <div>
+        <mat-form-field>
+            <input matInput
+            #filmInput 
+            placeholder="Choose Existed Film"
+            [formControl]="filmsCtrl"
+            [matAutocomplete]="autoForFilms">
+            <mat-icon>search</mat-icon>
+        </mat-form-field>   
+          <button mat-mini-fab
+                title="Restore"
+                (click)="resetButtonClick()">
+                    <mat-icon>restore</mat-icon>
+          </button>     
+        <mat-autocomplete #autoForFilms="matAutocomplete" (optionSelected)="selectedFilm($event)">
+            <mat-option *ngFor="let film of (editMode ? [] : (filteredFilms | async))"
+                [value]="film">
+                <img class="film-image" 
+                [src]="'data:image/png;base64,' + film.photo?.image" 
+                [alt]="film.photo?.title" 
+                onerror="this.src='assets/DefaultMovie.png'">
+                {{film.name}}
+            </mat-option>
+        </mat-autocomplete>             
+    </div> 
+    <div class="photo-things">
+        <img class="photo"
+        [src]="'data:image/png;base64,' + model?.filmItem?.photo?.image" 
+        [alt]="model?.filmItem?.photo?.title"
+        onerror="this.src='assets/DefaultMovie.png'">
+        <div style="margin-left: 20px;">
+            <div id="photo-things">
+                <mat-form-field appearance="outline">
+                    <mat-label>Title</mat-label>
+                    <input matInput disabled [value]="model?.filmItem?.photo?.title">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Photo Imdb Url</mat-label>
+                    <input matInput disabled [value]="model?.filmItem?.photo?.imdbPageUrl">
+                </mat-form-field>
+            </div> 
+            <div id="name">
+                <mat-form-field appearance="outline">
+                    <mat-label>Category Name</mat-label>
+                    <input matInput [(ngModel)]="model.categoryName">
+                </mat-form-field>
+                <mat-form-field style="margin-left: 10px;">
+                    <mat-select (selectionChange)="model.categoryName = $event.value">
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let catName of data.categoryNames" 
+                            [value]="catName">
+                            {{catName}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-label><i>choose from Existed Categories</i></mat-label>
+                </mat-form-field>
+            </div>
+            <div id="year-description">
+                <mat-form-field appearance="outline">
+                    <mat-label>Year</mat-label>
+                    <input matInput type="number" [disabled]="model.filmItem.year==undefined" [(ngModel)]="model.year">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <input matInput [(ngModel)]="model.description">
+                </mat-form-field>
+            </div>
+            <div id="film-stats">
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput [disabled]="model.filmItem.id!=undefined" [(ngModel)]="model.filmItem.name">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Imdb Page Url</mat-label>
+                    <input matInput [disabled]="model.filmItem.id!=undefined" [(ngModel)]="model.filmItem.imdbPageUrl">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div id="characters">
+        <span>Characters:</span>
+        <hr>
+       <button *ngIf="!showNewCharacter" mat-mini-fab
+                title="Show Form"
+                (click)="showNewCharacter=true">
+                    <mat-icon>add</mat-icon>
+        </button>  
+        <div *ngIf="showNewCharacter" id="newCharacter">
+            <mat-form-field appearance="outline">
+                <mat-label>Character Name</mat-label>
+                <input matInput [(ngModel)]="newCharacter.name">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Imdb Page Url</mat-label>
+                <input matInput [(ngModel)]="newCharacter.imdbPageUrl">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Description</mat-label>
+                <input matInput [(ngModel)]="newCharacter.description">
+            </mat-form-field>
+            <button mat-mini-fab
+                title="Add"
+                (click)="addNewCharacter()">
+                    <mat-icon>add</mat-icon>
+            </button>  
+        </div> 
+        <div *ngFor="let character of model.characters">
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput [(ngModel)]="character.name">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Imdb Page Url</mat-label>
+                <input matInput [(ngModel)]="character.imdbPageUrl">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Description</mat-label>
+                <input matInput [(ngModel)]="character.description">
+            </mat-form-field>
+            <button mat-mini-fab
+                title="Remove"
+                (click)="removeCharacter(character)">
+                    <mat-icon>remove</mat-icon>
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCloseClick()">Close</button>
+  <button mat-button [mat-dialog-close]="model" cdkFocusInitial>Save</button>
+</mat-dialog-actions>

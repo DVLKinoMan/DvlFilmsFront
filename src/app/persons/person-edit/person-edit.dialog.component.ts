@@ -9,6 +9,7 @@ import { Filmography, Person } from "../person";
 import { PersonsService } from "../services/persons.service";
 import { PersonPhotosDialogComponent } from "../person-photos/person-photos.dialog.component";
 import { PersonAlternateNamesDailogComponent } from "./person-alternate-names/person-alternate-names.dialog.component";
+import { PersonFilmographyDialogComponent } from "./person-filmography/person-filmography.dialog.component";
 
 @Component({
     selector: 'app-person-edit',
@@ -102,11 +103,38 @@ export class PersonEditDialogComponent {
     }
 
     openFilmographyDialog() {
+        const dialogRef = this.photosDialog.open(PersonFilmographyDialogComponent, {
+            width: '1000px',
+            data: {
+                title: "Add Filmography Item",
+                categoryNames: Array.from(this.groupedFilmography.keys())
+            }
+        });
 
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.allFilmography.push(result);
+                this.setGroupedFilmography();
+            }
+            console.log('The dialog was closed');
+        });
     }
 
     openEditFilmographyDialog(filmography: Filmography) {
+        const dialogRef = this.photosDialog.open(PersonFilmographyDialogComponent, {
+            width: '1000px',
+            data: {
+                title: "Edit " + filmography.filmItem?.name,
+                filmography: filmography,
+                categoryNames: Array.from(this.groupedFilmography.keys())
+            }
+        });
 
+        dialogRef.afterClosed().subscribe(result => {
+            if (result)
+                filmography = result;
+            console.log('The dialog was closed');
+        });
     }
 
     resetFilmography() {
