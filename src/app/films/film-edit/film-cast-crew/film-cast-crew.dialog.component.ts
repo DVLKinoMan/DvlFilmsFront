@@ -1,3 +1,4 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -23,10 +24,12 @@ export class FilmCastAndCrewDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
         private filmsService: FilmsService,
         private addEditCastDialog: MatDialog,
-        private router: Router
+        private router: Router,
     ) {
-        if (data.cast)
+        if (data.cast) {
             this.cast = data.cast;
+            this.cast.sort((c1, c2) => c1.index - c2.index);
+        }
         else
             this.loadCast();
 
@@ -45,6 +48,7 @@ export class FilmCastAndCrewDialogComponent implements OnInit {
         this.dialogRef.close();
     }
 
+
     onClickAddCastMember() {
         const dialogRef = this.addEditCastDialog.open(FilmCastEditDialogComponent, {
             width: '800px'
@@ -52,28 +56,47 @@ export class FilmCastAndCrewDialogComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log("Cast member dialog closed");
-            if (result)
+            if (result) {
+                result.index = this.cast.length;
                 this.cast.push(result);
+                this.cast.sort((c1, c2) => c1.index - c2.index);
+            }
+        });
+    }
+
+    drop(event: CdkDragDrop<any>) {
+        var prevIndex = event.previousContainer.data.index;
+        var curIndex = event.container.data.index;
+        var prevItem = this.cast[prevIndex];
+        this.cast.splice(prevIndex, 1);
+        this.cast.splice(curIndex, 0, prevItem);
+        this.setCastIndexes();
+    }
+
+    setCastIndexes() {
+        this.cast.forEach((c, ind) => {
+            c.index = ind + 1;
+        });
+    }
+
+    editCastMember(member: FilmCastMember) {
+        const dialogRef = this.addEditCastDialog.open(FilmCastEditDialogComponent, {
+            width: '800px',
+            data: { model: JSON.parse(JSON.stringify(member)) }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log("Cast member dialog closed");
+            if (result) {
+                const index = this.cast.indexOf(member);
+                if (index >= 0)
+                    this.cast[index] = result;
+            }
         });
     }
 
     onClickCastMember(member: FilmCastMember) {
-        if (this.data.editMode) {
-            const dialogRef = this.addEditCastDialog.open(FilmCastEditDialogComponent, {
-                width: '800px',
-                data: { model: JSON.parse(JSON.stringify(member)) }
-            });
-
-            dialogRef.afterClosed().subscribe(result => {
-                console.log("Cast member dialog closed");
-                if (result) {
-                    const index = this.cast.indexOf(member);
-                    if (index >= 0)
-                        this.cast[index] = result;
-                }
-            });
-        }
-        else if (member.personId)
+        if (!this.data.editMode && member.personId)
             this.router.navigate(['/person/' + member.personId]);
     }
 
@@ -127,6 +150,7 @@ export class FilmCastAndCrewDialogComponent implements OnInit {
     loadCast() {
         this.filmsService.getCast(this.data.filmId).subscribe(result => {
             this.cast = result;
+            this.cast.sort((c1, c2) => c1.index - c2.index);
         }, error => console.error(error));
     }
 }

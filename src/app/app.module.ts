@@ -31,6 +31,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NgImageFullscreenViewModule } from 'ng-image-fullscreen-view';
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 import { PersonComponent } from './persons/person-view/person.component';
 import { PersonAwardsDialogComponent } from './persons/person-edit/person-awards/person-awards.dialog.component';
@@ -110,7 +111,8 @@ import { PersonFilmographyDialogComponent } from './persons/person-edit/person-f
     MatExpansionModule,
     MatChipsModule,
     MatAutocompleteModule,
-    NgImageFullscreenViewModule
+    NgImageFullscreenViewModule,
+    DragDropModule
   ],
   providers: [
     PersonsService,

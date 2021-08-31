@@ -10,34 +10,44 @@
                                     <mat-icon>add</mat-icon>
                                 </button>
                     </div>
-                <div *ngIf="cast; else loading" style="margin-top: 25px;">
-                    <mat-grid-list cols="6" rowHeight="1:2" gutterSize="10px">
-                        <mat-grid-tile
-                            *ngFor="let castMember of cast">
-                            <mat-grid-tile-header *ngIf="data.editMode">
-                                <button mat-mini-fab
-                                [title]="'Remove '+castMember.name"
-                                (click)="removeCastMember(castMember)">
-                                    <mat-icon>remove</mat-icon>
-                                </button>
-                            </mat-grid-tile-header>
-                            <img class="cast-image"
-                            [src]="'data:image/png;base64,' + castMember.profilePicture?.image" 
-                            [title]="castMember.name"
-                            (click)="onClickCastMember(castMember)"
-                            (error)="setDefaultProfilePicture($event, castMember)">
-                            <mat-grid-tile-footer style="display: block; height: 70px">
-                                <span>{{castMember.name}}</span>
-                                <hr>
-                                <div *ngFor="let character of castMember.characters">
-                                    <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
-                                        {{character?.name}}
-                                    </a>
-                                    <ng-template #chOnlyName>{{character?.name}}
-                                        <p *ngIf="character.description"> ({{character.description}})</p>
-                                    </ng-template>
-                                </div>
-                            </mat-grid-tile-footer>
+
+                <div *ngIf="cast; else loading" style="margin-top: 25px;" >
+                    <mat-grid-list cols="6" rowHeight="1:2" gutterSize="10px" cdkDropListGroup >
+                        <mat-grid-tile class="cast-tile" [ngStyle]="{'cursor': data.editMode ? 'grab' : 'pointer'}"
+                            *ngFor="let castMember of cast; let i = index" cdkDropList cdkDropListOrientation="horizontal" 
+                            [cdkDropListData]="{item:castMember,index:i}"
+                            (cdkDropListDropped)="drop($event)" >
+                              <div cdkDrag [cdkDragDisabled]="!data.editMode">
+                                <mat-grid-tile-header *ngIf="data.editMode">
+                                    <button mat-mini-fab
+                                    [title]="'Edit '+castMember.name"
+                                    (click)="editCastMember(castMember)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button mat-mini-fab
+                                    [title]="'Remove '+castMember.name"
+                                    (click)="removeCastMember(castMember)">
+                                        <mat-icon>remove</mat-icon>
+                                    </button>
+                                </mat-grid-tile-header>
+                                <img 
+                                [src]="'data:image/png;base64,' + castMember.profilePicture?.image" 
+                                [title]="castMember.name"
+                                (click)="onClickCastMember(castMember)"
+                                (error)="setDefaultProfilePicture($event, castMember)">
+                                <mat-grid-tile-footer style="display: block; height: 70px">
+                                    <span>{{castMember.name}}</span>
+                                    <hr>
+                                    <div *ngFor="let character of castMember.characters">
+                                        <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
+                                            {{character?.name}}
+                                        </a>
+                                        <ng-template #chOnlyName>{{character?.name}}
+                                            <p *ngIf="character.description"> ({{character.description}})</p>
+                                        </ng-template>
+                                    </div>
+                                </mat-grid-tile-footer>
+                        </div>
                         </mat-grid-tile>
                     </mat-grid-list>
                 </div>

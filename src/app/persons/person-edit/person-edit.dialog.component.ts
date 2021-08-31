@@ -170,6 +170,9 @@ export class PersonEditDialogComponent {
                 arr.push(member);
             else map.set(member.categoryName, [member]);
         });
+        map.forEach(element => {
+            element.sort((a, b) => b.year - a.year);
+        });
         this.groupedFilmography = map;
     }
 

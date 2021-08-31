@@ -13,4 +13,5 @@ export class FilmCastMember {
     profilePicture: Photo;
     characters: Character[];
     gender: Gender;
+    index?: number;
 }
