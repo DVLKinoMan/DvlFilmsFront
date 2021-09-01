@@ -10,6 +10,7 @@ import { PersonsService } from "../services/persons.service";
 import { PersonPhotosDialogComponent } from "../person-photos/person-photos.dialog.component";
 import { PersonAlternateNamesDailogComponent } from "./person-alternate-names/person-alternate-names.dialog.component";
 import { PersonFilmographyDialogComponent } from "./person-filmography/person-filmography.dialog.component";
+import { PersonFetcherService } from "../services/person-fetcher.service";
 
 @Component({
     selector: 'app-person-edit',
@@ -19,6 +20,7 @@ import { PersonFilmographyDialogComponent } from "./person-filmography/person-fi
 
 export class PersonEditDialogComponent {
     model: Person;
+    dbPerson: Person;
     alternateNames: string[];
     genders: any[] = ["Unknown", "Male", "Female"];
 
@@ -34,6 +36,7 @@ export class PersonEditDialogComponent {
     constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData,
         public dialogRef: MatDialogRef<PersonEditDialogComponent>,
         private personService: PersonsService,
+        private personFetcherSerivce: PersonFetcherService,
         private photosService: PhotosService,
         public alternateNamesDialog: MatDialog,
         public photosDialog: MatDialog,
@@ -43,6 +46,7 @@ export class PersonEditDialogComponent {
             this.loadPerson();
         else {
             this.model = data.person;
+            this.dbPerson = data.person;
             this.data.personName = data.person.name;
             this.allFilmography = data.person.filmographies;
             this.setGroupedFilmography();
@@ -206,6 +210,26 @@ export class PersonEditDialogComponent {
                         this.model.photos = result;
                     }, error => console.log(error));
             }, error => console.log(error));
+    }
+
+    fetchPerson() {
+        this.loading = true;
+        this.personFetcherSerivce.getByUrl(this.model.imdbPageUrl).subscribe(result => {
+            this.loading = false;
+            this.dbPerson = this.model;
+            this.model = result;
+            this.allFilmography = JSON.parse(JSON.stringify(this.model.filmographies));
+            this.setGroupedFilmography();
+        }, error => {
+            this.loading = false;
+            console.log(error);
+        });
+    }
+
+    restorePerson() {
+        this.model = this.dbPerson;
+        this.allFilmography = JSON.parse(JSON.stringify(this.model.filmographies));
+        this.setGroupedFilmography();
     }
 
     loadFilmography() {

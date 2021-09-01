@@ -2,11 +2,22 @@
 <mat-dialog-content>
     <mat-tab-group>
         <mat-tab label="Main">
+        <span>Fetch Person from Imdb </span>
+        <button mat-mini-fab 
+            (click)="fetchPerson()"
+            title="Fetch from Imdb">
+                <mat-icon>get_app</mat-icon>
+        </button>
+        <button mat-mini-fab
+            [title]="'Restore'"
+            (click)="restorePerson()">
+                <mat-icon>restore</mat-icon>
+        </button>
             <mat-spinner *ngIf="loading"></mat-spinner>
                 <div class="little-stats">
                     <div id="poster">
                         <img class="profilePicture"
-                                [src]="'data:image/png;base64,' + model.profilePicture.image" 
+                                [src]="model.profilePicture.image.indexOf('data:image/') !== -1 ? model.profilePicture.image : 'data:image/png;base64,' + model.profilePicture.image" 
                                 *ngIf="model.profilePicture" 
                                 [title]="model.profilePicture.title"
                                 (error)="setDefaultProfilePicture($event)">
@@ -171,7 +182,7 @@
                                 <mat-grid-tile-footer style="display: block; height: 70px">
                                     <span>{{filmography.filmItem?.name}} ({{filmography.year}})</span>
                                     <hr>
-                                     <div *ngIf="filmography.characters.length != 0; else description">
+                                     <div *ngIf="filmography.characters?.length != 0; else description">
                                          <div *ngFor="let character of filmography.characters">
                                             <div *ngIf="character.imdbPageUrl; else justCharName">
                                                 <a  target="_blank" 
