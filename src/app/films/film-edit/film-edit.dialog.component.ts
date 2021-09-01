@@ -24,6 +24,7 @@ import { FilmCastAndCrewDialogComponent } from "./film-cast-crew/film-cast-crew.
 import { FilmCastMember } from "./film-cast-crew/filmCastMember";
 import { FilmCrewMember } from "./film-cast-crew/filmCrewMember";
 import { FilmPersonDialogComponent } from "./film-person/film-person.dialog.component";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 
 @Component({
     selector: 'app-film-edit',
@@ -84,6 +85,8 @@ export class FilmEditDialogComponent {
         else {
             this.model = data.film;
             this.data.filmName = data.film.name;
+            this.model.directors.sort((d1, d2) => d1.index - d2.index);
+            this.model.writers.sort((d1, d2) => d1.index - d2.index);
         }
         this.loadCompanies();
         this.loadCountries();
@@ -193,10 +196,12 @@ export class FilmEditDialogComponent {
                     filmId: this.model.id,
                     imdbPageUrl: result.imdbPageUrl,
                     profilePicture: result.profilePicture,
-                    sex: result.sex
+                    sex: result.sex,
+                    index: this.model.directors.length
                 };
 
                 this.model.directors?.push(result);
+                this.model.directors.sort((d1, d2) => d1.index - d2.index);
             }
         });
     }
@@ -216,11 +221,27 @@ export class FilmEditDialogComponent {
                     filmId: this.model.id,
                     imdbPageUrl: result.imdbPageUrl,
                     profilePicture: result.profilePicture,
-                    sex: result.sex
+                    sex: result.sex,
+                    index: this.model.writers.length
                 };
 
                 this.model.writers?.push(p);
+                this.model.writers.sort((d1, d2) => d1.index - d2.index);
             }
+        });
+    }
+
+    dropWriter(event: CdkDragDrop<FilmPerson[]>) {
+        moveItemInArray(this.model.writers, event.previousIndex, event.currentIndex);
+        this.model.writers.forEach((wr, ind) => {
+            wr.index = ind + 1;
+        });
+    }
+
+    dropDirector(event: CdkDragDrop<FilmPerson[]>) {
+        moveItemInArray(this.model.directors, event.previousIndex, event.currentIndex);
+        this.model.directors.forEach((dr, ind) => {
+            dr.index = ind + 1;
         });
     }
 
@@ -394,6 +415,8 @@ export class FilmEditDialogComponent {
                 this.data.filmName = result.name;
                 this.model = result;
                 this.loading = false;
+                this.model.directors.sort((d1, d2) => d1.index - d2.index);
+                this.model.writers.sort((d1, d2) => d1.index - d2.index);
                 this.loadFilmAnotherNames();
                 this.loadCast();
                 this.loadCrew();

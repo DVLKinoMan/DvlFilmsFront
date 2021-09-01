@@ -72,4 +72,5 @@ export class FilmPerson {
     profilePicture: Photo;
     sex?: Gender;
     personItemWithNameAndUrlId?: string;
+    index: number;
 }

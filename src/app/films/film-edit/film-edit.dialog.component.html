@@ -211,55 +211,63 @@
                 <div id="directors">
                     <span>Directors: </span>
                     <hr>
-                    <div class="cast"> 
-                        <mat-card 
-                        class="cast-card"
-                        *ngFor="let director of model.directors"
-                        [routerLink]="director.id ? ['/person/'+director.id] : []"
-                        [queryParams]="{flmCatName: 'director'}">
-                            <img   
-                            class="cast-image"
-                            [src]="director.profilePicture?.imdbPageUrl" 
-                                [title]="director.name"
-                                (error)="setDefaultPersonPhoto($event, director)">
-                            <mat-card-footer class="cast-footer">
-                                <mat-card-title>{{director.name}}</mat-card-title>
+                    <div class="cast">
+                        <div class="drag-drop-list" cdkDropList cdkDropListOrientation="horizontal"
+                                (cdkDropListDropped)="dropDirector($event)"> 
+                                <mat-card 
+                                class="drag-drop-item"
+                                *ngFor="let director of model.directors"
+                                [routerLink]="director.id ? ['/person/'+director.id] : []"
+                                [queryParams]="{flmCatName: 'director'}"
+                                cdkDrag>
+                                    <img   
+                                    class="cast-image"
+                                    [src]="director.profilePicture?.imdbPageUrl" 
+                                        [title]="director.name"
+                                        (error)="setDefaultPersonPhoto($event, director)">
+                                    <mat-card-footer class="cast-footer">
+                                        <mat-card-title>{{director.name}}</mat-card-title>
+                                        <button mat-mini-fab
+                                        title="Remove Director"
+                                        (click)="removeDirector(director)">
+                                            <mat-icon>remove</mat-icon>
+                                        </button>
+                                    </mat-card-footer>
+                                </mat-card>
                                 <button mat-mini-fab
-                                title="Remove Director"
-                                (click)="removeDirector(director)">
-                                    <mat-icon>remove</mat-icon>
+                                title="Add Director"
+                                (click)="addDirectorClicked()">
+                                    <mat-icon>add</mat-icon>
                                 </button>
-                            </mat-card-footer>
-                        </mat-card>
-                        <button mat-mini-fab
-                        title="Add Director"
-                        (click)="addDirectorClicked()">
-                            <mat-icon>add</mat-icon>
-                        </button>
+                            </div>
                     </div>
                 </div>
                 <div id="writers">
                     <span>Writers: </span>
                     <hr>
                     <div class="cast">
-                            <mat-card *ngFor="let writer of model.writers"
-                            class="cast-card" 
-                            [routerLink]="writer.id ? ['/person/'+writer.id] : []"
-                            [queryParams]="{flmCatName: 'writer'}">
-                                <img  
-                                    class="cast-image"
-                                    [src]="writer.profilePicture?.imdbPageUrl" 
-                                    [title]="writer.name"
-                                    (error)="setDefaultPersonPhoto($event, writer)">
-                                <mat-card-footer class="cast-footer">
-                                    <mat-card-title>{{writer.name}}</mat-card-title>
-                                <button mat-mini-fab
-                                title="Remove Writer"
-                                (click)="removeWriter(writer)">
-                                    <mat-icon>remove</mat-icon>
-                                </button>
-                                </mat-card-footer>
-                            </mat-card>
+                            <div class="drag-drop-list" cdkDropList cdkDropListOrientation="horizontal"
+                                (cdkDropListDropped)="dropWriter($event)">
+                                <mat-card *ngFor="let writer of model.writers"
+                                    class="drag-drop-item" 
+                                    [routerLink]="writer.id ? ['/person/'+writer.id] : []"
+                                    [queryParams]="{flmCatName: 'writer'}"
+                                    cdkDrag>
+                                    <img  
+                                        class="cast-image"
+                                        [src]="writer.profilePicture?.imdbPageUrl" 
+                                        [title]="writer.name"
+                                        (error)="setDefaultPersonPhoto($event, writer)">
+                                    <mat-card-footer class="cast-footer">
+                                        <mat-card-title>{{writer.name}}</mat-card-title>
+                                    <button mat-mini-fab
+                                    title="Remove Writer"
+                                    (click)="removeWriter(writer)">
+                                        <mat-icon>remove</mat-icon>
+                                    </button>
+                                    </mat-card-footer>
+                                </mat-card>
+                            </div>
                         <button mat-mini-fab
                         title="Add Writer"
                         (click)="addWriterClicked()">

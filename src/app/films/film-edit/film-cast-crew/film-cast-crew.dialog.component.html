@@ -13,7 +13,7 @@
 
                 <div *ngIf="cast; else loading" style="margin-top: 25px;" >
                     <mat-grid-list cols="6" rowHeight="1:2" gutterSize="10px" cdkDropListGroup >
-                        <mat-grid-tile class="cast-tile" [ngStyle]="{'cursor': data.editMode ? 'grab' : 'pointer'}"
+                        <mat-grid-tile class="cast-tile" [ngStyle]="{'cursor': data.editMode ? 'move' : 'pointer'}"
                             *ngFor="let castMember of cast; let i = index" cdkDropList cdkDropListOrientation="horizontal" 
                             [cdkDropListData]="{item:castMember,index:i}"
                             (cdkDropListDropped)="drop($event)" >
