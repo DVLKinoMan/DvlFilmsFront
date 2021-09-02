@@ -31,3 +31,14 @@ export enum PersonFilterType {
     Gender,
     Film
 }
+
+export enum PersonIncludingProperty {
+    Properties = 0,
+    DetFestivalAwardsWithDetails = 1,
+    DetExternalSites = 2,
+    DetBiography = 4,
+    DetPhotos = 8,
+    DetOtherWorks = 16,
+    DetPublicity = 32,
+    DetNews = 64
+}

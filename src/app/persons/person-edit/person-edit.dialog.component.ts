@@ -201,10 +201,8 @@ export class PersonEditDialogComponent {
     loadPerson() {
         if (this.data.personId)
             this.personService.getById(this.data.personId).subscribe(result => {
-                this.data.personName = result.name;
-                this.model = result;
                 this.loading = false;
-                this.alternateNames = [...new Set(result.alternateNames.map(item => item.name))];
+                this.setModel(result);
                 this.loadFilmography();
                 this.photosService.getPersonPhotos(this.model.id, 0, this.showPhotos)
                     .subscribe(result => {
@@ -213,14 +211,27 @@ export class PersonEditDialogComponent {
             }, error => console.log(error));
     }
 
+    setModel(person: Person) {
+        this.data.personName = person.name;
+        this.model = person;
+        this.alternateNames = [...new Set(person.alternateNames.map(item => item.name))];
+    }
+
     fetchPerson() {
         this.loading = true;
         this.personFetcherSerivce.getByUrl(this.model.imdbPageUrl).subscribe(result => {
             this.loading = false;
             if (!this.dbPerson)
                 this.dbPerson = this.model;
-            this.model = result;
-            this.model.id = this.dbPerson.id;
+            result.id = this.dbPerson.id;
+            result.profilePicture.id = this.dbPerson?.profilePicture?.id;
+            result.alternateNames?.forEach(alt => {
+                var dbAlt = this.dbPerson.alternateNames?.find(t => t.name == alt.name);
+                alt.personId = result.id;
+                if (dbAlt)
+                    alt.id = dbAlt.id;
+            });
+            this.setModel(result);
             this.mergeFilmographies();
         }, error => {
             this.loading = false;
@@ -231,8 +242,8 @@ export class PersonEditDialogComponent {
     mergeFilmographies() {
         var titles: string[] = [];
         this.model.filmographies.forEach(flm => {
-            var dbflm = this.dbPerson.filmographies.find(d => Helpers.getImdbTitle(d.filmItem.imdbPageUrl) ==
-                Helpers.getImdbTitle(flm.filmItem.imdbPageUrl));
+            var dbflm = this.dbPerson.filmographies.find(d => d.filmItem.imdbTitle ==
+                flm.filmItem.imdbTitle);
             flm.personId = this.model.id
             if (dbflm) {
                 flm.id = dbflm.id;
@@ -250,7 +261,7 @@ export class PersonEditDialogComponent {
                     }
                 });
             }
-            else titles.push(Helpers.getImdbTitle(flm.filmItem.imdbPageUrl));
+            else titles.push(flm.filmItem.imdbTitle);
         });
 
         if (titles.length == 0) {
@@ -259,22 +270,28 @@ export class PersonEditDialogComponent {
             return;
         }
 
-        this.personService.getPersonFilmItems(titles).subscribe(result => {
-            result.forEach(r => {
-                var res = this.model.filmographies.find(flm => flm.filmItem.imdbTitle == r.imdbTitle);
-                if (res) {
-                    res.filmItem.id = r.id;
-                    res.filmItem.photo = r.photo;
-                    res.filmItem.filmItemWithNameAndUrlId = r.filmItemWithNameAndUrlId;
+        var chunks = 50;
+        for (var i = 0; i < titles.length; i += chunks + 1) {
+            var chunkedTitles = titles.slice(i, i + chunks);
+            this.personService.getPersonFilmItems(chunkedTitles).subscribe(result => {
+                result.forEach(r => {
+                    var res = this.model.filmographies.find(flm => flm.filmItem.imdbTitle == r.imdbTitle);
+                    if (res) {
+                        res.filmItem.id = r.id;
+                        res.filmItem.photo = r.photo;
+                        res.filmItem.filmItemWithNameAndUrlId = r.filmItemWithNameAndUrlId;
+                    }
+                });
+                if (i + chunks + 1 >= titles.length) {
+                    this.allFilmography = JSON.parse(JSON.stringify(this.model.filmographies));
+                    this.setGroupedFilmography();
                 }
-            });
-            this.allFilmography = JSON.parse(JSON.stringify(this.model.filmographies));
-            this.setGroupedFilmography();
-        }, error => console.log(error));
+            }, error => console.log(error));
+        }
     }
 
     restorePerson() {
-        this.model = this.dbPerson;
+        this.setModel(this.dbPerson);
         this.allFilmography = JSON.parse(JSON.stringify(this.model.filmographies));
         this.setGroupedFilmography();
     }

@@ -52,12 +52,11 @@ export class FilmItem {
     id?: number;
     name: string;
     imdbPageUrl: string;
+    description?: string;
+    imdbTitle?: string;
     photo?: Photo;
     year?: number;
     filmItemWithNameAndUrlId?: string;
-    public get imdbTitle(): string {
-        return Helpers.getImdbTitle(this.imdbPageUrl);
-    }
 }
 
 export class Character {
