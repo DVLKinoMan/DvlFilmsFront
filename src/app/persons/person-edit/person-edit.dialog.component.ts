@@ -1,16 +1,17 @@
-import { Component, Inject } from "@angular/core";
+import { Component, DefaultIterableDiffer, Inject } from "@angular/core";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Photo } from "src/app/common/photo";
 import { PhotosService } from "src/app/common/services/photos.service";
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gender } from "src/app/persons/enums";
-import { Filmography, Person } from "../person";
+import { FilmItem, Filmography, Person } from "../person";
 import { PersonsService } from "../services/persons.service";
 import { PersonPhotosDialogComponent } from "../person-photos/person-photos.dialog.component";
 import { PersonAlternateNamesDailogComponent } from "./person-alternate-names/person-alternate-names.dialog.component";
 import { PersonFilmographyDialogComponent } from "./person-filmography/person-filmography.dialog.component";
 import { PersonFetcherService } from "../services/person-fetcher.service";
+import { Helpers } from "src/app/common/helpers";
 
 @Component({
     selector: 'app-person-edit',
@@ -216,14 +217,60 @@ export class PersonEditDialogComponent {
         this.loading = true;
         this.personFetcherSerivce.getByUrl(this.model.imdbPageUrl).subscribe(result => {
             this.loading = false;
-            this.dbPerson = this.model;
+            if (!this.dbPerson)
+                this.dbPerson = this.model;
             this.model = result;
-            this.allFilmography = JSON.parse(JSON.stringify(this.model.filmographies));
-            this.setGroupedFilmography();
+            this.model.id = this.dbPerson.id;
+            this.mergeFilmographies();
         }, error => {
             this.loading = false;
             console.log(error);
         });
+    }
+
+    mergeFilmographies() {
+        var titles: string[] = [];
+        this.model.filmographies.forEach(flm => {
+            var dbflm = this.dbPerson.filmographies.find(d => Helpers.getImdbTitle(d.filmItem.imdbPageUrl) ==
+                Helpers.getImdbTitle(flm.filmItem.imdbPageUrl));
+            flm.personId = this.model.id
+            if (dbflm) {
+                flm.id = dbflm.id;
+                flm.filmItem.id = dbflm.filmItem?.id;
+                flm.filmItem.photo = dbflm.filmItem?.photo;
+                flm.filmItem.filmItemWithNameAndUrlId = dbflm.filmItem?.filmItemWithNameAndUrlId;
+
+                flm.characters?.forEach(ch => {
+                    var dbCh = dbflm.characters?.find(c => c.name == ch.name);
+                    if (dbCh) {
+                        ch.id = dbCh.id;
+                        ch.filmCharacterId = dbCh.filmCharacterId;
+                        ch.filmCastMemberId = dbCh.filmCastMemberId;
+                        ch.personFilmogbraphyId = dbCh.personFilmogbraphyId;
+                    }
+                });
+            }
+            else titles.push(Helpers.getImdbTitle(flm.filmItem.imdbPageUrl));
+        });
+
+        if (titles.length == 0) {
+            this.allFilmography = JSON.parse(JSON.stringify(this.model.filmographies));
+            this.setGroupedFilmography();
+            return;
+        }
+
+        this.personService.getPersonFilmItems(titles).subscribe(result => {
+            result.forEach(r => {
+                var res = this.model.filmographies.find(flm => flm.filmItem.imdbTitle == r.imdbTitle);
+                if (res) {
+                    res.filmItem.id = r.id;
+                    res.filmItem.photo = r.photo;
+                    res.filmItem.filmItemWithNameAndUrlId = r.filmItemWithNameAndUrlId;
+                }
+            });
+            this.allFilmography = JSON.parse(JSON.stringify(this.model.filmographies));
+            this.setGroupedFilmography();
+        }, error => console.log(error));
     }
 
     restorePerson() {

@@ -4,6 +4,7 @@ import { FilmItem, Filmography, Person } from "../person";
 import { Observable } from "rxjs";
 import { PersonsQuery } from "../persons-list/person-query";
 import { PersonAwardResult } from "../person-edit/person-awards/personAwardResult";
+import { Helpers } from "src/app/common/helpers";
 
 @Injectable({
     providedIn: 'root',
@@ -82,20 +83,13 @@ export class PersonsService {
         return this.http.get<Filmography[]>(url);
     }
 
-    getPersonFilmItems(imdbRealPageUrls: string[]): Observable<FilmItem[]> {
+    getPersonFilmItems(titles: string[]): Observable<FilmItem[]> {
         var url = this.baseUrl + "/Films/Get/PersonFilmItems";
         let params = new HttpParams();
-        var titles = imdbRealPageUrls.map(url => this.getBetweenString(url, "title/", "/"));
         titles.forEach(function (title) {
             params = params.append("imdbTitles", title);
         })
         return this.http.get<FilmItem[]>(url, { params: params });
-    }
-
-    getBetweenString(str: string, prevString: string, afterString: string): string {
-        var firstIndex = str.indexOf(prevString) + prevString.length;
-        var endIndex = str.substring(firstIndex).indexOf(afterString);
-        return str.substring(firstIndex, endIndex < 0 ? undefined : endIndex - 1);
     }
 
     getAwards(personId: number): Observable<PersonAwardResult[]> {

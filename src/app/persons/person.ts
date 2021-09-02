@@ -1,3 +1,4 @@
+import { Helpers } from "../common/helpers";
 import { Photo } from "../common/photo";
 import { Gender, ZodiacSign } from "./enums";
 
@@ -54,6 +55,9 @@ export class FilmItem {
     photo?: Photo;
     year?: number;
     filmItemWithNameAndUrlId?: string;
+    public get imdbTitle(): string {
+        return Helpers.getImdbTitle(this.imdbPageUrl);
+    }
 }
 
 export class Character {
