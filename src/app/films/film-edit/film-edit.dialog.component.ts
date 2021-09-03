@@ -264,16 +264,16 @@ export class FilmEditDialogComponent {
         }
     }
 
-    onCloseClick() {
-        this.dialogRef.close();
+    onCloseClick(res: boolean) {
+        this.dialogRef.close(res);
     }
 
     onSaveClick() {
         this.loading = true;
         this.filmService.update(this.model)
             .subscribe(res => {
-                this.loading = true;
-                this.onCloseClick();
+                this.loading = false;
+                this.onCloseClick(true);
             }, error => {
                 this.loading = false;
                 console.log(error);

@@ -125,6 +125,8 @@ export class FilmComponent implements OnInit {
 
     loadFilm() {
         this.service.getById(this.id).subscribe(result => {
+            result.writers?.sort((wr1, wr2) => wr1.index - wr2.index);
+            result.directors?.sort((dr1, dr2) => dr1.index - dr2.index);
             this.model = result;
             this.loading = false;
             this.photosService.getFilmPhotos(this.id, 0, this.showPhotos).subscribe(result => {
@@ -150,7 +152,7 @@ export class FilmComponent implements OnInit {
 
     loadCast() {
         this.service.getCast(this.id).subscribe(result => {
-            this.allCast = result;
+            this.allCast = result.sort((a, b) => a.index - b.index);
             this.cast = this.allCast.slice(0, this.castItemsPerPage);
             this.castPagesLength = Math.floor(this.allCast.length / this.castItemsPerPage) +
                 (this.allCast.length % this.castItemsPerPage > 0 ? 1 : 0);

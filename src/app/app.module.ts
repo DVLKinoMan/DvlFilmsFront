@@ -54,6 +54,7 @@ import { FilmCastEditDialogComponent } from './films/film-edit/film-cast-crew/fi
 import { FilmsComponent } from './films/films-list/films.component';
 import { PersonEditDialogComponent } from './persons/person-edit/person-edit.dialog.component';
 import { PersonFilmographyDialogComponent } from './persons/person-edit/person-filmography/person-filmography.dialog.component';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { PersonFilmographyDialogComponent } from './persons/person-edit/person-f
     FilmCastEditDialogComponent,
     FilmsComponent,
     PersonEditDialogComponent,
-    PersonFilmographyDialogComponent
+    PersonFilmographyDialogComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
@@ -87,6 +89,7 @@ import { PersonFilmographyDialogComponent } from './persons/person-edit/person-f
       { path: 'person/:id', component: PersonComponent },
       // { path: 'person/:id/awards', component: PersonAwardsComponent },
       { path: 'film/:id', component: FilmComponent },
+      { path: 'login', component: AuthComponent }
     ]),
     BrowserAnimationsModule,
     MatPaginatorModule,
