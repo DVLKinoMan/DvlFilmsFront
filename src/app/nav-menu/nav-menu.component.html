@@ -19,5 +19,9 @@
          <span [routerLink]="['/login']">Login</span>
         <mat-icon>login</mat-icon>
       </button>
+      <button *ngIf="!isAuthenticated" style="margin-right: 50px;" mat-icon-button>
+         <span [routerLink]="['/login']" [queryParams]="{registerMode: true}" >Register</span>
+        <mat-icon>add_circle_outline</mat-icon>
+      </button>
   </mat-toolbar>
 </header>

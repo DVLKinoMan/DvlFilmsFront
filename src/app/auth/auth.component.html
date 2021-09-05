@@ -19,6 +19,11 @@
             <button type="submit"  [disabled]="!loginForm.valid" mat-button>Login</button>
             <button mat-button (click)="loginMode=!loginMode">Go To Registration</button>
           </div>
+          <div>
+            <button (click)="loginWithGoogle()" mat-raised-button class="google-login-btn">
+              Google
+            </button>   
+          </div>
         </form>
         <ng-template #registerMode>
               <form [formGroup]="registrationForm" (ngSubmit)="onRegisterSubmit()">

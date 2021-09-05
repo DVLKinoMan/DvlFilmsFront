@@ -55,6 +55,7 @@ import { FilmsComponent } from './films/films-list/films.component';
 import { PersonEditDialogComponent } from './persons/person-edit/person-edit.dialog.component';
 import { PersonFilmographyDialogComponent } from './persons/person-edit/person-filmography/person-filmography.dialog.component';
 import { AuthComponent } from './auth/auth.component';
+import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -125,7 +126,20 @@ import { AuthComponent } from './auth/auth.component';
     CountriesService,
     CompaniesService,
     GenresService,
+    SocialAuthService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: true, //keeps the user signed in
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('312974140998-qk5f77p9iu2a27coo9k85cqk2g19o63t.apps.googleusercontent.com') // your client id
+          }
+        ]
+      }
+    },
   ],
   bootstrap: [AppComponent]
 })
