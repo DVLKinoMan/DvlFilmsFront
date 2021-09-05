@@ -1,27 +1,97 @@
  <mat-card>
-      <mat-card-title>Login</mat-card-title>
       <mat-card-content>
-        <form [formGroup]="form" (ngSubmit)="submit()">
+        <form *ngIf="loginMode; else registerMode" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+          <mat-card-title>Login</mat-card-title>
           <p>
             <mat-form-field>
               <input type="text" matInput placeholder="Username" formControlName="username">
             </mat-form-field>
           </p>
-
           <p>
             <mat-form-field>
               <input type="password" matInput placeholder="Password" formControlName="password">
             </mat-form-field>
           </p>
-
-          <p *ngIf="error" class="error">
+          <mat-error *ngIf="error">
             {{ error }}
-          </p>
-
+          </mat-error>
           <div class="button">
-            <button type="submit" mat-button>Login</button>
+            <button type="submit"  [disabled]="!loginForm.valid" mat-button>Login</button>
+            <button mat-button (click)="loginMode=!loginMode">Go To Registration</button>
           </div>
-
         </form>
+        <ng-template #registerMode>
+              <form [formGroup]="registrationForm" (ngSubmit)="onRegisterSubmit()">
+                <mat-card-title>Register</mat-card-title>
+                <p>
+                  <mat-form-field>
+                    <input type="text" matInput placeholder="Username" formControlName="username">
+                    <mat-error
+                        *ngIf="registrationForm.get('username').hasError('required')">
+                        Username is <strong>required</strong>.
+                    </mat-error>
+                    <mat-error
+                        *ngIf="registrationForm.get('username').hasError('minlength')">
+                        The minimum length for Username is {{registrationForm.get('username').errors.minlength.requiredLength}} characters.
+                    </mat-error>
+                    <mat-error
+                        *ngIf="registrationForm.get('username').hasError('maxlength')">
+                        The maximum length for Username is {{registrationForm.get('username').errors.maxlength.requiredLength}} characters.
+                    </mat-error>
+                  </mat-form-field>
+                </p>
+                <p>
+                  <mat-form-field>
+                    <input type="password" matInput placeholder="Password" formControlName="password" [errorStateMatcher]="matcher">
+                  <mat-error *ngIf="registrationForm.get('password').hasError('password') && !registrationForm.get('password').hasError('required')">
+                      Password is <strong>required</strong>.
+                  </mat-error>
+                    <mat-error *ngIf="registrationForm.get('password').hasError('minlength')">
+                      The minimum length for password is {{registrationForm.get('password').errors.minlength.requiredLength}} characters.
+                    </mat-error>
+                    <mat-error
+                        *ngIf="registrationForm.get('password').hasError('maxlength')">
+                        The maximum length for password is {{registrationForm.get('password').errors.maxlength.requiredLength}} characters.
+                    </mat-error>
+                </mat-form-field>
+                </p>
+                <p>
+                  <mat-form-field>
+                    <input type="password" matInput placeholder="ConfirmPassword" formControlName="confirmPassword" [errorStateMatcher]="matcher">
+                    <mat-error *ngIf="registrationForm.get('confirmPassword').hasError('required')">
+                      Password is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </p>
+                <p>
+                  <mat-form-field>
+                    <input type="email" matInput placeholder="Email" formControlName="email" [errorStateMatcher]="matcher">
+                    <mat-error *ngIf="registrationForm.get('email').hasError('email') && !registrationForm.get('email').hasError('required')">
+                      Please enter a valid email address
+                    </mat-error>
+                    <mat-error *ngIf="registrationForm.get('email').hasError('required')">
+                      Email is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field> 
+                </p> 
+                <mat-form-field appearance="fill">
+                    <mat-label>Birth Date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="birthDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error
+                        *ngIf="registrationForm.get('birthDate').hasError('required')">
+                        Birth Date is <strong>required</strong>.
+                    </mat-error>
+                </mat-form-field>
+                <mat-error *ngIf="error">
+                  {{ error }}
+                </mat-error>
+                <div class="button">
+                  <button type="submit" [disabled]="!registrationForm.valid" mat-button>Register</button>
+                  <button mat-button (click)="loginMode=!loginMode">Go To Login</button>
+                </div>
+              </form>
+        </ng-template>
       </mat-card-content>
 </mat-card>

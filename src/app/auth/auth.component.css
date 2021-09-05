@@ -1,0 +1,18 @@
+  mat-card {
+        width: 250px;
+        margin-left: 40%;
+        height: 100%;
+        vertical-align: middle;
+        display: flex;
+        justify-content: center;
+  }
+
+  mat-card-title {
+        display: flex;
+        justify-content: center;
+}
+      
+.button {
+    display: flex;
+    justify-content: flex-end;
+}
