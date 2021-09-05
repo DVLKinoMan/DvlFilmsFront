@@ -10,5 +10,14 @@
     <button mat-icon-button style="margin-left: 50px;">
       <span [routerLink]="['/persons']">Persons</span>
     </button>
+    <span class="example-spacer"></span>
+      <button *ngIf="isAuthenticated" (click)="onLogout()" style="margin-right: 100px;" mat-icon-button>
+        <span>{{userName}} Logout</span>
+        <mat-icon>logout</mat-icon>
+      </button>
+      <button *ngIf="!isAuthenticated" style="margin-right: 50px;" mat-icon-button>
+         <span [routerLink]="['/login']">Login</span>
+        <mat-icon>login</mat-icon>
+      </button>
   </mat-toolbar>
 </header>

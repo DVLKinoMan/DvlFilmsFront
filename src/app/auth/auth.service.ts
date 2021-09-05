@@ -1,13 +1,14 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, Subject, throwError } from "rxjs";
+import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { User } from "./user.model";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     baseUrl = "https://localhost:44338";
-    user = new Subject<User>();
+    user = new BehaviorSubject<User>(null);
+    private tokenExpirationTimer: any;
 
     constructor(private http: HttpClient) {
 
@@ -30,6 +31,18 @@ export class AuthService {
             );;
     }
 
+    autoLogin() {
+        const us: User = JSON.parse(localStorage.getItem('userData'));
+        if (!us)
+            return;
+
+        if (us.token) {
+            this.user.next(us);
+            this.autoLogout(new Date(us.TokenExpirationDate).getTime() -
+                new Date().getTime());
+        }
+    }
+
     login(userName: string, password: string): Observable<LoginResponse> {
 
         return this.http.post<LoginResponse>(this.baseUrl + "/Accounts/Login", {
@@ -49,6 +62,21 @@ export class AuthService {
             );
     }
 
+    logout() {
+        this.user.next(null);
+        localStorage.removeItem('userData');
+        if (this.tokenExpirationTimer) {
+            clearTimeout(this.tokenExpirationTimer);
+        }
+        this.tokenExpirationTimer = null;
+    }
+
+    autoLogout(expirationDuration: number) {
+        this.tokenExpirationTimer = setTimeout(() => {
+            this.logout();
+        }, expirationDuration);
+    }
+
     private handleAuthentication(
         userName: string,
         photo: string,
@@ -57,6 +85,8 @@ export class AuthService {
     ) {
         const user = new User(userName, photo, token, expiration);
         this.user.next(user);
+        this.autoLogout(new Date(expiration).getTime() - new Date().getTime());
+        localStorage.setItem('userData', JSON.stringify(user));
     }
 
     private handleError(errorRes: HttpErrorResponse) {
