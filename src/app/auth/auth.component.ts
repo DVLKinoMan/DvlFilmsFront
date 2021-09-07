@@ -118,6 +118,28 @@ export class AuthComponent {
             });
     }
 
+    registerWithGoogle() {
+        this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
+            .then(x => {
+                this.isLoading = true;
+                this.authService.externalRegister(x.idToken)
+                    .subscribe(res => {
+                        console.log(res);
+                        this.isLoading = false;
+                        this.loginMode = true;
+                        this.registrationForm.reset();
+                    }, error => {
+                        console.log(error);
+                        this.error = error;
+                        this.socialAuthService.signOut();
+                        this.isLoading = false;
+                    });
+            })
+            .catch(reason => {
+                console.log(reason);
+            });
+    }
+
     loginWithGoogle(): void {
         this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
             .then(x => {

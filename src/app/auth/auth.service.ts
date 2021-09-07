@@ -31,6 +31,19 @@ export class AuthService {
             );;
     }
 
+    externalRegister(idToken: string): Observable<RegisterResponse> {
+        return this.http.post<RegisterResponse>(this.baseUrl + "/Accounts/ExternalRegister", {
+            idToken: idToken,
+            provider: "google"
+        })
+            .pipe(
+                catchError(this.handleError),
+                tap(resData => {
+
+                })
+            );
+    }
+
     autoLogin() {
         const us: User = JSON.parse(localStorage.getItem('userData'));
         if (!us)
@@ -65,6 +78,7 @@ export class AuthService {
     externalLogin(idToken: string): Observable<LoginResponse> {
         return this.http.post<LoginResponse>(this.baseUrl + "/Accounts/ExternalLogin", {
             idToken: idToken,
+            provider: "google"
         })
             .pipe(
                 catchError(this.handleError),

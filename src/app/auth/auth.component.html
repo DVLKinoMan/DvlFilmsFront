@@ -96,6 +96,11 @@
                   <button type="submit" [disabled]="!registrationForm.valid" mat-button>Register</button>
                   <button mat-button (click)="loginMode=!loginMode">Go To Login</button>
                 </div>
+                <div>
+                  <button (click)="registerWithGoogle()" mat-raised-button class="google-login-btn">
+                    Google
+                  </button>   
+                </div>
               </form>
         </ng-template>
       </mat-card-content>
