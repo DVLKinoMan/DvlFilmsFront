@@ -62,6 +62,23 @@ export class AuthService {
             );
     }
 
+    externalLogin(idToken: string): Observable<LoginResponse> {
+        return this.http.post<LoginResponse>(this.baseUrl + "/Accounts/ExternalLogin", {
+            idToken: idToken,
+        })
+            .pipe(
+                catchError(this.handleError),
+                tap(resData => {
+                    this.handleAuthentication(
+                        resData.userName,
+                        resData.photo,
+                        resData.token,
+                        resData.expiration
+                    );
+                })
+            );
+    }
+
     logout() {
         this.user.next(null);
         localStorage.removeItem('userData');

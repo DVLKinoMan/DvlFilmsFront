@@ -120,7 +120,27 @@ export class AuthComponent {
 
     loginWithGoogle(): void {
         this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
-            .then(() => this.router.navigate(['films']))
+            .then(x => {
+                this.isLoading = true;
+                this.authService.externalLogin(x.idToken)
+                    .subscribe(res => {
+                        console.log(res);
+                        this.isLoading = false;
+                        this.activatedRoute.queryParams.subscribe(
+                            params => {
+                                var url = params['returnUrl'];
+                                if (url)
+                                    this.router.navigate([url]);
+                                else this.router.navigate(["/films"]);
+                            }
+                        );
+                    }, error => {
+                        console.log(error);
+                        this.socialAuthService.signOut();
+                        this.error = error;
+                        this.isLoading = false;
+                    });
+            })
             .catch(reason => {
                 console.log(reason);
             });
