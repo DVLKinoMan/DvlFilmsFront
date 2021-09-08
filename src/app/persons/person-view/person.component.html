@@ -20,7 +20,7 @@
                                     title="Person Alternate Names">
                                         <mat-icon>info</mat-icon>
                                 </button>
-                                <button mat-mini-fab 
+                                <button mat-mini-fab *ngIf="editMode"
                                         (click)="openEditDialog()" 
                                         title="Edit Film">
                                             <mat-icon>edit</mat-icon>

@@ -10,6 +10,9 @@ import { formatDate } from '@angular/common';
 import { Gender } from '../enums';
 import { PersonPhotosDialogComponent } from '../person-photos/person-photos.dialog.component';
 import { PersonEditDialogComponent } from '../person-edit/person-edit.dialog.component';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
+import { UserRole } from 'src/app/auth/user.model';
 
 @Component({
   selector: 'app-person',
@@ -18,6 +21,8 @@ import { PersonEditDialogComponent } from '../person-edit/person-edit.dialog.com
 })
 
 export class PersonComponent implements OnInit {
+  private userSub: Subscription;
+
   model: Person;
   id: number;
   selectedZodiacSign: string;
@@ -45,10 +50,16 @@ export class PersonComponent implements OnInit {
     public awardsDialog: MatDialog,
     public alternateNamesDialog: MatDialog,
     public personEditDialog: MatDialog,
-    public photosDialog: MatDialog
+    public photosDialog: MatDialog,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
+    this.userSub = this.authService.user.subscribe(user => {
+      if (user.role == UserRole.Admin)
+        this.editMode = true;
+      this.editMode = false;
+    });
     this.route.queryParams.subscribe(
       params => {
         this.selectedFilmographyCatName = params['flmCatName'];

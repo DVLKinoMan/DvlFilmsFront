@@ -71,7 +71,8 @@ export class AuthService {
                         resData.userName,
                         resData.profilePicture,
                         resData.token,
-                        resData.expiration
+                        resData.expiration,
+                        resData.userRoleId
                     );
                 })
             );
@@ -89,7 +90,8 @@ export class AuthService {
                         resData.userName,
                         resData.profilePicture,
                         resData.token,
-                        resData.expiration
+                        resData.expiration,
+                        resData.userRoleId
                     );
                 })
             );
@@ -114,9 +116,10 @@ export class AuthService {
         userName: string,
         photo: string,
         token: string,
-        expiration: Date
+        expiration: Date,
+        userRoleId: number
     ) {
-        const user = new User(userName, photo, token, expiration);
+        const user = new User(userName, photo, token, expiration, userRoleId);
         this.user.next(user);
         this.autoLogout(new Date(expiration).getTime() - new Date().getTime());
         localStorage.setItem('userData', JSON.stringify(user));
@@ -146,6 +149,7 @@ export class AuthService {
 export class LoginResponse {
     userName: string;
     profilePicture?: string;
+    userRoleId: number;
     token: string;
     expiration: Date
 }
