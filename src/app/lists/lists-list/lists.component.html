@@ -1,0 +1,134 @@
+<h1>Lists</h1>
+<p>Here's a list of lists: feel free to play with it.</p>
+<p *ngIf="!lists"><em>Loading...</em></p>
+<h4>Filter</h4>
+<table>
+    <tr>
+        <td style="width: 200px;">
+            <mat-form-field appearance="fill" class="mat-form">
+                <mat-label>Filter</mat-label><br>
+                <mat-select [(value)]="selectedFilter" 
+                    (selectionChange)="filterChanged($event.value)" panelClass="example-panel-black">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let filter of filterNames" [value]="filter">{{filter}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </td>
+        <td>
+            <form [formGroup]="idFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Id'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="id">Id:</mat-label>
+                    <input id="id" formControlName="id" type="number" matInput placeholder="Id Value Here">
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
+            <form [formGroup]="nameFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Name'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="value">Exact Name:</mat-label>
+                    <input id="value" formControlName="value" matInput>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="pattern">Name Contains:</mat-label>
+                    <input id="pattern" formControlName="pattern" matInput>
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
+            <form [formGroup]="userNameFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'UserName'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="value">Exact Name:</mat-label>
+                    <input id="value" formControlName="value" matInput>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label for="pattern">Name Contains:</mat-label>
+                    <input id="pattern" formControlName="pattern" matInput>
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
+            <form [formGroup]="listTypeFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'ListType'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mat-form">
+                    <mat-label>List Type:</mat-label><br>
+                    <mat-select formControlName="listType" panelClass="example-panel-black">
+                        <mat-option *ngFor="let listType of listTypes; let i=index" 
+                        [value]="i">{{listType}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
+        </td>
+        <td style="float: right;">
+            <button mat-flat-button color="primary" (click)="searchButtonClick()">Search</button><br><br>
+        </td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td *ngFor="let filter of filters; let i = index">
+            {{filter.ToString()}} 
+            <button *ngIf='filter' mat-mini-fab (click)="deleteFilter(i)" color="primary" aria-label="Delete This Filter">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </td>
+        <td style = "float: right;" *ngIf="filters.length > 0">
+            <button mat-flat-button color="warn" (click)="clearFilters()">Clear All Filters</button>
+        </td>
+    </tr>
+</table>
+<mat-spinner *ngIf="!lists"></mat-spinner>
+<table matSort (matSortChange)="sortChanged($event)">
+    <tr>
+        <th mat-sort-header = "id">ID</th>
+        <th mat-sort-header = "name">Name</th>
+        <th>Created by</th>
+        <th  mat-sort-header="birthDate">Created Date</th>
+        <th>Items Count</th>
+    </tr>
+    <tr *ngFor="let list of lists">
+        <td>{{list.id}}</td>
+        <!-- <td>
+            <img class="list-image" 
+            [src]="'data:image/png;base64,' + person.profilePicture.image" 
+            *ngIf="person.profilePicture" 
+            [alt]="person.profilePicture.title" 
+            (error)="setDefaultProfilePicture($event, person)">
+        </td> -->
+        <td>{{list.name}}</td>
+        <td>
+            <a [routerLink]="['/user', list.user.id]">{{list.user.userName}}</a>
+        </td> 
+        <td>{{list.createdDateTime}}</td>
+        <td>{{list.items.length}}</td>
+    </tr>  
+</table>
+<!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
+<!-- Pagination directive -->
+<mat-paginator [hidden]="!lists" [pageSize]="10" (page)="pageEvent = pageChanged($event)"
+    [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>

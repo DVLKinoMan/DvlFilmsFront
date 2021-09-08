@@ -57,6 +57,8 @@ import { PersonEditDialogComponent } from './persons/person-edit/person-edit.dia
 import { PersonFilmographyDialogComponent } from './persons/person-edit/person-filmography/person-filmography.dialog.component';
 import { AuthComponent } from './auth/auth.component';
 import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
+import { ListsComponent } from './lists/lists-list/lists.component';
+import { ListsService } from './lists/services/lists.service';
 
 @NgModule({
   declarations: [
@@ -78,6 +80,7 @@ import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
     FilmsComponent,
     PersonEditDialogComponent,
     PersonFilmographyDialogComponent,
+    ListsComponent,
     AuthComponent
   ],
   imports: [
@@ -88,6 +91,7 @@ import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
       { path: '', component: PersonsComponent, pathMatch: 'full' },
       { path: 'films', component: FilmsComponent },
       { path: 'persons', component: PersonsComponent },
+      { path: 'lists', component: ListsComponent },
       { path: 'person/:id', component: PersonComponent },
       // { path: 'person/:id/awards', component: PersonAwardsComponent },
       { path: 'film/:id', component: FilmComponent },
@@ -129,6 +133,7 @@ import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
     CompaniesService,
     GenresService,
     SocialAuthService,
+    ListsService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
     {
       provide: 'SocialAuthServiceConfig',

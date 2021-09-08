@@ -10,6 +10,9 @@
     <button mat-icon-button style="margin-left: 50px;">
       <span [routerLink]="['/persons']">Persons</span>
     </button>
+    <button mat-icon-button style="margin-left: 50px;">
+      <span [routerLink]="['/lists']">Lists</span>
+    </button>
     <span class="example-spacer"></span>
       <button *ngIf="isAuthenticated" (click)="onLogout()" style="margin-right: 100px;" mat-icon-button>
         <span> <img class="profilePicture" 

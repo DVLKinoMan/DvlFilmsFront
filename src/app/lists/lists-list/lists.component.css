@@ -1,0 +1,14 @@
+table {
+    width: 100%;
+    text-align: center;
+  }
+
+.mat-form {
+  background-color: black;
+  color: white;
+}
+
+.list-image {
+  width: 56px;
+  height: 84px;
+}
