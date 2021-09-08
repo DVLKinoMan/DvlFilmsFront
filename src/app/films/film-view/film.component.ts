@@ -27,7 +27,7 @@ export class FilmComponent implements OnInit {
 
     id: number;
     model: Film;
-    editMode: boolean = false;
+    editMode: boolean;
     fetched?: Film;
     loading: boolean = true;
 
@@ -59,9 +59,9 @@ export class FilmComponent implements OnInit {
     }
     ngOnInit(): void {
         this.userSub = this.authService.user.subscribe(user => {
-            if (user.role == UserRole.Admin)
+            if (UserRole.Admin as UserRole === user.role as UserRole)
                 this.editMode = true;
-            this.editMode = false;
+            else this.editMode = false;
         });
     }
 

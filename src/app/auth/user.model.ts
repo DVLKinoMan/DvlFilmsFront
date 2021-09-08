@@ -13,7 +13,7 @@ export class User {
         return this._token;
     }
 
-    get role() {
+    get role(): UserRole {
         if (this._userRoleId == 1)
             return UserRole.Admin;
         return UserRole.User;

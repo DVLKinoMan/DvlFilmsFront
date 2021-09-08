@@ -1,17 +1,16 @@
-import { Component, DefaultIterableDiffer, Inject } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Photo } from "src/app/common/photo";
 import { PhotosService } from "src/app/common/services/photos.service";
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gender } from "src/app/persons/enums";
-import { FilmItem, Filmography, Person } from "../person";
+import { Filmography, Person } from "../person";
 import { PersonsService } from "../services/persons.service";
 import { PersonPhotosDialogComponent } from "../person-photos/person-photos.dialog.component";
 import { PersonAlternateNamesDailogComponent } from "./person-alternate-names/person-alternate-names.dialog.component";
 import { PersonFilmographyDialogComponent } from "./person-filmography/person-filmography.dialog.component";
 import { PersonFetcherService } from "../services/person-fetcher.service";
-import { Helpers } from "src/app/common/helpers";
 
 @Component({
     selector: 'app-person-edit',

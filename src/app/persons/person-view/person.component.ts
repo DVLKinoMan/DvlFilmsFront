@@ -58,7 +58,7 @@ export class PersonComponent implements OnInit {
     this.userSub = this.authService.user.subscribe(user => {
       if (user.role == UserRole.Admin)
         this.editMode = true;
-      this.editMode = false;
+      else this.editMode = false;
     });
     this.route.queryParams.subscribe(
       params => {
