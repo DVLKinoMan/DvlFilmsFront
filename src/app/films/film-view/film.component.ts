@@ -12,6 +12,9 @@ import { FilmCastAndCrewDialogComponent } from "../film-edit/film-cast-crew/film
 import { Gender } from "src/app/persons/enums";
 import { FilmPhotosDialogComponent } from "../film-photos/film-photos.dialog.component";
 import { FilmEditDialogComponent } from "../film-edit/film-edit.dialog.component";
+import { Subscription } from "rxjs";
+import { AuthService } from "src/app/auth/auth.service";
+import { UserRole } from "src/app/auth/user.model";
 
 @Component({
     selector: 'app-film',
@@ -20,8 +23,11 @@ import { FilmEditDialogComponent } from "../film-edit/film-edit.dialog.component
 })
 
 export class FilmComponent implements OnInit {
+    private userSub: Subscription;
+
     id: number;
     model: Film;
+    editMode: boolean = false;
     fetched?: Film;
     loading: boolean = true;
 
@@ -42,7 +48,8 @@ export class FilmComponent implements OnInit {
         public awardsDialog: MatDialog,
         public castAndCrewDialog: MatDialog,
         public photosDialog: MatDialog,
-        public editDialog: MatDialog
+        public editDialog: MatDialog,
+        private authService: AuthService
     ) {
         this.route.params.subscribe(item => {
             this.id = item['id'];
@@ -51,7 +58,11 @@ export class FilmComponent implements OnInit {
         });
     }
     ngOnInit(): void {
-
+        this.userSub = this.authService.user.subscribe(user => {
+            if (user.role == UserRole.Admin)
+                this.editMode = true;
+            this.editMode = false;
+        });
     }
 
     setDefaultProfilePicture(event: any, castMember: FilmCastMember) {
