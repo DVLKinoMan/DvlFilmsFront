@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { User } from "./user.model";
@@ -10,7 +11,8 @@ export class AuthService {
     user = new BehaviorSubject<User>(null);
     private tokenExpirationTimer: any;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,
+        private _snackBar: MatSnackBar) {
 
     }
 
@@ -67,7 +69,7 @@ export class AuthService {
                 tap(resData => {
                     this.handleAuthentication(
                         resData.userName,
-                        resData.photo,
+                        resData.profilePicture,
                         resData.token,
                         resData.expiration
                     );
@@ -85,7 +87,7 @@ export class AuthService {
                 tap(resData => {
                     this.handleAuthentication(
                         resData.userName,
-                        resData.photo,
+                        resData.profilePicture,
                         resData.token,
                         resData.expiration
                     );
@@ -120,29 +122,30 @@ export class AuthService {
         localStorage.setItem('userData', JSON.stringify(user));
     }
 
-    private handleError(errorRes: HttpErrorResponse) {
+    private handleError = (errorRes: HttpErrorResponse) => {
         let errorMessage = 'An unknown error occurred!';
+        if (errorRes.error && errorRes.error.message) {
+            this.showSnackBar(errorRes.error.message, 'OK');
+            return throwError(errorRes.error.message);
+        }
         if (!errorRes.error || !errorRes.error.error) {
+            this.showSnackBar(errorMessage, 'OK');
             return throwError(errorMessage);
         }
-        switch (errorRes.error.error.message) {
-            case 'EMAIL_EXISTS':
-                errorMessage = 'This email exists already';
-                break;
-            case 'EMAIL_NOT_FOUND':
-                errorMessage = 'This email does not exist.';
-                break;
-            case 'INVALID_PASSWORD':
-                errorMessage = 'This password is not correct.';
-                break;
-        }
-        return throwError(errorMessage);
+        this.showSnackBar(errorRes.error.error.message, 'OK');
+        return throwError(errorRes.error.error.message);
+    }
+
+    private showSnackBar(message: string, action: string) {
+        this._snackBar.open(message, action, {
+            duration: 4000
+        });
     }
 }
 
 export class LoginResponse {
     userName: string;
-    photo?: string;
+    profilePicture?: string;
     token: string;
     expiration: Date
 }

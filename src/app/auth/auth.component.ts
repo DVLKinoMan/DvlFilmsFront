@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, FormGroupDirective, NgForm, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
-import { ErrorStateMatcher } from "@angular/material/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { GoogleLoginProvider, SocialAuthService } from "angularx-social-login";
 import { MyErrorStateMatcher } from "../common/myErrorStateMatcher";
@@ -27,15 +26,17 @@ export class AuthComponent {
     constructor(private authService: AuthService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private socialAuthService: SocialAuthService) {
+        private socialAuthService: SocialAuthService
+    ) {
 
     }
     ngOnInit(): void {
         this.activatedRoute.queryParams.subscribe(
             params => {
                 var registerMode = params['registerMode'];
-                if (registerMode)
+                if (registerMode == 'true')
                     this.loginMode = false;
+                else this.loginMode = true;
             }
         );
     }

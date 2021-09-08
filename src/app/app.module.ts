@@ -30,6 +30,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgImageFullscreenViewModule } from 'ng-image-fullscreen-view';
 import { DragDropModule } from "@angular/cdk/drag-drop";
 
@@ -115,6 +116,7 @@ import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
     MatExpansionModule,
     MatChipsModule,
     MatAutocompleteModule,
+    MatSnackBarModule,
     NgImageFullscreenViewModule,
     DragDropModule
   ],

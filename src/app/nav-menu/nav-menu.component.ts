@@ -11,6 +11,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   isExpanded = false;
   isAuthenticated = false;
   userName: string;
+  profilePicture: string;
   private userSub: Subscription;
 
   constructor(
@@ -20,8 +21,10 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userSub = this.authService.user.subscribe(user => {
       this.isAuthenticated = !!user;
-      if (user)
+      if (user) {
         this.userName = user.userName;
+        this.profilePicture = user.photo;
+      }
     });
   }
 
