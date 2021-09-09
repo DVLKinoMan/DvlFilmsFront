@@ -206,7 +206,7 @@ export class ListsComponent implements OnInit {
             this.pageEvent.pageSize,
             this.listOrderBy,
             this.orderAscending,
-            ListSelectControlFlags.Basic), false];
+            ListSelectControlFlags.WithUser), false];
     }
 
     getListFilters(obj: any): ListFilter[] {

@@ -120,9 +120,10 @@
             [alt]="person.profilePicture.title" 
             (error)="setDefaultProfilePicture($event, person)">
         </td> -->
-        <td>{{list.name}}</td>
         <td>
-            <a [routerLink]="['/user', list.user.id]">{{list.user.userName}}</a>
+            <a [routerLink]="['/list/view']" [queryParams]="{id: list.id}">{{list.name}}</a>
+        <td>
+            <a [routerLink]="['/user', list.user?.id]">{{list.user.userName}}</a>
         </td> 
         <td>{{list.createdDateTime}}</td>
         <td>{{list.items.length}}</td>

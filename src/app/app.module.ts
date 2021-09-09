@@ -100,6 +100,7 @@ import { AuthGuard } from './auth/auth.guard';
       // { path: 'person/:id/awards', component: PersonAwardsComponent },
       { path: 'film/:id', component: FilmComponent },
       { path: 'list/add', component: ListAddEditComponent, canActivate: [AuthGuard] },
+      { path: 'list/view', component: ListAddEditComponent },
       { path: 'login', component: AuthComponent }
     ]),
     BrowserAnimationsModule,
@@ -141,6 +142,7 @@ import { AuthGuard } from './auth/auth.guard';
     SocialAuthService,
     ListsService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+    // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

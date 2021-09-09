@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from "rxjs";
 import { ListsQuery } from "../lists-list/list-query";
 import { List } from "../list.model";
+import { AuthService } from "src/app/auth/auth.service";
 
 @Injectable({
     providedIn: 'root',
@@ -14,6 +15,7 @@ export class ListsService {
 
     constructor(
         private http: HttpClient,
+        private authService: AuthService,
         //@Inject('BASE_URL') private baseUrl: string
     ) {
 
@@ -76,7 +78,13 @@ export class ListsService {
     add(list: List): Observable<List> {
         var url = this.baseUrl + "/lists/add";
 
-        return this.http.post<List>(url, list);
+        var headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        this.authService.user.subscribe(us => {
+            headers = headers.append("Authorization", "Bearer " + us.token);
+        });
+        return this.http.post<List>(url, list, { headers: headers });
     }
 
     getPersons(name: string, take: number, exactMatch: boolean): Observable<List[]> {

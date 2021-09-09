@@ -20,7 +20,9 @@ export class ListsQuery extends Query {
 }
 
 export enum ListSelectControlFlags {
-    Basic = 1
+    Basic = 1,
+    WithUser = 2,
+    WithItems = 4
 }
 
 export enum ListOrderBy {
