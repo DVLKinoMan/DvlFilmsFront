@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -62,6 +62,7 @@ import { ListsComponent } from './lists/lists-list/lists.component';
 import { ListsService } from './lists/services/lists.service';
 import { ListAddEditComponent } from './lists/list-add-edit/list-add-edit.component';
 import { AuthGuard } from './auth/auth.guard';
+import { AuthInterceptorService } from './auth/auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -141,8 +142,8 @@ import { AuthGuard } from './auth/auth.guard';
     GenresService,
     SocialAuthService,
     ListsService,
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
-    // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
+    // { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
