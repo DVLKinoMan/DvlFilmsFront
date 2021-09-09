@@ -61,6 +61,7 @@ import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
 import { ListsComponent } from './lists/lists-list/lists.component';
 import { ListsService } from './lists/services/lists.service';
 import { ListAddEditComponent } from './lists/list-add-edit/list-add-edit.component';
+import { AuthGuard } from './auth/auth.guard';
 
 @NgModule({
   declarations: [
@@ -98,7 +99,7 @@ import { ListAddEditComponent } from './lists/list-add-edit/list-add-edit.compon
       { path: 'person/:id', component: PersonComponent },
       // { path: 'person/:id/awards', component: PersonAwardsComponent },
       { path: 'film/:id', component: FilmComponent },
-      { path: 'list/add', component: ListAddEditComponent },
+      { path: 'list/add', component: ListAddEditComponent, canActivate: [AuthGuard] },
       { path: 'login', component: AuthComponent }
     ]),
     BrowserAnimationsModule,
