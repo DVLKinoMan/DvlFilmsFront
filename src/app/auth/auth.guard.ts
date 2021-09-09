@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { Observable } from "rxjs";
 import { map, take } from "rxjs/operators";
@@ -7,7 +8,9 @@ import { AuthService } from "./auth.service";
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
     constructor(private authService: AuthService,
-        private router: Router) {
+        private router: Router,
+        private _snackBar: MatSnackBar
+    ) {
 
     }
 
@@ -19,6 +22,7 @@ export class AuthGuard implements CanActivate {
                 const isAuth = !!user;
                 if (isAuth)
                     return true;
+                this._snackBar.open("You must login to access this page", "Ok", { duration: 4000 });
                 return this.router.createUrlTree(['/login'], { queryParams: { returnUrl: route.url.join('/') } });
             })
         );
