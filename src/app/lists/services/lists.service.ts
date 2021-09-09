@@ -61,7 +61,7 @@ export class ListsService {
         });
     }
 
-    getById(id: number): Observable<List> {
+    getById(id: string): Observable<List> {
         var url = this.baseUrl + "/Lists/Get/" + id;
 
         return this.http.get<List>(url);
@@ -69,6 +69,12 @@ export class ListsService {
 
     update(list: List): Observable<List> {
         var url = this.baseUrl + "/lists/Update";
+
+        return this.http.post<List>(url, list);
+    }
+
+    add(list: List): Observable<List> {
+        var url = this.baseUrl + "/lists/add";
 
         return this.http.post<List>(url, list);
     }

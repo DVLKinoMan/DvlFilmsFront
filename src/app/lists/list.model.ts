@@ -2,16 +2,17 @@ import { Photo } from "../common/photo";
 
 export class List {
     public createdDateTime: Date;
-    public _imdbPageUrl?: string;
-    public items: ListItem[];
+    public imdbPageUrl?: string;
+    public items: ListItem[] = [];
+    public name: string;
+    public isPublic: boolean;
+    public listType: ListType;
+    public user: ListCreator;
+    public description?: string;
+    public id?: string;
+    public allowDuplicates: boolean;
 
     constructor(
-        public name: string,
-        public isPublic: boolean,
-        public listType: ListType,
-        public user: ListCreator,
-        public description?: string,
-        public id?: string,
     ) {
 
     }
@@ -20,11 +21,14 @@ export class List {
 export class ListItem {
     public id?: string;
     public listId?: string;
-    public itemId: number;
-    public photo?: Photo;
-    public itemName: string;
-    public description: string;
-    public index: number;
+    public description: string;;
+    constructor(public itemId: number,
+        public itemName: string,
+        public index: number,
+        public photo?: Photo
+    ) {
+
+    }
 }
 
 export class ListCreator {

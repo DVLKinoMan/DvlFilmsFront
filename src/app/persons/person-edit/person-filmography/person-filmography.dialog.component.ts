@@ -5,9 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { debounceTime, startWith, switchMap } from "rxjs/operators";
 import { FilmsService } from "src/app/films/services/films.service";
-import { Gender } from "src/app/persons/enums";
 import { Character, FilmItem, Filmography, Person } from "src/app/persons/person";
-import { PersonsService } from "src/app/persons/services/persons.service";
 
 @Component({
     selector: 'app-person-filmography-dialog',

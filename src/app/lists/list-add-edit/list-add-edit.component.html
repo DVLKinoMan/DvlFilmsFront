@@ -1,0 +1,105 @@
+<div id="list-description">
+    <mat-form-field appearance="outline" class="mat-form">
+            <mat-label>Name</mat-label>
+            <input matInput [disabled]="!editMode" [(ngModel)]="model.name">
+    </mat-form-field>
+    <mat-checkbox class="example-margin" [disabled]="!editMode" [(ngModel)]="model.isPublic">
+      Public List
+    </mat-checkbox>
+    <mat-checkbox class="example-margin" [disabled]="!editMode || (model.allowDuplicates && model.items.length > 0)" 
+        [(ngModel)]="model.allowDuplicates">
+      Allow Duplicates
+    </mat-checkbox>
+    <mat-form-field appearance="outline" class="mat-form">
+        <mat-label>List Type</mat-label>
+        <mat-select [(ngModel)]="model.listType" [disabled]="!editMode || model.items.length > 0">
+            <mat-option *ngFor="let type of listTypes" 
+                [value]="type">
+                {{listType2StringMapping[type]}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field class="description" appearance="outline" class="mat-form">
+        <mat-label>Description</mat-label>
+        <textarea rows="8" matInput [disabled]="!editMode" [(ngModel)]="model.description"></textarea>
+    </mat-form-field>
+</div>
+<button *ngIf="editMode" mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
+<div id="add-items">
+    <div id="add-film-item" *ngIf="availableAddingOrNot('films')">
+        <mat-form-field>
+            <input matInput
+            #filmInput 
+            placeholder="Choose Existed Film"
+            [formControl]="filmsCtrl"
+            [matAutocomplete]="autoForFilms">
+            <mat-icon>search</mat-icon>
+        </mat-form-field>    
+        <mat-autocomplete #autoForFilms="matAutocomplete" (optionSelected)="selectedFilm($event)">
+            <mat-option *ngFor="let film of filteredFilms | async"
+                [value]="film">
+                <img class="film-image" 
+                [src]="'data:image/png;base64,' + film.photo?.image" 
+                [alt]="film.photo?.title" 
+                onerror="this.src='assets/DefaultMovie.png'">
+                {{film.name}}
+            </mat-option>
+        </mat-autocomplete>     
+    </div>
+         
+    <div id="add-person-item" *ngIf="availableAddingOrNot('persons')">
+        <mat-form-field>
+            <input matInput
+            #personInput 
+            placeholder="Choose Existed Person"
+            [formControl]="personsCtrl"
+            [matAutocomplete]="autoForPersons">
+            <mat-icon>search</mat-icon>
+        </mat-form-field>
+        <mat-autocomplete #autoForPersons="matAutocomplete" (optionSelected)="selectedPerson($event)">
+        <mat-option *ngFor="let person of filteredPersons | async"
+            [value]="person">
+            <img class="person-image" 
+            [src]="'data:image/png;base64,' + person.profilePicture?.image" 
+            [alt]="person.profilePicture?.title" 
+            (error)="setDefaultProfilePicture($event, person)">
+            {{person.name}}
+        </mat-option>
+    </mat-autocomplete>
+    </div>     
+</div>
+<div id="items">
+    Items:
+    <hr>
+    <mat-grid-list cols="10" rowHeight="1:2" gutterSize="10px" cdkDropListGroup >
+        <mat-grid-tile class="list-item-tile" [ngStyle]="{'cursor': editMode ? 'move' : 'pointer'}"
+            *ngFor="let item of model.items; let i = index" cdkDropList cdkDropListOrientation="horizontal" 
+            [cdkDropListData]="{item:item,index:i}"
+            (cdkDropListDropped)="drop($event)" >
+                <div cdkDrag [cdkDragDisabled]="!editMode">
+                    <mat-grid-tile-header *ngIf="editMode">
+                        <button mat-mini-fab
+                        [title]="'Remove '+item.itemName"
+                        (click)="removeItem(item)">
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                    </mat-grid-tile-header>
+                    <img 
+                    [src]="'data:image/png;base64,' + item.photo?.image" 
+                    [title]="item.itemName"
+                    (click)="onClickItem(item)"
+                    (error)="setDefaultPhoto($event, item)">
+                    <mat-grid-tile-footer style="display: block; height: 70px">
+                        <span>{{item.itemName}}</span>
+                        <hr>
+                        <div>
+                            <mat-form-field class="item-description" appearance="outline">
+                                <mat-label>Description</mat-label>
+                                <textarea rows="3" [disabled]="!editMode" matInput [(ngModel)]="item.description"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </mat-grid-tile-footer>
+                </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

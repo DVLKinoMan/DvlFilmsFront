@@ -31,6 +31,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgImageFullscreenViewModule } from 'ng-image-fullscreen-view';
 import { DragDropModule } from "@angular/cdk/drag-drop";
 
@@ -59,6 +60,7 @@ import { AuthComponent } from './auth/auth.component';
 import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
 import { ListsComponent } from './lists/lists-list/lists.component';
 import { ListsService } from './lists/services/lists.service';
+import { ListAddEditComponent } from './lists/list-add-edit/list-add-edit.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +83,7 @@ import { ListsService } from './lists/services/lists.service';
     PersonEditDialogComponent,
     PersonFilmographyDialogComponent,
     ListsComponent,
+    ListAddEditComponent,
     AuthComponent
   ],
   imports: [
@@ -95,6 +98,7 @@ import { ListsService } from './lists/services/lists.service';
       { path: 'person/:id', component: PersonComponent },
       // { path: 'person/:id/awards', component: PersonAwardsComponent },
       { path: 'film/:id', component: FilmComponent },
+      { path: 'list/add', component: ListAddEditComponent },
       { path: 'login', component: AuthComponent }
     ]),
     BrowserAnimationsModule,
@@ -121,6 +125,7 @@ import { ListsService } from './lists/services/lists.service';
     MatChipsModule,
     MatAutocompleteModule,
     MatSnackBarModule,
+    MatCheckboxModule,
     NgImageFullscreenViewModule,
     DragDropModule
   ],

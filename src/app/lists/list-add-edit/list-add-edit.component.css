@@ -1,0 +1,56 @@
+.mat-checkbox {
+    background-color: black;
+    color: white;
+    display: block;
+    max-width: 50%;
+}
+
+  .mat-form {
+    background-color: black;
+    color: white;
+    display: block;
+    max-width: 50%;
+  }
+
+  .matInput{
+    color: black;
+  }
+
+.descripton {
+    width: 80%;
+}
+
+.person-image {
+    max-width: 30px;
+}
+
+.film-image{
+    max-width: 30px;
+}
+
+.drag-drop-list{
+  display: flex;
+}
+
+.drag-drop-item{
+  width: 120px;
+  cursor: move;
+  margin-right: 5px;
+  margin-top: 10px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: .3;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

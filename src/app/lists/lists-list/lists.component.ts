@@ -176,6 +176,10 @@ export class ListsComponent implements OnInit {
         this.setPageLength();
     }
 
+    createNewList() {
+        this.router.navigate(['/list/add']);
+    }
+
     getListsQuery(notFromRoute: boolean = false): [ListsQuery, boolean] {
         if (!notFromRoute) {
             var filtersString = this.queryParams['listFilters'];
