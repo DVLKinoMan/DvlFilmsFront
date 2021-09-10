@@ -63,6 +63,7 @@ import { ListsService } from './lists/services/lists.service';
 import { ListAddEditComponent } from './lists/list-add-edit/list-add-edit.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { ListSortDialogComponent } from './lists/list-sort/list-sort.dialog.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     PersonFilmographyDialogComponent,
     ListsComponent,
     ListAddEditComponent,
+    ListSortDialogComponent,
     AuthComponent
   ],
   imports: [

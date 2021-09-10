@@ -2,6 +2,7 @@ import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { Observable } from "rxjs";
@@ -10,6 +11,7 @@ import { FilmsService } from "src/app/films/services/films.service";
 import { Gender } from "src/app/persons/enums";
 import { FilmItem, Person } from "src/app/persons/person";
 import { PersonsService } from "src/app/persons/services/persons.service";
+import { ListSortDialogComponent } from "../list-sort/list-sort.dialog.component";
 import { List, ListItem, ListType } from "../list.model";
 import { ListsService } from "../services/lists.service";
 
@@ -44,6 +46,7 @@ export class ListAddEditComponent implements OnInit {
         private service: ListsService,
         private personsService: PersonsService,
         private filmsService: FilmsService,
+        private sortListDialog: MatDialog,
         private _snackBar: MatSnackBar
     ) {
         this.filteredPersons = this.personsCtrl.valueChanges.pipe(
@@ -161,6 +164,19 @@ export class ListAddEditComponent implements OnInit {
         }, error => {
             this._snackBar.open("Failed to Save", "Close");
             console.log(error);
+        });
+    }
+
+    onSortClick() {
+        const dialogRef = this.sortListDialog.open(ListSortDialogComponent, {
+            width: '500px',
+            data: { itemName: this.listType2StringMapping[this.model.type], listItems: this.model.items }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result)
+                this.model.items = result;
+            console.log('The dialog was closed');
         });
     }
 

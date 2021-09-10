@@ -30,6 +30,7 @@
     </mat-form-field>
 </div>
 <button *ngIf="editMode" mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
+<button *ngIf="editMode" mat-button (click)="onSortClick()" cdkFocusInitial>Sort With Merge Sort</button>
 <div id="add-items">
     <div id="add-film-item" *ngIf="availableAddingOrNot('Films')">
         <mat-form-field>
