@@ -67,39 +67,32 @@
     </tr>
 </table>
 <mat-spinner *ngIf="!films"></mat-spinner>
-<table matSort (matSortChange)="sortChanged($event)">
-    <tr>
-        <th mat-sort-header = "id">ID</th>
-        <th>Photo</th>
-        <th mat-sort-header = "name">Name</th>
-        <th mat-sort-header = "releaseDate">ReleaseDate</th>
-        <th  mat-sort-header="imdbRating">ImdbRating</th>
-        <th  mat-sort-header="durationInMinutes">Duration</th>
-        <th mat-sort-header="imdbUserRatingsCount">ImdbUserRatingsCount</th>
-        <th>AwardsInformationString</th>
-        <th>Tagline</th>
-    </tr>
-    <tr *ngFor="let film of films">
-        <td>{{film.id}}</td>
-        <td>
-            <img class="film-image" 
-            [src]="'data:image/png;base64,' + film.photo?.image" 
-            [title]="film.photo?.title" 
-            onerror="this.src='assets/DefaultMovie.png'">
-        </td>
-        <td>
-            <a [routerLink]="['/film', film.id]">{{film.name}}</a>
-        </td> 
-        <td>{{film.releaseDate}}</td>
-        <td>{{film.imdbRating}}</td>
-        <td>{{film.durationInMinutes}}min</td>
-        <td>{{film.imdbUserRatingsCount}}</td>
-        <td>{{film.awardsInformationString}}</td>
-        <td>{{film.tagline}}</td>
-    </tr>  
-</table>
+  <mat-grid-list cols="10" rowHeight="1:2">
+            <mat-grid-tile
+                *ngFor="let film of films">
+            <a [routerLink]="['/film', film.id]">
+                  <img class="film-image" 
+                    [src]="'data:image/png;base64,' + film.photo?.image" 
+                    [title]="film.name" 
+                    onerror="this.src='assets/DefaultMovie.png'">
+            </a>
+            <mat-grid-tile-footer style="display: block; height: 70px"> 
+                <div class="imdb-rating">
+                        <a target="_blank" *ngIf="film.imdbPageUrl; else onlyLogo" href="{{film.imdbPageUrl}}">
+                            <img class="imdb-logo" src="assets/ImdbLogo.png">
+                        </a>
+                        <ng-template #onlyLogo><img class="imdb-logo" src="assets/ImdbLogo.png"></ng-template>
+                        <div *ngIf="film.imdbRating">
+                            <span>{{film.imdbRating}}</span>
+                            <span>{{' ('+film.imdbUserRatingsCount+') '}}</span>
+                        </div>
+                    </div>
+                <div>{{film.name}}({{getYear(film.releaseDate)}})</div>
+            </mat-grid-tile-footer>
+            </mat-grid-tile>
+        </mat-grid-list>
 <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
 <!-- Pagination directive -->
-<mat-paginator [hidden]="!films" [pageSize]="10" (page)="pageEvent = pageChanged($event)"
-    [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+<mat-paginator [hidden]="!films" [pageSize]="50" (page)="pageEvent = pageChanged($event)"
+    [pageSizeOptions]="[25, 50, 75, 100]" showFirstLastButtons></mat-paginator>

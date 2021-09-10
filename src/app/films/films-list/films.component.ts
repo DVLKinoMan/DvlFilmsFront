@@ -21,7 +21,7 @@ import { FilmsService } from '../services/films.service';
 export class FilmsComponent implements OnInit {
     public films: Film[];
     defaultPageIndex: number = 0;
-    defaultPageSize: number = 10;
+    defaultPageSize: number = 50;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     pageEvent: PageEvent;
     filmOrderBy: FilmOrderBy = FilmOrderBy.Id;
@@ -64,6 +64,12 @@ export class FilmsComponent implements OnInit {
             value: '',
             pattern: ''
         });
+    }
+
+    public getYear(date: Date) {
+        if (typeof date == "string")
+            return new Date(date).getFullYear();
+        return date.getFullYear();
     }
 
     ngAfterViewInit() {
