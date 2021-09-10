@@ -12,6 +12,7 @@ export class List {
     public id?: string;
     public allowDuplicates: boolean;
     public itemsCount: number;
+    public photo?: Photo;
 
     constructor(
     ) {
