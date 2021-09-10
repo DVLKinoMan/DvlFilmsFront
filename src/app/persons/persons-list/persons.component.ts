@@ -13,6 +13,7 @@ import { Gender, ZodiacSign } from '../enums';
 import { PersonsService } from '../services/persons.service';
 import { PhotosService } from 'src/app/common/services/photos.service';
 import { FilterOperator } from 'src/app/common/filter';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-persons',
@@ -22,7 +23,7 @@ import { FilterOperator } from 'src/app/common/filter';
 export class PersonsComponent implements OnInit {
   public persons: Person[];
   defaultPageIndex: number = 0;
-  defaultPageSize: number = 10;
+  defaultPageSize: number = 50;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageEvent: PageEvent;
   personOrderBy: PersonOrderBy = PersonOrderBy.Id;
@@ -88,6 +89,13 @@ export class PersonsComponent implements OnInit {
 
   ngAfterViewInit() {
 
+  }
+
+  formatDate(dateTime: Date | undefined): string | undefined {
+    if (dateTime)
+      return formatDate(dateTime, 'yyyy-MM-dd', 'en-US');
+
+    return undefined;
   }
 
   setPageLength() {

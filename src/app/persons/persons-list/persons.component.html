@@ -123,42 +123,30 @@
     </tr>
 </table>
 <mat-spinner *ngIf="!persons"></mat-spinner>
-<table matSort (matSortChange)="sortChanged($event)">
-    <tr>
-        <th mat-sort-header = "id">ID</th>
-        <th>Photo</th>
-        <th mat-sort-header = "name">Name</th>
-        <th>Sex</th>
-        <th mat-sort-header = "age">Age</th>
-        <th>ZodiacSign</th>
-        <th  mat-sort-header="birthDate">BirthDate</th>
-        <th>BirthPlace</th>
-        <th mat-sort-header="heightInMeters">HeightInMeters</th>
-        <th>AwardsInformationString</th>
-    </tr>
-    <tr *ngFor="let person of persons">
-        <td>{{person.id}}</td>
-        <td>
-            <img class="person-image" 
-            [src]="'data:image/png;base64,' + person.profilePicture.image" 
-            *ngIf="person.profilePicture" 
-            [alt]="person.profilePicture.title" 
-            (error)="setDefaultProfilePicture($event, person)">
-        </td>
-        <td>
-            <a [routerLink]="['/person', person.id]">{{person.name}}</a>
-        </td> 
-        <td>{{person.sex}}</td>
-        <td>{{person.age}}</td>
-        <td>{{person.zodiacSign}}</td>
-        <td>{{person.birthDate}}</td>
-        <td>{{person.birthPlace}}</td>
-        <td>{{person.heightInMeters}}</td>
-        <td>{{person.awardsInformationString}}</td>
-    </tr>  
-</table>
+  <mat-grid-list cols="10" rowHeight="1:2">
+            <mat-grid-tile
+                *ngFor="let person of persons">
+            <a [routerLink]="['/person', person.id]">
+                    <img class="person-image" 
+                        [src]="'data:image/png;base64,' + person.profilePicture.image" 
+                        *ngIf="person.profilePicture" 
+                        [alt]="person.name" 
+                        (error)="setDefaultProfilePicture($event, person)">
+            </a>
+            <mat-grid-tile-footer style="display: block; height: 100px; line-height: 1.2;"> 
+                <div>{{person.name}} ({{person.sex}})</div>
+                <hr>
+                <div *ngIf="person.birthDate" style="font-size: 9pt;"> 
+                    <span>Birth: {{formatDate(person.birthDate)}} ({{person.age}}, {{person.zodiacSign}}) 
+                                <span *ngIf="person.birthPlace">in {{person.birthPlace}}</span>
+                    </span>
+                </div>
+                <div *ngIf="person.heightInMeters" style="font-size: 9pt;">Height: {{person.heightInMeters}}m</div>
+            </mat-grid-tile-footer>
+            </mat-grid-tile>
+        </mat-grid-list>
 <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
 <!-- Pagination directive -->
-<mat-paginator [hidden]="!persons" [pageSize]="10" (page)="pageEvent = pageChanged($event)"
-    [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+<mat-paginator [hidden]="!persons" [pageSize]="50" (page)="pageEvent = pageChanged($event)"
+    [pageSizeOptions]="[25, 50, 75, 100]" showFirstLastButtons></mat-paginator>
