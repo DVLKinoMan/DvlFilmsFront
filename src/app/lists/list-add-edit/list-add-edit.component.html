@@ -17,7 +17,7 @@
     </mat-checkbox>
     <mat-form-field appearance="outline" class="mat-form">
         <mat-label>List Type</mat-label>
-        <mat-select [(ngModel)]="model.listType" [disabled]="!editMode || model.items.length > 0">
+        <mat-select [(ngModel)]="model.type" [disabled]="!editMode || model.items.length > 0">
             <mat-option *ngFor="let type of listTypes" 
                 [value]="type">
                 {{listType2StringMapping[type]}}
@@ -31,7 +31,7 @@
 </div>
 <button *ngIf="editMode" mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
 <div id="add-items">
-    <div id="add-film-item" *ngIf="availableAddingOrNot('films')">
+    <div id="add-film-item" *ngIf="availableAddingOrNot('Films')">
         <mat-form-field>
             <input matInput
             #filmInput 
@@ -52,7 +52,7 @@
         </mat-autocomplete>     
     </div>
          
-    <div id="add-person-item" *ngIf="availableAddingOrNot('persons')">
+    <div id="add-person-item" *ngIf="availableAddingOrNot('Persons')">
         <mat-form-field>
             <input matInput
             #personInput 

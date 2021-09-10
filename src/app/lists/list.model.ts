@@ -6,11 +6,12 @@ export class List {
     public items: ListItem[] = [];
     public name: string;
     public isPublic: boolean;
-    public listType: ListType;
+    public type: ListType;
     public user: ListCreator;
     public description?: string;
     public id?: string;
     public allowDuplicates: boolean;
+    public itemsCount: number;
 
     constructor(
     ) {

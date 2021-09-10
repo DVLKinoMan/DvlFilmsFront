@@ -4,7 +4,7 @@ import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { Observable, throwError } from "rxjs";
+import { Observable } from "rxjs";
 import { debounceTime, startWith, switchMap } from "rxjs/operators";
 import { FilmsService } from "src/app/films/services/films.service";
 import { Gender } from "src/app/persons/enums";
@@ -100,9 +100,10 @@ export class ListAddEditComponent implements OnInit {
 
     //todo: shity method
     availableAddingOrNot(type: string) {
-        return type == 'persons' ? this.model.listType == ListType.Persons :
-            type == 'films' ? this.model.listType == ListType.Films :
-                false;
+        if (typeof this.model.type == 'string')
+            return this.model.type == type;
+        return type == 'Persons' ? this.model.type == ListType.Persons :
+            type == 'Films' ? this.model.type == ListType.Films : false;
     }
 
     drop(event: CdkDragDrop<any>) {
@@ -121,7 +122,7 @@ export class ListAddEditComponent implements OnInit {
     }
 
     setDefaultPhoto(event: any, item: ListItem) {
-        if (this.model.listType == ListType.Films)
+        if (this.model.type == ListType.Films)
             event.target.src = 'assets/DefaultMovie.png';
         else event.target.src = 'assets/DefaultPersonMale.png';
     }
@@ -133,9 +134,9 @@ export class ListAddEditComponent implements OnInit {
     }
 
     onClickItem(item: ListItem) {
-        if (this.model.listType == ListType.Films)
+        if (this.model.type == ListType.Films)
             this.router.navigate(['/film/' + item.itemId]);
-        else if (this.model.listType == ListType.Persons)
+        else if (this.model.type == ListType.Persons)
             this.router.navigate(['/person/' + item.itemId]);
     }
 
