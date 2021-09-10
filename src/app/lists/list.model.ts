@@ -26,7 +26,7 @@ export class ListItem {
     public description: string;;
     constructor(public itemId: number,
         public itemName: string,
-        public index: number,
+        public index: number = 1,
         public photo?: Photo
     ) {
 

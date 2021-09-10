@@ -79,7 +79,7 @@ export class ListAddEditComponent implements OnInit {
                 });
                 return;
             }
-            this.model.items.push(new ListItem(p.id, p.name, this.model.items.length, p.profilePicture));
+            this.model.items.push(new ListItem(p.id, p.name, this.model.items.length + 1, p.profilePicture));
         }
     }
 
@@ -94,7 +94,7 @@ export class ListAddEditComponent implements OnInit {
                 });
                 return;
             }
-            this.model.items.push(new ListItem(f.id, f.name, this.model.items.length, f.photo));
+            this.model.items.push(new ListItem(f.id, f.name, this.model.items.length + 1, f.photo));
         }
     }
 
