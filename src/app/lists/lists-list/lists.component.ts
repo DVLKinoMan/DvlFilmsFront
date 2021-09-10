@@ -11,6 +11,7 @@ import {
     ListTypeFilter, ListUserNameFilter
 } from './list-query';
 import { ListsService } from '../services/lists.service';
+import { formatDate } from '@angular/common';
 
 @Component({
     selector: 'app-lists',
@@ -86,6 +87,13 @@ export class ListsComponent implements OnInit {
         this.service.getCount(query).subscribe(result => {
             this.paginator.length = result;
         }, error => console.error(error));
+    }
+
+    formatDate(dateTime: Date | undefined): string | undefined {
+        if (dateTime)
+            return formatDate(dateTime, 'yyyy-MM-dd', 'en-US');
+
+        return undefined;
     }
 
     getOrderBy<ListOrderBy>(sort: Sort) {

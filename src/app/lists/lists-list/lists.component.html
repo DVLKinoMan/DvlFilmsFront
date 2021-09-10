@@ -103,34 +103,27 @@
     </tr>
 </table>
 <mat-spinner *ngIf="!lists"></mat-spinner>
-<table matSort (matSortChange)="sortChanged($event)">
-    <tr>
-        <th mat-sort-header = "id">ID</th>
-        <th>Photo</th>
-        <th mat-sort-header = "name">Name</th>
-        <th>Created by</th>
-        <th  mat-sort-header="birthDate">Created Date</th>
-        <th>Items Count</th>
-    </tr>
-    <tr *ngFor="let list of lists">
-        <td>{{list.id}}</td>
-        <td>
-            <img class="list-image" 
-            [src]="'data:image/png;base64,' + list.photo?.image" 
-            [title]="list.photo?.title" 
-            onerror="this.src='assets/DefaultMovie.png'">
-        </td>
-        <td>
-            <a [routerLink]="['/list/view']" [queryParams]="{id: list.id}">{{list.name}}</a>
-        <td>
-            <a [routerLink]="['/user', list.user?.id]">{{list.user.userName}}</a>
-        </td> 
-        <td>{{list.createdDateTime}}</td>
-        <td>{{list.itemsCount}}</td>
-    </tr>  
-</table>
+<mat-grid-list cols="10" rowHeight="1:2">
+            <mat-grid-tile
+                *ngFor="let list of lists">
+            <a [routerLink]="['/list/view']" [queryParams]="{id: list.id}">
+                     <img class="list-image" 
+                        [src]="'data:image/png;base64,' + list.photo?.image" 
+                        [title]="list.name" 
+                        onerror="this.src='assets/DefaultMovie.png'">
+            </a>
+            <mat-grid-tile-footer style="display: block; height: 70px; line-height: 1.2;"> 
+                <div>{{list.name}} ({{list.itemsCount}} Items)</div>
+                <hr>
+                <div style="font-size: 9pt;"> 
+                    <span>Created in: {{formatDate(list.createdDateTime)}} by <a [routerLink]="['/user', list.user?.id]">{{list.user.userName}}</a>
+                    </span>
+                </div>
+            </mat-grid-tile-footer>
+            </mat-grid-tile>
+        </mat-grid-list>
 <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
 <!-- Pagination directive -->
-<mat-paginator [hidden]="!lists" [pageSize]="10" (page)="pageEvent = pageChanged($event)"
-    [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+<mat-paginator [hidden]="!lists" [pageSize]="50" (page)="pageEvent = pageChanged($event)"
+    [pageSizeOptions]="[25, 50, 75, 100]" showFirstLastButtons></mat-paginator>
