@@ -1,29 +1,43 @@
 <div id="list-description">
-    <mat-form-field appearance="outline" class="mat-form">
-            <mat-label>Name</mat-label>
-            <input matInput [disabled]="!editMode" [(ngModel)]="model.name">
-    </mat-form-field> 
-    <button mat-mini-fab
-        [title]="'Edit '+model.name"
-        (click)="editMode=true">
-            <mat-icon>edit</mat-icon>
-    </button>
-    <mat-checkbox class="example-margin" [disabled]="!editMode" [(ngModel)]="model.isPublic">
-      Public List
-    </mat-checkbox>
-    <mat-checkbox class="example-margin" [disabled]="!editMode || (model.allowDuplicates && model.items.length > 0)" 
-        [(ngModel)]="model.allowDuplicates">
-      Allow Duplicates
-    </mat-checkbox>
-    <mat-form-field appearance="outline" class="mat-form">
-        <mat-label>List Type</mat-label>
-        <mat-select [(ngModel)]="model.type" [disabled]="!editMode || model.items.length > 0">
-            <mat-option *ngFor="let type of listTypes" 
-                [value]="type">
-                {{listType2StringMapping[type]}}
-            </mat-option>
-        </mat-select>
+    <div style="display: flex;">
+        <mat-form-field appearance="outline" class="mat-form">
+                <mat-label>Name</mat-label>
+                <input matInput [disabled]="!editMode" [(ngModel)]="model.name">
+        </mat-form-field> 
+        <button mat-mini-fab
+            [title]="'Edit '+model.name"
+            (click)="editMode=true">
+                <mat-icon>edit</mat-icon>
+        </button>
+    </div>
+
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Simple placeholder" required>
     </mat-form-field>
+
+    <mat-form-field appearance="fill" >
+      <mat-label>Both a label and a placeholder</mat-label>
+      <input matInput placeholder="Simple placeholder">
+    </mat-form-field>
+
+    <div style="display: flex;">
+        <mat-form-field appearance="outline" class="mat-form">
+                <mat-label>List Type</mat-label>
+                <mat-select [(ngModel)]="model.type" [disabled]="!editMode || model.items.length > 0">
+                    <mat-option *ngFor="let type of listTypes" 
+                        [value]="type">
+                        {{listType2StringMapping[type]}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-checkbox class="example-margin" [disabled]="!editMode" [(ngModel)]="model.isPublic">
+            Public List
+            </mat-checkbox>
+            <mat-checkbox class="example-margin" [disabled]="!editMode || (model.allowDuplicates && model.items.length > 0)" 
+                [(ngModel)]="model.allowDuplicates">
+            Allow Duplicates
+            </mat-checkbox>
+    </div>
     <mat-form-field class="description" appearance="outline" class="mat-form">
         <mat-label>Description</mat-label>
         <textarea rows="8" matInput [disabled]="!editMode" [(ngModel)]="model.description"></textarea>
@@ -31,7 +45,7 @@
 </div>
 <button *ngIf="editMode" mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
 <button *ngIf="editMode" mat-button (click)="onSortClick()" cdkFocusInitial>Sort With Merge Sort</button>
-<div id="add-items">
+<div id="add-items" *ngIf="editMode">
     <div id="add-film-item" *ngIf="availableAddingOrNot('Films')">
         <mat-form-field>
             <input matInput

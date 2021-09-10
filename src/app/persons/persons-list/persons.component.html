@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td style="width: 200px;">
-            <mat-form-field appearance="fill" class="mat-form">
+            <mat-form-field appearance="fill" >
                 <mat-label>Filter</mat-label><br>
                 <mat-select [(value)]="selectedFilter" 
                     (selectionChange)="filterChanged($event.value)" panelClass="example-panel-black">
@@ -16,68 +16,68 @@
         </td>
         <td>
             <form [formGroup]="idFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Id'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
                         [value]="i+1">{{filterOperator}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="mat-form">
+                <mat-form-field >
                     <mat-label for="id">Id:</mat-label>
                     <input id="id" formControlName="id" type="number" matInput placeholder="Id Value Here">
                 </mat-form-field>
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="nameFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Name'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
                         [value]="i+1">{{filterOperator}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="mat-form">
+                <mat-form-field >
                     <mat-label for="value">Exact Name:</mat-label>
                     <input id="value" formControlName="value" matInput>
                 </mat-form-field>
-                <mat-form-field class="mat-form">
+                <mat-form-field >
                     <mat-label for="pattern">Name Contains:</mat-label>
                     <input id="pattern" formControlName="pattern" matInput>
                 </mat-form-field>
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="ageFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Age'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
                         [value]="i+1">{{filterOperator}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="mat-form">
+                <mat-form-field >
                     <mat-label for="value">Exact Age:</mat-label>
                     <input id="value" formControlName="value" type="number" matInput placeholder="Age Value Here">
                 </mat-form-field>
-                <mat-form-field class="mat-form">
+                <mat-form-field >
                     <mat-label for="start">Start Age:</mat-label>
                     <input id="start" formControlName="start" type="number" matInput placeholder="Age Value Here">
                 </mat-form-field>
-                <mat-form-field class="mat-form">
+                <mat-form-field >
                     <mat-label for="end">End Age:</mat-label>
                     <input id="end" formControlName="end" type="number" matInput placeholder="Age Value Here">
                 </mat-form-field>
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="genderFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Gender'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
                         [value]="i+1">{{filterOperator}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="mat-form">
+                <mat-form-field >
                     <mat-label>Gender:</mat-label><br>
                     <mat-select formControlName="gender" panelClass="example-panel-black">
                         <mat-option *ngFor="let gender of genders; let i=index" 
@@ -87,14 +87,14 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="zodiacSignFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'ZodiacSign'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
                         [value]="i+1">{{filterOperator}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="mat-form">
+                <mat-form-field >
                     <mat-label>Zodiac Sign:</mat-label><br>
                     <mat-select formControlName="sign" panelClass="example-panel-black">
                         <mat-option *ngFor="let sign of zodiacSigns; let i=index" 

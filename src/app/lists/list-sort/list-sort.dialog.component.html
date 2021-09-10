@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Sorting {{data.itemName}}s With Merge Sort</h1>
 <mat-dialog-content>
-    <span>Which {{data.itemName}} You Prefer?</span>
+    <span *ngIf="!finishedSorting">Which {{data.itemName}} You Prefer?</span>
     <div *ngIf="!finishedSorting; else finishedMessage" class="two-items">
         <div>
             <img class="image-item"
@@ -21,10 +21,10 @@
         </div>
     </div>
     <ng-template #finishedMessage>
-        <span>You have finshed Sorting! Click save to save your sorted list</span>
+        <span>You have finshed Sorting! Click save to save your sorted list.(Will not be saved in Database)</span>
     </ng-template>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onCloseClick()">Close</button>
-  <button mat-button [mat-dialog-close]="model" cdkFocusInitial>Save</button>
+  <button mat-button *ngIf="finishedSorting" [mat-dialog-close]="model" cdkFocusInitial>Save</button>
 </mat-dialog-actions>

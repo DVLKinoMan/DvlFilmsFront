@@ -96,7 +96,7 @@
         </div>
         <!-- dropdown for filmography Categories -->
         <div id="categories-dropdown"style="float: right; margin-left: 25px">
-            <mat-form-field appearance="fill" class="mat-form">
+            <mat-form-field appearance="fill" >
                 <mat-label>Filmography Category:</mat-label>
                 <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFilmographyCatName">
                     <mat-option *ngFor="let categoryName of filmographyCategoryNames" [value]="categoryName">
@@ -109,7 +109,7 @@
         <div id="sorting-dropdown" style="float: right;">
             <img [src] = "sortAscending ? 'assets/AscendingIcon.png' : 'assets/DescendingIcon.png'"
             (click) = "sortingChanged()" style="width: 25px;">
-            <mat-form-field appearance="fill" class="mat-form">
+            <mat-form-field appearance="fill" >
                 <mat-label>Sort By:</mat-label>
                 <mat-select panelClass="example-panel-black" (selectionChange)="loadFilmItems()" [(value)]="selectedFlmSortBy">
                     <mat-option *ngFor="let sortChoice of sortChoicesForFilms" [value]="sortChoice">

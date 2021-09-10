@@ -4,11 +4,6 @@
     align-items: flex-start;
   }
 
-  .mat-form {
-    background-color: black;
-    color: white;
-  }
-
   .matInput{
     color: black;
   }

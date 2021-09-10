@@ -158,7 +158,7 @@
                 </div>
             </div>
             <div class="cast">
-                <mat-card *ngFor="let castMember of cast" class="cast-card" 
+                <mat-card *ngFor="let castMember of cast" class="cast-card"
                 [routerLink]="castMember.personId ? ['/person/'+castMember.personId] : []">
                     <img class="cast-image"
                         [src]="'data:image/png;base64,' + castMember.profilePicture?.image" 

@@ -6,4 +6,5 @@
     width: 150px;
     height: 200px;
     cursor: pointer;
+    display: block;
 }

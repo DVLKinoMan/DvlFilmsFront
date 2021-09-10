@@ -5,7 +5,7 @@
 <table>
     <tr>
         <td style="width: 200px;">
-            <mat-form-field appearance="fill" class="mat-form">
+            <mat-form-field appearance="fill" color="accent">
                 <mat-label>Filter</mat-label><br>
                 <mat-select [(value)]="selectedFilter" 
                     (selectionChange)="filterChanged($event.value)" panelClass="example-panel-black">
@@ -16,32 +16,32 @@
         </td>
         <td>
             <form [formGroup]="idFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Id'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
                         [value]="i+1">{{filterOperator}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="mat-form">
+                <mat-form-field >
                     <mat-label for="id">Id:</mat-label>
                     <input id="id" formControlName="id" type="number" matInput placeholder="Id Value Here">
                 </mat-form-field>
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="nameFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Name'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="mat-form">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
                         [value]="i+1">{{filterOperator}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="mat-form">
+                <mat-form-field >
                     <mat-label for="value">Exact Name:</mat-label>
                     <input id="value" formControlName="value" matInput>
                 </mat-form-field>
-                <mat-form-field class="mat-form">
+                <mat-form-field >
                     <mat-label for="pattern">Name Contains:</mat-label>
                     <input id="pattern" formControlName="pattern" matInput>
                 </mat-form-field>
