@@ -70,6 +70,18 @@
   <mat-grid-list cols="10" rowHeight="1:2">
             <mat-grid-tile
                 *ngFor="let film of films">
+                <mat-grid-tile-header>
+                    <button mat-mini-fab *ngIf="!film.haveSeen"
+                        (click)="addToWatch(film)" 
+                        title="Have Watched">
+                            <mat-icon>visibility</mat-icon>
+                    </button>
+                    <button mat-mini-fab *ngIf="film.haveSeen"
+                        (click)="removeFromWatched(film)" 
+                        title="Remove From Watched">
+                            <mat-icon>visibility_off</mat-icon>
+                    </button>
+                </mat-grid-tile-header>
             <a [routerLink]="['/film', film.id]">
                   <img class="film-image" 
                     [src]="'data:image/png;base64,' + film.photo?.image" 

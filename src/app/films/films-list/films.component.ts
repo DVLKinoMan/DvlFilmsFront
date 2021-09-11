@@ -12,6 +12,7 @@ import { PhotosService } from 'src/app/common/services/photos.service';
 import { FilterOperator } from 'src/app/common/filter';
 import { Film } from '../film';
 import { FilmsService } from '../services/films.service';
+import { FilmBuiltInListsService } from '../services/filmBuiltInLists.service';
 
 @Component({
     selector: 'app-films',
@@ -41,6 +42,7 @@ export class FilmsComponent implements OnInit {
     constructor(private service: FilmsService,
         private formBuilder: FormBuilder,
         private photosService: PhotosService,
+        private builtInListsService: FilmBuiltInListsService,
         private route: ActivatedRoute,
         private router: Router) { }
 
@@ -74,6 +76,34 @@ export class FilmsComponent implements OnInit {
 
     ngAfterViewInit() {
 
+    }
+
+    addToWatch(film: Film) {
+        this.builtInListsService.addToWatched(film.id).subscribe(res => {
+            film.haveSeen = true;
+        }, error => {
+            console.log(error);
+        });
+    }
+
+    removeFromWatched(film: Film) {
+
+    }
+
+    addToWantToWatch(film: Film) {
+        this.builtInListsService.addToWantToSee(film.id).subscribe(res => {
+            film.wantToSee = true;
+        }, error => {
+            console.log(error);
+        });
+    }
+
+    addToFavorite(film: Film) {
+        this.builtInListsService.addToFavorite(film.id).subscribe(res => {
+            film.isFavorite = true;
+        }, error => {
+            console.log(error);
+        });
     }
 
     setPageLength() {

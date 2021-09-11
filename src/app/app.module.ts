@@ -64,6 +64,7 @@ import { ListAddEditComponent } from './lists/list-add-edit/list-add-edit.compon
 import { AuthGuard } from './auth/auth.guard';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { ListSortDialogComponent } from './lists/list-sort/list-sort.dialog.component';
+import { FilmBuiltInListsService } from './films/services/filmBuiltInLists.service';
 
 @NgModule({
   declarations: [
@@ -144,6 +145,7 @@ import { ListSortDialogComponent } from './lists/list-sort/list-sort.dialog.comp
     GenresService,
     SocialAuthService,
     ListsService,
+    FilmBuiltInListsService,
     // { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
     {

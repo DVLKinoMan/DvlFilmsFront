@@ -53,6 +53,10 @@ export interface Film {
     photos?: Photo[];
     anotherNames?: FilmAnotherName[];
     companies?: Company[];
+
+    haveSeen: boolean;
+    wantToSee: boolean;
+    isFavorite: boolean;
 }
 
 export interface BoxOffice {
