@@ -87,7 +87,11 @@ export class FilmsComponent implements OnInit {
     }
 
     removeFromWatched(film: Film) {
-
+        this.builtInListsService.deleteFromWatched(film.id).subscribe(res => {
+            film.haveSeen = false;
+        }, error => {
+            console.log(error);
+        });
     }
 
     addToWantToWatch(film: Film) {
@@ -98,9 +102,25 @@ export class FilmsComponent implements OnInit {
         });
     }
 
+    removeFromWantToWatch(film: Film) {
+        this.builtInListsService.deleteFromWatched(film.id).subscribe(res => {
+            film.wantToSee = false;
+        }, error => {
+            console.log(error);
+        });
+    }
+
     addToFavorite(film: Film) {
         this.builtInListsService.addToFavorite(film.id).subscribe(res => {
             film.isFavorite = true;
+        }, error => {
+            console.log(error);
+        });
+    }
+
+    removeFromFavorite(film: Film) {
+        this.builtInListsService.deleteFromWatched(film.id).subscribe(res => {
+            film.isFavorite = false;
         }, error => {
             console.log(error);
         });

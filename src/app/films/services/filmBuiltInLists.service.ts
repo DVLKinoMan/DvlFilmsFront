@@ -20,17 +20,30 @@ export class FilmBuiltInListsService {
         });
     }
 
-    addToWantToSee(filmId: number): Observable<object> {
-        var url = this.baseUrl + "/WantToSee/Add/" + filmId;
+    deleteFromWatched(filmId: number): Observable<object> {
+        var url = this.baseUrl + "/WatchedFilms/Delete/" + filmId;
         return this.http.post(url, {
-
+            watchedTime: null
         });
+    }
+
+    addToWantToSee(filmId: number): Observable<object> {
+        var url = this.baseUrl + "/WantToSeeFilms/Add/" + filmId;
+        return this.http.post(url, null);
+    }
+
+    deleteFromWantToSee(filmId: number): Observable<object> {
+        var url = this.baseUrl + "/WantToSeeFilms/Delete/" + filmId;
+        return this.http.post(url, null);
     }
 
     addToFavorite(filmId: number): Observable<object> {
         var url = this.baseUrl + "/Favorites/Add/" + filmId + "/Film";
-        return this.http.post(url, {
+        return this.http.post(url, null);
+    }
 
-        });
+    deleteFromFavorite(filmId: number): Observable<object> {
+        var url = this.baseUrl + "/Favorites/Delete/" + filmId + "/Film";
+        return this.http.post(url, null);
     }
 }
