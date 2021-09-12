@@ -10,6 +10,16 @@
                             [title]="model.profilePicture.title"
                             (error)="setDefaultProfilePicture($event)">
                         <!-- </mat-form-field> -->
+                    <button mat-mini-fab *ngIf="!model.isFavorite"
+                        (click)="addToFavorites()" 
+                        title="Add To Favorites">
+                            <mat-icon>favorite_border</mat-icon>
+                    </button>
+                    <button mat-mini-fab *ngIf="model.isFavorite"
+                        (click)="removeFromFavorites()" 
+                        title="Remove from Favorites">
+                            <mat-icon>favorite</mat-icon>
+                    </button>
                 </div>
                 <div id="little-stats">
                     <div style="margin-left: 20px;">

@@ -13,6 +13,7 @@ import { PersonEditDialogComponent } from '../person-edit/person-edit.dialog.com
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UserRole } from 'src/app/auth/user.model';
+import { PersonBuiltInListsService } from '../services/person-builtIn-lists.service';
 
 @Component({
   selector: 'app-person',
@@ -51,7 +52,8 @@ export class PersonComponent implements OnInit {
     public alternateNamesDialog: MatDialog,
     public personEditDialog: MatDialog,
     public photosDialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private builtInListsService: PersonBuiltInListsService
   ) { }
 
   ngOnInit(): void {
@@ -70,6 +72,22 @@ export class PersonComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params['id'];
       this.loadPerson();
+    });
+  }
+
+  addToFavorites() {
+    this.builtInListsService.addToFavorites(this.model.id).subscribe(res => {
+      this.model.isFavorite = true;
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  removeFromFavorites() {
+    this.builtInListsService.deleteFromFavorites(this.model.id).subscribe(res => {
+      this.model.isFavorite = false;
+    }, error => {
+      console.log(error);
     });
   }
 
