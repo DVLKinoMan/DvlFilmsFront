@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { FilmWatch } from "../film-watch.model";
 
 
 @Injectable({
@@ -45,5 +46,15 @@ export class FilmBuiltInListsService {
     deleteFromFavorites(filmId: number): Observable<object> {
         var url = this.baseUrl + "/Favorites/Delete/" + filmId + "/Film";
         return this.http.post(url, null);
+    }
+
+    getWatchHistory(filmId: number): Observable<FilmWatch[]> {
+        var url = this.baseUrl + "/WatchedFilms/List/" + filmId;
+        return this.http.get<FilmWatch[]>(url);
+    }
+
+    updateWatchHistory(watches: FilmWatch[]): Observable<object> {
+        var url = this.baseUrl + "/WatchedFilms/Update";
+        return this.http.post(url, { watches: watches });
     }
 }

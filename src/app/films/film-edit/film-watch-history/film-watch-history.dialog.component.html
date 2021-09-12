@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>{{data.filmName}} Watch History</h1>
+<mat-dialog-content>
+  <button *ngIf="!showNewWatch" mat-mini-fab
+        title="Show Form"
+        (click)="showNewWatch=true">
+            <mat-icon>add</mat-icon>
+  </button>     
+  <div *ngIf="showNewWatch" id="newWatch">
+        <mat-form-field appearance="fill">
+            <mat-label>Watched Time</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="newWatch.watchedTime">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <button mat-mini-fab
+            title="Add"
+            (click)="addNewWatch()">
+                <mat-icon>add</mat-icon>
+        </button>  
+  </div>
+  <div *ngFor="let watch of watches">
+       <mat-form-field appearance="fill">
+            <mat-label>Watched Time</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="watch.watchedTime">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+       <button mat-mini-fab
+        title="Remove"
+        (click)="removeWatch(watch)">
+            <mat-icon>remove</mat-icon>
+       </button>
+  </div>
+  <mat-spinner *ngIf="loading"></mat-spinner>
+</mat-dialog-content>
+<mat-dialog-actions>
+   <button mat-button (click)="onCloseClick()">Close</button>
+   <button mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
+</mat-dialog-actions>

@@ -16,6 +16,7 @@ import { Subscription } from "rxjs";
 import { AuthService } from "src/app/auth/auth.service";
 import { UserRole } from "src/app/auth/user.model";
 import { FilmBuiltInListsService } from "../services/filmBuiltInLists.service";
+import { FilmWatchHistoryDialogComponent } from "../film-edit/film-watch-history/film-watch-history.dialog.component";
 
 @Component({
     selector: 'app-film',
@@ -51,6 +52,7 @@ export class FilmComponent implements OnInit {
         public castAndCrewDialog: MatDialog,
         public photosDialog: MatDialog,
         public editDialog: MatDialog,
+        public watchHistoryDialog: MatDialog,
         private authService: AuthService
     ) {
         this.route.params.subscribe(item => {
@@ -72,6 +74,19 @@ export class FilmComponent implements OnInit {
             this.model.haveSeen = true;
         }, error => {
             console.log(error);
+        });
+    }
+
+    openWatchHistory() {
+        const dialogRef = this.castAndCrewDialog.open(FilmWatchHistoryDialogComponent, {
+            width: '400px',
+            data: { filmId: this.id, filmName: this.model.name }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result)
+                window.location.reload();
+            console.log('The dialog was closed');
         });
     }
 

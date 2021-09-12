@@ -11,9 +11,9 @@
                                 <mat-icon>visibility</mat-icon>
                         </button>
                         <button mat-mini-fab *ngIf="model.haveSeen"
-                            (click)="removeFromWatched()" 
-                            title="Mark as Unwatched">
-                                <mat-icon>visibility_off</mat-icon>
+                            (click)="openWatchHistory()" 
+                            title="View Watched History">
+                                <mat-icon>history</mat-icon>
                         </button>
                         <button mat-mini-fab *ngIf="!model.wantToSee"
                             (click)="addToWantToWatch()" 

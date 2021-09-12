@@ -66,6 +66,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { ListSortDialogComponent } from './lists/list-sort/list-sort.dialog.component';
 import { FilmBuiltInListsService } from './films/services/filmBuiltInLists.service';
 import { PersonBuiltInListsService } from './persons/services/person-builtIn-lists.service';
+import { FilmWatchHistoryDialogComponent } from './films/film-edit/film-watch-history/film-watch-history.dialog.component';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { PersonBuiltInListsService } from './persons/services/person-builtIn-lis
     ListsComponent,
     ListAddEditComponent,
     ListSortDialogComponent,
+    FilmWatchHistoryDialogComponent,
     AuthComponent
   ],
   imports: [
