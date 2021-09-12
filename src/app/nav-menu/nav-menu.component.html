@@ -21,7 +21,7 @@
         <mat-icon>logout</mat-icon>
       </button>
       <button *ngIf="!isAuthenticated" style="margin-right: 50px;" mat-icon-button>
-         <span [routerLink]="['/login']" [queryParams]="{registerMode: false}">Login</span>
+         <span (click)="loginClicked()">Login</span>
         <mat-icon>login</mat-icon>
       </button>
       <button *ngIf="!isAuthenticated" style="margin-right: 50px;" mat-icon-button>

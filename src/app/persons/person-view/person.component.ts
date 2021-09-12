@@ -183,12 +183,12 @@ export class PersonComponent implements OnInit {
     this.service.getById(this.id).subscribe(result => {
       this.model = result;
 
-      this.photosService.getPersonPhotos(this.id, 0, this.showPhotos).subscribe(result => {
-        this.model.photos = result;
+      this.photosService.getPersonPhotos(this.id, 0, this.showPhotos).subscribe(res1 => {
+        this.model.photos = res1;
       }, error => console.log(error));
 
-      this.service.getFilmographies(this.id).subscribe(result => {
-        this.model.filmographies = result;
+      this.service.getFilmographies(this.id).subscribe(res2 => {
+        this.model.filmographies = res2;
         this.loadFilmCategories();
         this.loadFilmItems();
       }, error => console.log(error));

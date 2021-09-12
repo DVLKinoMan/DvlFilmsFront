@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
@@ -15,7 +16,8 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   private userSub: Subscription;
 
   constructor(
-    private authService: AuthService) {
+    private authService: AuthService,
+    private router: Router) {
 
   }
   ngOnInit() {
@@ -26,6 +28,15 @@ export class NavMenuComponent implements OnInit, OnDestroy {
         this.profilePicture = user.photo;
       }
     });
+  }
+
+  loginClicked() {
+    this.router.navigate(["/login"], {
+      queryParams: {
+        registerMode: false,
+        returnUrl: this.router.url
+      }
+    })
   }
 
   collapse() {

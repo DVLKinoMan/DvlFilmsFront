@@ -82,7 +82,7 @@ export class AuthComponent {
                     params => {
                         var url = params['returnUrl'];
                         if (url)
-                            this.router.navigate([url]);
+                            this.router.navigateByUrl(url);
                         else this.router.navigate(["/films"]);
                     }
                 );
