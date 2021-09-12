@@ -37,12 +37,12 @@ export class FilmBuiltInListsService {
         return this.http.post(url, null);
     }
 
-    addToFavorite(filmId: number): Observable<object> {
+    addToFavorites(filmId: number): Observable<object> {
         var url = this.baseUrl + "/Favorites/Add/" + filmId + "/Film";
         return this.http.post(url, null);
     }
 
-    deleteFromFavorite(filmId: number): Observable<object> {
+    deleteFromFavorites(filmId: number): Observable<object> {
         var url = this.baseUrl + "/Favorites/Delete/" + filmId + "/Film";
         return this.http.post(url, null);
     }

@@ -4,6 +4,38 @@
     <div id = "little-bios" style="display: flex;">
         <div id="little-bio" style="display: flex">
                 <div id="poster">
+                    <div class="builtin-lists">
+                         <button mat-mini-fab *ngIf="!model.haveSeen"
+                            (click)="addToWatch()" 
+                            title="Mark as Watched">
+                                <mat-icon>visibility</mat-icon>
+                        </button>
+                        <button mat-mini-fab *ngIf="model.haveSeen"
+                            (click)="removeFromWatched()" 
+                            title="Mark as Unwatched">
+                                <mat-icon>visibility_off</mat-icon>
+                        </button>
+                        <button mat-mini-fab *ngIf="!model.wantToSee"
+                            (click)="addToWantToWatch()" 
+                            title="Watch Later">
+                                <mat-icon>watch_later</mat-icon>
+                        </button>
+                        <button mat-mini-fab *ngIf="model.wantToSee"
+                            (click)="removeFromWantToWatch()" 
+                            title="Remove from Watch Later">
+                                <mat-icon>not_interested</mat-icon>
+                        </button>
+                        <button mat-mini-fab *ngIf="!model.isFavorite"
+                            (click)="addToFavorites()" 
+                            title="Add To Favorites">
+                                <mat-icon>favorite_border</mat-icon>
+                        </button>
+                        <button mat-mini-fab *ngIf="model.isFavorite"
+                            (click)="removeFromFavorites()" 
+                            title="Remove from Favorites">
+                                <mat-icon>favorite</mat-icon>
+                        </button>
+                    </div>
                     <img class="poster"
                     [src]="'data:image/png;base64,' + model.photo?.image" 
                     [alt]="model.photo?.title"

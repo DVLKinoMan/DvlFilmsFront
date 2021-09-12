@@ -15,6 +15,7 @@ import { FilmEditDialogComponent } from "../film-edit/film-edit.dialog.component
 import { Subscription } from "rxjs";
 import { AuthService } from "src/app/auth/auth.service";
 import { UserRole } from "src/app/auth/user.model";
+import { FilmBuiltInListsService } from "../services/filmBuiltInLists.service";
 
 @Component({
     selector: 'app-film',
@@ -43,6 +44,7 @@ export class FilmComponent implements OnInit {
 
     constructor(private service: FilmsService,
         private photosService: PhotosService,
+        private builtInListsService: FilmBuiltInListsService,
         private route: ActivatedRoute,
         public anotherNamesDialog: MatDialog,
         public awardsDialog: MatDialog,
@@ -62,6 +64,54 @@ export class FilmComponent implements OnInit {
             if (UserRole.Admin as UserRole === user.role as UserRole)
                 this.editMode = true;
             else this.editMode = false;
+        });
+    }
+
+    addToWatch() {
+        this.builtInListsService.addToWatched(this.model.id).subscribe(res => {
+            this.model.haveSeen = true;
+        }, error => {
+            console.log(error);
+        });
+    }
+
+    removeFromWatched() {
+        this.builtInListsService.deleteFromWatched(this.model.id).subscribe(res => {
+            this.model.haveSeen = false;
+        }, error => {
+            console.log(error);
+        });
+    }
+
+    addToWantToWatch() {
+        this.builtInListsService.addToWantToSee(this.model.id).subscribe(res => {
+            this.model.wantToSee = true;
+        }, error => {
+            console.log(error);
+        });
+    }
+
+    removeFromWantToWatch() {
+        this.builtInListsService.deleteFromWantToSee(this.model.id).subscribe(res => {
+            this.model.wantToSee = false;
+        }, error => {
+            console.log(error);
+        });
+    }
+
+    addToFavorites() {
+        this.builtInListsService.addToFavorites(this.model.id).subscribe(res => {
+            this.model.isFavorite = true;
+        }, error => {
+            console.log(error);
+        });
+    }
+
+    removeFromFavorites() {
+        this.builtInListsService.deleteFromFavorites(this.model.id).subscribe(res => {
+            this.model.isFavorite = false;
+        }, error => {
+            console.log(error);
         });
     }
 

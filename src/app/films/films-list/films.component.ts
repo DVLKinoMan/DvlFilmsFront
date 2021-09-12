@@ -103,7 +103,7 @@ export class FilmsComponent implements OnInit {
     }
 
     removeFromWantToWatch(film: Film) {
-        this.builtInListsService.deleteFromWatched(film.id).subscribe(res => {
+        this.builtInListsService.deleteFromWantToSee(film.id).subscribe(res => {
             film.wantToSee = false;
         }, error => {
             console.log(error);
@@ -111,7 +111,7 @@ export class FilmsComponent implements OnInit {
     }
 
     addToFavorite(film: Film) {
-        this.builtInListsService.addToFavorite(film.id).subscribe(res => {
+        this.builtInListsService.addToFavorites(film.id).subscribe(res => {
             film.isFavorite = true;
         }, error => {
             console.log(error);
@@ -119,7 +119,7 @@ export class FilmsComponent implements OnInit {
     }
 
     removeFromFavorite(film: Film) {
-        this.builtInListsService.deleteFromWatched(film.id).subscribe(res => {
+        this.builtInListsService.deleteFromFavorites(film.id).subscribe(res => {
             film.isFavorite = false;
         }, error => {
             console.log(error);
