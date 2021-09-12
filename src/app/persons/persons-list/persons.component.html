@@ -126,6 +126,18 @@
   <mat-grid-list cols="10" rowHeight="1:2">
             <mat-grid-tile
                 *ngFor="let person of persons">
+            <mat-grid-tile-header>
+                <button mat-mini-fab *ngIf="!person.isFavorite"
+                        (click)="addToFavorites(person)" 
+                        title="Add To Favorites">
+                            <mat-icon>favorite_border</mat-icon>
+                    </button>
+                    <button mat-mini-fab *ngIf="person.isFavorite"
+                        (click)="removeFromFavorites(person)" 
+                        title="Remove from Favorites">
+                            <mat-icon>favorite</mat-icon>
+                    </button>
+            </mat-grid-tile-header>
             <a [routerLink]="['/person', person.id]">
                     <img class="person-image" 
                         [src]="'data:image/png;base64,' + person.profilePicture.image" 

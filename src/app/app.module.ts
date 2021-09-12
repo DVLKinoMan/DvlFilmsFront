@@ -65,6 +65,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { ListSortDialogComponent } from './lists/list-sort/list-sort.dialog.component';
 import { FilmBuiltInListsService } from './films/services/filmBuiltInLists.service';
+import { PersonBuiltInListsService } from './persons/services/person-builtIn-lists.service';
 
 @NgModule({
   declarations: [
@@ -146,6 +147,7 @@ import { FilmBuiltInListsService } from './films/services/filmBuiltInLists.servi
     SocialAuthService,
     ListsService,
     FilmBuiltInListsService,
+    PersonBuiltInListsService,
     // { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
     {

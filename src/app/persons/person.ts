@@ -30,6 +30,8 @@ export class Person {
     imdbpageMoreOfficialSitesUrl?: string;
     imdbpageMoreOtherWorksUrl?: string;
     imdbpageMorePublicityListingsUrl?: string;
+
+    isFavorite: boolean;
 }
 
 export class AlternateName {

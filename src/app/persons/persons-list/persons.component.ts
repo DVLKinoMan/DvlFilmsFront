@@ -14,6 +14,7 @@ import { PersonsService } from '../services/persons.service';
 import { PhotosService } from 'src/app/common/services/photos.service';
 import { FilterOperator } from 'src/app/common/filter';
 import { formatDate } from '@angular/common';
+import { PersonBuiltInListsService } from '../services/person-builtIn-lists.service';
 
 @Component({
   selector: 'app-persons',
@@ -48,6 +49,7 @@ export class PersonsComponent implements OnInit {
   constructor(private service: PersonsService,
     private formBuilder: FormBuilder,
     private photosService: PhotosService,
+    private builtInListsService: PersonBuiltInListsService,
     private route: ActivatedRoute,
     private router: Router) { }
 
@@ -96,6 +98,22 @@ export class PersonsComponent implements OnInit {
       return formatDate(dateTime, 'yyyy-MM-dd', 'en-US');
 
     return undefined;
+  }
+
+  addToFavorites(person: Person) {
+    this.builtInListsService.addToFavorites(person.id).subscribe(res => {
+      person.isFavorite = true;
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  removeFromFavorites(person: Person) {
+    this.builtInListsService.deleteFromFavorites(person.id).subscribe(res => {
+      person.isFavorite = false;
+    }, error => {
+      console.log(error);
+    });
   }
 
   setPageLength() {
