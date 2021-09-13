@@ -68,4 +68,14 @@ export class FilmBuiltInListsService {
         var url = this.baseUrl + "/WantToSeeFilms/List/";
         return this.http.get<ListItem[]>(url);
     }
+
+    updateFavorites(items: ListItem[]): Observable<object> {
+        var url = this.baseUrl + "/Favorites/Update/Film";
+        return this.http.post(url, { items: items });
+    }
+
+    updateWantToSeeFilms(items: ListItem[]): Observable<object> {
+        var url = this.baseUrl + "/WantToSeeFilms/Update";
+        return this.http.post(url, { items: items });
+    }
 }

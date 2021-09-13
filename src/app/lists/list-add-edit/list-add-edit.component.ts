@@ -74,7 +74,6 @@ export class ListAddEditComponent implements OnInit {
             this.id = params['id'];
             var builtInList = params['builtInList'];
             if (builtInList) {
-                //load builtinList
                 this.builtInListMode = true;
                 this.builtInList = builtInList;
                 switch (this.builtInList) {
@@ -181,7 +180,7 @@ export class ListAddEditComponent implements OnInit {
         if (!this.editMode)
             return;
 
-        if (this.model) {
+        if (!this.builtInListMode) {
             this.model.items = this.items;
             if (this.model.id) {
                 this.service.update(this.model).subscribe(res => {
@@ -203,16 +202,43 @@ export class ListAddEditComponent implements OnInit {
             });
         }
         else {
-            //todo save for builtInList
             switch (this.builtInList) {
                 case "FavoritePersons":
-                    this.loadFavoritePersons();
+                    this.builtInPersonsListService.updateFavorites(this.items).subscribe(res => {
+                        this._snackBar.open("Updated Successfully", "Close");
+                        this.router.navigate(['/Lists']);
+                    }, error => {
+                        this._snackBar.open("Failed to Save", "Close");
+                        console.log(error);
+                    });
                     break;
                 case "FavoriteFilms":
-                    this.loadFavoriteFilms();
+                    this.builtInFilmsListService.updateFavorites(this.items).subscribe(res => {
+                        this._snackBar.open("Updated Successfully", "Close");
+                        this.router.navigate(['/Lists']);
+                    }, error => {
+                        this._snackBar.open("Failed to Save", "Close");
+                        console.log(error);
+                    });
                     break;
                 case "WantToSeeFilms":
-                    this.loadWantToSeeFilms();
+                    this.builtInFilmsListService.updateWantToSeeFilms(this.items).subscribe(res => {
+                        this._snackBar.open("Updated Successfully", "Close");
+                        this.router.navigate(['/Lists']);
+                    }, error => {
+                        this._snackBar.open("Failed to Save", "Close");
+                        console.log(error);
+                    });
+                    break;
+                case "WatchedFilms":
+                    //todo
+                    // this.builtInFilmsListService.updateWatchHistory(this.items).subscribe(res => {
+                    //     this._snackBar.open("Created Successfully", "Close");
+                    //     this.router.navigate(['/Lists']);
+                    // }, error => {
+                    //     this._snackBar.open("Failed to Save", "Close");
+                    //     console.log(error);
+                    // });
                     break;
                 default:
                     throwError("not implemented");

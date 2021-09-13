@@ -113,6 +113,9 @@ export class ListSortDialogComponent implements OnInit {
 
     finishSorting() {
         this.model = this.lists[0];
+        this.model.forEach((item, index) => {
+            item.index = index + 1;
+        });
         this.finishedSorting = true;
     }
 
