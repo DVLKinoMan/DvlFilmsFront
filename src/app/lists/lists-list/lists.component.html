@@ -116,7 +116,7 @@
                 <div>{{list.name}} ({{list.itemsCount}} Items)</div>
                 <hr>
                 <div style="font-size: 9pt;"> 
-                    <span>Created in: {{formatDate(list.createdDateTime)}} by <a [routerLink]="['/user', list.user?.id]">{{list.user.userName}}</a>
+                    <span>Created in: {{formatDate(list.createdDateTime)}} by <a [routerLink]="['/user', list.user?.id]">{{list.user?.userName}}</a>
                     </span>
                 </div>
             </mat-grid-tile-footer>
