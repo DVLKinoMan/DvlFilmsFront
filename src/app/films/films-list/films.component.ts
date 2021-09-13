@@ -13,6 +13,8 @@ import { FilterOperator } from 'src/app/common/filter';
 import { Film } from '../film';
 import { FilmsService } from '../services/films.service';
 import { FilmBuiltInListsService } from '../services/filmBuiltInLists.service';
+import { MatDialog } from '@angular/material/dialog';
+import { FilmWatchHistoryDialogComponent } from '../film-edit/film-watch-history/film-watch-history.dialog.component';
 
 @Component({
     selector: 'app-films',
@@ -43,6 +45,7 @@ export class FilmsComponent implements OnInit {
         private formBuilder: FormBuilder,
         private photosService: PhotosService,
         private builtInListsService: FilmBuiltInListsService,
+        private watchHistoryDialog: MatDialog,
         private route: ActivatedRoute,
         private router: Router) { }
 
@@ -91,6 +94,19 @@ export class FilmsComponent implements OnInit {
             film.haveSeen = false;
         }, error => {
             console.log(error);
+        });
+    }
+
+    openWatchHistory(film: Film) {
+        const dialogRef = this.watchHistoryDialog.open(FilmWatchHistoryDialogComponent, {
+            width: '400px',
+            data: { filmId: film.id, filmName: film.name }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result)
+                window.location.reload();
+            console.log('The dialog was closed');
         });
     }
 

@@ -77,9 +77,9 @@
                             <mat-icon>visibility</mat-icon>
                     </button>
                     <button mat-mini-fab *ngIf="film.haveSeen"
-                        (click)="removeFromWatched(film)" 
-                        title="Mark as Unwatched">
-                            <mat-icon>visibility_off</mat-icon>
+                            (click)="openWatchHistory(film)" 
+                            title="View Watched History">
+                                <mat-icon>history</mat-icon>
                     </button>
                     <button mat-mini-fab *ngIf="!film.wantToSee"
                         (click)="addToWantToWatch(film)" 

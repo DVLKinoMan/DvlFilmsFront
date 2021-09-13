@@ -78,7 +78,7 @@ export class FilmComponent implements OnInit {
     }
 
     openWatchHistory() {
-        const dialogRef = this.castAndCrewDialog.open(FilmWatchHistoryDialogComponent, {
+        const dialogRef = this.watchHistoryDialog.open(FilmWatchHistoryDialogComponent, {
             width: '400px',
             data: { filmId: this.id, filmName: this.model.name }
         });
