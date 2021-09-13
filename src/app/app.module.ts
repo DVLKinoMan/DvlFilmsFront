@@ -135,6 +135,7 @@ import { FilmWatchHistoryDialogComponent } from './films/film-edit/film-watch-hi
     MatAutocompleteModule,
     MatSnackBarModule,
     MatCheckboxModule,
+    MatMenuModule,
     NgImageFullscreenViewModule,
     DragDropModule
   ],

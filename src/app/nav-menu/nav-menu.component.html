@@ -13,22 +13,30 @@
     <button mat-icon-button style="margin-left: 50px;">
       <span [routerLink]="['/lists']">Lists</span>
     </button>
-      <button *ngIf="isAuthenticated"  style="margin-left: 50px;" mat-icon-button>
-         <span [routerLink]="['/list/view']" [queryParams]="{builtInList: 'FavoritePersons'}" >Favorite Persons</span>
-      </button>
-      <button *ngIf="isAuthenticated"  style="margin-left: 50px;" mat-icon-button>
-         <span [routerLink]="['/list/view']" [queryParams]="{builtInList: 'FavoriteFilms'}" >Favorite Films</span>
-      </button>
-      <button *ngIf="isAuthenticated"  style="margin-left: 50px;" mat-icon-button>
-         <span [routerLink]="['/list/view']" [queryParams]="{builtInList: 'WantToSeeFilms'}" >Want To See Films</span>
-      </button>
+   
     <span class="example-spacer"></span>
-      <button *ngIf="isAuthenticated" (click)="onLogout()" style="margin-right: 100px;" mat-icon-button>
-        <span> <img class="profilePicture" 
-            [src]="profilePicture" 
-             onerror="this.src='assets/DefaultPersonMale.png'">{{userName}} Logout</span>
-        <mat-icon>logout</mat-icon>
-      </button>
+    <button *ngIf="isAuthenticated" mat-button [matMenuTriggerFor]="menu">
+              <span>
+              <img class="profilePicture" 
+                [src]="profilePicture" 
+                onerror="this.src='assets/DefaultPersonMale.png'">{{userName}}
+              </span>
+    </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+            <span [routerLink]="['/list/view']" [queryParams]="{builtInList: 'FavoritePersons'}" >Favorite Persons</span>
+        </button>
+        <button mat-menu-item>
+            <span [routerLink]="['/list/view']" [queryParams]="{builtInList: 'FavoriteFilms'}" >Favorite Films</span>
+        </button>
+        <button mat-menu-item>
+            <span [routerLink]="['/list/view']" [queryParams]="{builtInList: 'WantToSeeFilms'}" >Want To See Films</span>
+        </button>
+        <button (click)="onLogout()"  mat-menu-item>
+            <span>Logout</span>
+            <mat-icon>logout</mat-icon>
+        </button>
+      </mat-menu>
       <button *ngIf="!isAuthenticated" style="margin-right: 50px;" mat-icon-button>
          <span (click)="loginClicked()">Login</span>
         <mat-icon>login</mat-icon>
