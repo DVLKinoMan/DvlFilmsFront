@@ -104,8 +104,11 @@ export class FilmsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            if (result)
-                window.location.reload();
+            if (result) {
+                const index = this.films.indexOf(film);
+                if (index >= 0)
+                    this.films[index].haveSeen = false;
+            }
             console.log('The dialog was closed');
         });
     }

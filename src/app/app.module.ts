@@ -67,6 +67,7 @@ import { ListSortDialogComponent } from './lists/list-sort/list-sort.dialog.comp
 import { FilmBuiltInListsService } from './films/services/filmBuiltInLists.service';
 import { PersonBuiltInListsService } from './persons/services/person-builtIn-lists.service';
 import { FilmWatchHistoryDialogComponent } from './films/film-edit/film-watch-history/film-watch-history.dialog.component';
+import { FilmWatchedListComponent } from './films/film-watched/film-watched.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { FilmWatchHistoryDialogComponent } from './films/film-edit/film-watch-hi
     ListAddEditComponent,
     ListSortDialogComponent,
     FilmWatchHistoryDialogComponent,
+    FilmWatchedListComponent,
     AuthComponent
   ],
   imports: [
@@ -103,6 +105,7 @@ import { FilmWatchHistoryDialogComponent } from './films/film-edit/film-watch-hi
       { path: 'films', component: FilmsComponent },
       { path: 'persons', component: PersonsComponent },
       { path: 'lists', component: ListsComponent },
+      { path: 'films/watched', component: FilmWatchedListComponent },
       { path: 'person/:id', component: PersonComponent },
       // { path: 'person/:id/awards', component: PersonAwardsComponent },
       { path: 'film/:id', component: FilmComponent },

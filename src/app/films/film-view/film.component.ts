@@ -85,7 +85,7 @@ export class FilmComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result)
-                window.location.reload();
+                this.model.haveSeen = false;
             console.log('The dialog was closed');
         });
     }

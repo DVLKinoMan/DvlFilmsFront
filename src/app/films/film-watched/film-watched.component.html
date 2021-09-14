@@ -1,0 +1,56 @@
+<button mat-mini-fab
+    title="Edit"
+    (click)="editMode=true">
+        <mat-icon>edit</mat-icon>
+</button>
+<div id="add-items" *ngIf="editMode">
+    <div id="add-film-item">
+        <mat-form-field>
+            <input matInput
+            #filmInput 
+            placeholder="Choose Existed Film"
+            [formControl]="filmsCtrl"
+            [matAutocomplete]="autoForFilms">
+            <mat-icon>search</mat-icon>
+        </mat-form-field>    
+        <mat-autocomplete #autoForFilms="matAutocomplete" (optionSelected)="selectedFilm($event)">
+            <mat-option *ngFor="let film of filteredFilms | async"
+                [value]="film">
+                <img class="film-image" 
+                [src]="'data:image/png;base64,' + film.photo?.image" 
+                [alt]="film.photo?.title" 
+                onerror="this.src='assets/DefaultMovie.png'">
+                {{film.name}}
+            </mat-option>
+        </mat-autocomplete>     
+    </div>
+</div>
+<div id="items">
+    Items:
+    <hr>
+    <mat-grid-list cols="10" rowHeight="1:2">
+        <mat-grid-tile class="list-item-tile" [ngStyle]="{'cursor': editMode ? 'move' : 'pointer'}"
+            *ngFor="let item of items; let i = index">
+                    <mat-grid-tile-header *ngIf="editMode">
+                        <button mat-mini-fab
+                                (click)="openWatchHistory(item)" 
+                                title="View Watched History">
+                                    <mat-icon>history</mat-icon>
+                        </button>
+                        <button mat-mini-fab
+                        [title]="'Remove '+item.name"
+                        (click)="removeItem(item)">
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                    </mat-grid-tile-header>
+                    <img 
+                    [src]="'data:image/png;base64,' + item.photo?.image" 
+                    [title]="item.name"
+                    (click)="onClickItem(item)"
+                    onerror="this.src='assets/DefaultMovie.png'">
+                    <mat-grid-tile-footer>
+                        <span>{{item.name}}</span>
+                    </mat-grid-tile-footer>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

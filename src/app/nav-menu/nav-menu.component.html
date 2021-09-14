@@ -32,6 +32,9 @@
         <button mat-menu-item>
             <span [routerLink]="['/list/view']" [queryParams]="{builtInList: 'WantToSeeFilms'}" >Want To See Films</span>
         </button>
+        <button mat-menu-item>
+            <span [routerLink]="['/films/watched']" >Watched Films</span>
+        </button>
         <button (click)="onLogout()"  mat-menu-item>
             <span>Logout</span>
             <mat-icon>logout</mat-icon>

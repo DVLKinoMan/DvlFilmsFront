@@ -34,7 +34,9 @@ export class FilmWatchHistoryDialogComponent implements OnInit {
         if (this.watches.length == 0) {
             this.builtInListsService.deleteFromWatched(this.data.filmId).subscribe(res => {
                 this.loading = false;
-                this.dialogRef.close(true);
+                if (this.watches.length == 0)
+                    this.dialogRef.close(true);
+                else this.dialogRef.close(false);
             }, error => {
                 console.log(error);
                 this.loading = false;
@@ -44,7 +46,9 @@ export class FilmWatchHistoryDialogComponent implements OnInit {
 
         this.builtInListsService.updateWatchHistory(this.watches).subscribe(result => {
             this.loading = false;
-            this.dialogRef.close(true);
+            if (this.watches.length == 0)
+                this.dialogRef.close(true);
+            else this.dialogRef.close(false);
         }, error => {
             console.log(error);
             this.loading = false;
