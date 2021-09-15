@@ -15,10 +15,11 @@ export class FilmBuiltInListsService {
 
     }
 
-    addToWatched(filmId: number): Observable<object> {
+    addToWatched(filmId: number, rating?: number): Observable<object> {
         var url = this.baseUrl + "/WatchedFilms/Add/" + filmId;
         return this.http.post(url, {
-            watchedTime: null
+            watchedTime: null,
+            rating: rating
         });
     }
 

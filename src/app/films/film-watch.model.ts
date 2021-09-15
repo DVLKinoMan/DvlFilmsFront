@@ -7,6 +7,7 @@ export class FilmWatch {
     public watchedTime: Date;
     public photo?: Photo;
     public name?: string;
+    public rating?: number;
 
     constructor(id: number, date: Date, name?: string, photo?: Photo) {
         this.filmId = id;

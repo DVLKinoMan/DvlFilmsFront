@@ -79,7 +79,7 @@ export class FilmComponent implements OnInit {
 
     openWatchHistory() {
         const dialogRef = this.watchHistoryDialog.open(FilmWatchHistoryDialogComponent, {
-            width: '400px',
+            width: '600px',
             data: { filmId: this.id, filmName: this.model.name }
         });
 
