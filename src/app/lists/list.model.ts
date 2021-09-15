@@ -23,7 +23,8 @@ export class List {
 export class ListItem {
     public id?: string;
     public listId?: string;
-    public description: string;;
+    public description: string;
+    public imdbName: string;
     constructor(public itemId: number,
         public itemName: string,
         public index: number = 1,

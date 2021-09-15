@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from "rxjs";
 import { ListsQuery } from "../lists-list/list-query";
-import { List } from "../list.model";
+import { List, ListItem } from "../list.model";
 
 @Injectable({
     providedIn: 'root',
@@ -89,6 +89,24 @@ export class ListsService {
 
         return this.http.get<List[]>(url, {
             params: params
-        })
+        });
+    }
+
+    getFilmItems(imdbTitles: string[]): Observable<ListItem[]> {
+        var url = this.baseUrl + "/Lists/Get/Film/Items";
+        return this.http.get<ListItem[]>(url, {
+            params: {
+                imdbTitles: imdbTitles
+            }
+        });
+    }
+
+    getPersonItems(imdbNames: string[]): Observable<ListItem[]> {
+        var url = this.baseUrl + "/Lists/Get/Person/Items";
+        return this.http.get<ListItem[]>(url, {
+            params: {
+                imdbNames: imdbNames
+            }
+        });
     }
 }

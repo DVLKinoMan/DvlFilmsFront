@@ -68,6 +68,7 @@ import { FilmBuiltInListsService } from './films/services/filmBuiltInLists.servi
 import { PersonBuiltInListsService } from './persons/services/person-builtIn-lists.service';
 import { FilmWatchHistoryDialogComponent } from './films/film-edit/film-watch-history/film-watch-history.dialog.component';
 import { FilmWatchedListComponent } from './films/film-watched/film-watched.component';
+import { ListFetcherService } from './lists/services/list-fetcher.service';
 
 @NgModule({
   declarations: [
@@ -154,6 +155,7 @@ import { FilmWatchedListComponent } from './films/film-watched/film-watched.comp
     ListsService,
     FilmBuiltInListsService,
     PersonBuiltInListsService,
+    ListFetcherService,
     // { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
     {

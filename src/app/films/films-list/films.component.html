@@ -118,7 +118,8 @@
                             <span>{{film.imdbRating}}</span>
                             <span>{{' ('+film.imdbUserRatingsCount+') '}}</span>
                         </div>
-                    </div>
+                </div>
+                <div *ngIf="film.myRating!=0">My Rating: {{film.myRating}}</div>
                 <div>{{film.name}}({{getYear(film.releaseDate)}})</div>
             </mat-grid-tile-footer>
             </mat-grid-tile>

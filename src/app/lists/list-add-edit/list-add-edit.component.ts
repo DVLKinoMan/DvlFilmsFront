@@ -15,6 +15,7 @@ import { PersonBuiltInListsService } from "src/app/persons/services/person-built
 import { PersonsService } from "src/app/persons/services/persons.service";
 import { ListSortDialogComponent } from "../list-sort/list-sort.dialog.component";
 import { List, ListItem, ListType } from "../list.model";
+import { ListFetcherService } from "../services/list-fetcher.service";
 import { ListsService } from "../services/lists.service";
 
 
@@ -27,11 +28,12 @@ export class ListAddEditComponent implements OnInit {
     queryParams: Params;
     id: string;
     model: List = new List;
-    items: ListItem[];
+    items: ListItem[] = [];
     listTypes: ListType[] = [ListType.Films, ListType.Persons];
     editMode: boolean = false;
     builtInListMode: boolean = false;
     builtInList: string;
+    loading: boolean = false;
 
     personsCtrl = new FormControl();
     filteredPersons: Observable<Person[]>;
@@ -50,6 +52,7 @@ export class ListAddEditComponent implements OnInit {
         private router: Router,
         private service: ListsService,
         private personsService: PersonsService,
+        private fetcherService: ListFetcherService,
         private builtInFilmsListService: FilmBuiltInListsService,
         private builtInPersonsListService: PersonBuiltInListsService,
         private filmsService: FilmsService,
@@ -180,13 +183,16 @@ export class ListAddEditComponent implements OnInit {
         if (!this.editMode)
             return;
 
+        this.loading = true;
         if (!this.builtInListMode) {
             this.model.items = this.items;
             if (this.model.id) {
                 this.service.update(this.model).subscribe(res => {
+                    this.loading = false;
                     this._snackBar.open("Updated Successfully", "Close");
                     this.router.navigate(['/Lists']);
                 }, error => {
+                    this.loading = false;
                     this._snackBar.open("Failed to Update", "Close");
                     console.log(error);
                 });
@@ -194,9 +200,11 @@ export class ListAddEditComponent implements OnInit {
             }
 
             this.service.add(this.model).subscribe(res => {
+                this.loading = false;
                 this._snackBar.open("Created Successfully", "Close");
                 this.router.navigate(['/Lists']);
             }, error => {
+                this.loading = false;
                 this._snackBar.open("Failed to Save", "Close");
                 console.log(error);
             });
@@ -205,40 +213,36 @@ export class ListAddEditComponent implements OnInit {
             switch (this.builtInList) {
                 case "FavoritePersons":
                     this.builtInPersonsListService.updateFavorites(this.items).subscribe(res => {
+                        this.loading = false;
                         this._snackBar.open("Updated Successfully", "Close");
                         this.router.navigate(['/Lists']);
                     }, error => {
+                        this.loading = false;
                         this._snackBar.open("Failed to Save", "Close");
                         console.log(error);
                     });
                     break;
                 case "FavoriteFilms":
                     this.builtInFilmsListService.updateFavorites(this.items).subscribe(res => {
+                        this.loading = false;
                         this._snackBar.open("Updated Successfully", "Close");
                         this.router.navigate(['/Lists']);
                     }, error => {
+                        this.loading = false;
                         this._snackBar.open("Failed to Save", "Close");
                         console.log(error);
                     });
                     break;
                 case "WantToSeeFilms":
                     this.builtInFilmsListService.updateWantToSeeFilms(this.items).subscribe(res => {
+                        this.loading = false;
                         this._snackBar.open("Updated Successfully", "Close");
                         this.router.navigate(['/Lists']);
                     }, error => {
+                        this.loading = false;
                         this._snackBar.open("Failed to Save", "Close");
                         console.log(error);
                     });
-                    break;
-                case "WatchedFilms":
-                    //todo
-                    // this.builtInFilmsListService.updateWatchHistory(this.items).subscribe(res => {
-                    //     this._snackBar.open("Created Successfully", "Close");
-                    //     this.router.navigate(['/Lists']);
-                    // }, error => {
-                    //     this._snackBar.open("Failed to Save", "Close");
-                    //     console.log(error);
-                    // });
                     break;
                 default:
                     throwError("not implemented");
@@ -259,6 +263,61 @@ export class ListAddEditComponent implements OnInit {
         });
     }
 
+    onFetchClick() {
+        this.loading = true;
+        this.fetcherService.getByUrl(this.model.imdbPageUrl).subscribe(res => {
+            var list: string[] = [];
+            res.items.forEach(it => {
+                list.push(it.imdbName);
+            });
+            this.model = res;
+            if (res.type == ListType.Persons) {
+                var chunks = 50;
+                for (var i = 0; i < list.length; i += chunks + 1) {
+                    var chunkedTitles = list.slice(i, i + chunks);
+                    this.service.getPersonItems(chunkedTitles).subscribe(res2 => {
+                        this.items.push(...res2);
+                        times--;
+                        if (times == 0)
+                            this.afterFetch();
+                    }, error => console.log(error));
+                }
+            }
+            else {
+                var chunks = 50;
+                var times = Math.ceil(list.length / chunks);
+                for (var i = 0; i < list.length; i += chunks + 1) {
+                    var chunkedTitles = list.slice(i, i + chunks);
+                    this.service.getFilmItems(chunkedTitles).subscribe(res2 => {
+                        this.items.push(...res2);
+                        times--;
+                        if (times == 0)
+                            this.afterFetch();
+                    }, error => console.log(error));
+                }
+            }
+        }, error => {
+            this.loading = false;
+            console.log(error);
+        })
+    }
+
+    afterFetch() {
+        this.items.forEach(item => {
+            var fetchedItem = this.model.items.find(it => it.imdbName == item.imdbName);
+            if (fetchedItem) {
+                item.index = fetchedItem.index;
+                item.description = fetchedItem.description;
+            }
+        });
+        this.items.sort((a, b) => a.index - b.index);
+        this.loading = false;
+        if (this.model.items.length - this.items.length > 0)
+            this._snackBar.open((this.model.items.length - this.items.length) + " items was not found in database", "Ok", {
+                duration: 4000
+            });
+    }
+
     getItemNameForDialog() {
         if (!this.builtInListMode)
             return this.listType2StringMapping[this.model.type];
@@ -277,36 +336,52 @@ export class ListAddEditComponent implements OnInit {
     }
 
     loadList() {
+        this.loading = true;
         this.service.getById(this.id).subscribe(res => {
+            this.loading = false;
             this.model = res;
             this.items = JSON.parse(JSON.stringify(res.items));
             this.items.sort((a, b) => a.index - b.index);
-        }, error => console.log(error));
+        }, error => {
+            this.loading = false;
+            console.log(error)
+        });
     }
 
     loadFavoritePersons() {
+        this.loading = true;
         this.builtInPersonsListService.listFavorites().subscribe(res => {
+            this.loading = false;
             this.items = res;
             this.items.sort((a, b) => a.index - b.index);
-        }, error => console.log(error));
+        }, error => {
+            this.loading = false;
+            console.log(error);
+        });
     }
 
     loadFavoriteFilms() {
+        this.loading = true;
         this.builtInFilmsListService.listFavorites().subscribe(res => {
+            this.loading = false;
             this.items = res;
             this.items.sort((a, b) => a.index - b.index);
-        }, error => console.log(error));
+        }, error => {
+            this.loading = false;
+            console.log(error);
+        });
     }
 
     loadWantToSeeFilms() {
+        this.loading = true;
         this.builtInFilmsListService.listWantToSeeFilms().subscribe(res => {
+            this.loading = false;
             this.items = res;
             this.items.sort((a, b) => a.index - b.index);
-        }, error => console.log(error));
-    }
-
-    loadWatchedFilms() {
-        //todo
+        }, error => {
+            this.loading = false;
+            console.log(error);
+        });
     }
 }
 

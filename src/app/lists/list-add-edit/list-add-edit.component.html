@@ -1,3 +1,11 @@
+<div id="Imdb-Fetch">
+    <mat-form-field appearance="outline" class="mat-form">
+                <mat-label>Imdb Page Url</mat-label>
+                <input matInput [disabled]="!editMode" [(ngModel)]="model.imdbPageUrl">
+     </mat-form-field> 
+    <button [disabled]="model.imdbPageUrl==null"  mat-button (click)="onFetchClick()" cdkFocusInitial>Fetch from Imdb</button>
+</div>
+<mat-spinner *ngIf="loading"></mat-spinner>
 <div id="list-description" *ngIf="!builtInListMode">
     <div style="display: flex;">
         <mat-form-field appearance="outline" class="mat-form">
@@ -95,7 +103,7 @@
                         </button>
                     </mat-grid-tile-header>
                     <img 
-                    [src]="'data:image/png;base64,' + item.photo?.image" 
+                    [src]="item.photo?.image.indexOf('data:image/') !== -1 ? item.photo?.image : 'data:image/png;base64,' + item.photo?.image" 
                     [title]="item.itemName"
                     (click)="onClickItem(item)"
                     (error)="setDefaultPhoto($event, item)">
