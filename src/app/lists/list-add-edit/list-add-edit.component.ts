@@ -271,8 +271,9 @@ export class ListAddEditComponent implements OnInit {
                 list.push(it.imdbName);
             });
             this.model = res;
+            var chunks = 50;
+            var times = Math.ceil(list.length / chunks);
             if (res.type == ListType.Persons) {
-                var chunks = 50;
                 for (var i = 0; i < list.length; i += chunks + 1) {
                     var chunkedTitles = list.slice(i, i + chunks);
                     this.service.getPersonItems(chunkedTitles).subscribe(res2 => {
@@ -284,8 +285,6 @@ export class ListAddEditComponent implements OnInit {
                 }
             }
             else {
-                var chunks = 50;
-                var times = Math.ceil(list.length / chunks);
                 for (var i = 0; i < list.length; i += chunks + 1) {
                     var chunkedTitles = list.slice(i, i + chunks);
                     this.service.getFilmItems(chunkedTitles).subscribe(res2 => {
