@@ -49,6 +49,11 @@
                             <span>{{model.imdbRating}}</span>
                             <span>{{' ('+model.imdbUserRatingsCount+') '}}</span>
                         </div>
+                        <br>
+                        <div *ngIf="model.myRating!=0">
+                            <span>My Rating: </span>
+                            <span>{{model.myRating}}</span>
+                        </div>
                     </div>
                 </div>
                 <div id="little-stats">

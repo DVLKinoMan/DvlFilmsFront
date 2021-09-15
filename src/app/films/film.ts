@@ -18,6 +18,7 @@ export interface Film {
     imdbTitle: string;
     awardsInformationString: string;
     imdbRating?: number;
+    myRating: number;
     imdbUserRatingsCount?: number;
     releaseDate?: Date;
     tagline: string;
