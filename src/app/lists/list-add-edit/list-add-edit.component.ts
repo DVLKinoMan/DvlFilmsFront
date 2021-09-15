@@ -271,6 +271,7 @@ export class ListAddEditComponent implements OnInit {
                 list.push(it.imdbName);
             });
             this.model = res;
+            this.items = [];
             var chunks = 50;
             var times = Math.ceil(list.length / chunks);
             if (res.type == ListType.Persons) {
