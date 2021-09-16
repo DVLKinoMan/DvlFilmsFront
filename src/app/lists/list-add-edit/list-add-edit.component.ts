@@ -2,7 +2,7 @@ import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { Observable, throwError } from "rxjs";
@@ -28,9 +28,12 @@ export class ListAddEditComponent implements OnInit {
     queryParams: Params;
     id: string;
     model: List = new List;
+    listType: ListType;
+    listName: string;
     items: ListItem[] = [];
     listTypes: ListType[] = [ListType.Films, ListType.Persons];
     editMode: boolean = false;
+    canEdit: boolean = false;
     builtInListMode: boolean = false;
     builtInList: string;
     loading: boolean = false;
@@ -95,7 +98,10 @@ export class ListAddEditComponent implements OnInit {
             }
             else if (this.id)
                 this.loadList();
-            else this.editMode = true;
+            else {
+                this.editMode = true;
+                this.canEdit = true;
+            }
         });
     }
 
@@ -139,10 +145,9 @@ export class ListAddEditComponent implements OnInit {
                     return type == "Films";
             }
         }
-        if (typeof this.model.type == 'string')
-            return this.model.type == type;
-        return type == 'Persons' ? this.model.type == ListType.Persons :
-            type == 'Films' ? this.model.type == ListType.Films : false;
+
+        return type == 'Persons' ? this.listType == ListType.Persons :
+            type == 'Films' ? this.listType == ListType.Films : false;
     }
 
     drop(event: CdkDragDrop<any>) {
@@ -161,21 +166,19 @@ export class ListAddEditComponent implements OnInit {
     }
 
     setDefaultPhoto(event: any, item: ListItem) {
-        if (this.model.type == ListType.Films)
+        if (this.listType == ListType.Films)
             event.target.src = 'assets/DefaultMovie.png';
         else event.target.src = 'assets/DefaultPersonMale.png';
     }
 
     setDefaultProfilePicture(event: any, person: Person) {
-        if (typeof person.sex == "string")
-            event.target.src = person.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
-        else event.target.src = person.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+        event.target.src = person.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
     }
 
     onClickItem(item: ListItem) {
-        if (this.model.type == ListType.Films)
+        if (this.listType == ListType.Films)
             this.router.navigate(['/film/' + item.itemId]);
-        else if (this.model.type == ListType.Persons)
+        else if (this.listType == ListType.Persons)
             this.router.navigate(['/person/' + item.itemId]);
     }
 
@@ -320,7 +323,7 @@ export class ListAddEditComponent implements OnInit {
 
     getItemNameForDialog() {
         if (!this.builtInListMode)
-            return this.listType2StringMapping[this.model.type];
+            return this.listType2StringMapping[this.listType];
         //todo another names also
         return "Favorites";
     }
@@ -340,18 +343,27 @@ export class ListAddEditComponent implements OnInit {
         this.service.getById(this.id).subscribe(res => {
             this.loading = false;
             this.model = res;
+            this.listType = this.model.type;
+            this.listName = this.model.name;
             this.items = JSON.parse(JSON.stringify(res.items));
             this.items.sort((a, b) => a.index - b.index);
         }, error => {
             this.loading = false;
             console.log(error)
         });
+
+        this.service.canEdit(this.id).subscribe(res => {
+            this.canEdit = res;
+        }, error => console.log(error));
     }
 
     loadFavoritePersons() {
         this.loading = true;
         this.builtInPersonsListService.listFavorites().subscribe(res => {
             this.loading = false;
+            this.listType = ListType.Persons;
+            this.listName = "Favorite Persons";
+            this.canEdit = true;
             this.items = res;
             this.items.sort((a, b) => a.index - b.index);
         }, error => {
@@ -364,6 +376,9 @@ export class ListAddEditComponent implements OnInit {
         this.loading = true;
         this.builtInFilmsListService.listFavorites().subscribe(res => {
             this.loading = false;
+            this.listType = ListType.Films;
+            this.listName = "Favorite Films";
+            this.canEdit = true;
             this.items = res;
             this.items.sort((a, b) => a.index - b.index);
         }, error => {
@@ -376,6 +391,9 @@ export class ListAddEditComponent implements OnInit {
         this.loading = true;
         this.builtInFilmsListService.listWantToSeeFilms().subscribe(res => {
             this.loading = false;
+            this.listType = ListType.Films;
+            this.listName = "Want to See Films";
+            this.canEdit = true;
             this.items = res;
             this.items.sort((a, b) => a.index - b.index);
         }, error => {

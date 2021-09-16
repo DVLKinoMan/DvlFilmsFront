@@ -1,8 +1,16 @@
-<button mat-mini-fab
-    title="Edit"
-    (click)="editMode=true">
-        <mat-icon>edit</mat-icon>
-</button>
+<span>Watched Films</span>
+<div>
+    <button mat-mini-fab *ngIf="!editMode"
+        title="Edit"
+        (click)="editMode=true">
+            <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-mini-fab *ngIf="editMode"
+        title="View Mode"
+        (click)="editMode=false">
+            <mat-icon>pageview</mat-icon>
+    </button>
+</div>
 <div id="add-items" *ngIf="editMode">
     <div id="add-film-item">
         <mat-form-field>

@@ -1,9 +1,10 @@
+<span *ngIf="builtInListMode">{{listName}}</span>
 <div id="Imdb-Fetch">
     <mat-form-field appearance="outline" class="mat-form">
                 <mat-label>Imdb Page Url</mat-label>
                 <input matInput [disabled]="!editMode" [(ngModel)]="model.imdbPageUrl">
      </mat-form-field> 
-    <button [disabled]="model.imdbPageUrl==null"  mat-button (click)="onFetchClick()" cdkFocusInitial>Fetch from Imdb</button>
+    <button [disabled]="model.imdbPageUrl==null || !editMode"  mat-button (click)="onFetchClick()" cdkFocusInitial>Fetch from Imdb</button>
 </div>
 <mat-spinner *ngIf="loading"></mat-spinner>
 <div id="list-description" *ngIf="!builtInListMode">
@@ -36,10 +37,15 @@
         <textarea rows="8" matInput [disabled]="!editMode" [(ngModel)]="model.description"></textarea>
     </mat-form-field>
 </div>
-<button mat-mini-fab
-    [title]="'Edit '+model.name"
+<button mat-mini-fab *ngIf="canEdit && !editMode"
+    [title]="'Edit '+ listName"
     (click)="editMode=true">
         <mat-icon>edit</mat-icon>
+</button>
+<button mat-mini-fab *ngIf="editMode"
+    title="View Mode"
+    (click)="editMode=false">
+        <mat-icon>pageview</mat-icon>
 </button>
 <button *ngIf="editMode" mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
 <button *ngIf="editMode" mat-button (click)="onSortClick()" cdkFocusInitial>Sort With Merge Sort</button>

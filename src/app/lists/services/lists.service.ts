@@ -109,4 +109,9 @@ export class ListsService {
             }
         });
     }
+
+    canEdit(listId: string): Observable<boolean> {
+        var url = this.baseUrl + "/Lists/CanEdit/" + listId;
+        return this.http.get<boolean>(url);
+    }
 }
