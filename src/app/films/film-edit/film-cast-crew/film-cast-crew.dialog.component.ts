@@ -101,9 +101,7 @@ export class FilmCastAndCrewDialogComponent implements OnInit {
     }
 
     setDefaultProfilePicture(event: any, castMember: FilmCastMember) {
-        if (typeof castMember.gender == "string")
-            event.target.src = castMember.gender == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
-        else event.target.src = castMember.gender == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+        event.target.src = castMember.gender == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
     }
 
     removeCastMember(member: FilmCastMember) {

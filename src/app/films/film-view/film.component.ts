@@ -131,15 +131,11 @@ export class FilmComponent implements OnInit {
     }
 
     setDefaultProfilePicture(event: any, castMember: FilmCastMember) {
-        if (typeof castMember.gender == "string")
-            event.target.src = castMember.gender == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
-        else event.target.src = castMember.gender == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+        event.target.src = castMember.gender == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
     }
 
     setDefaultPersonPhoto(event: any, person: FilmPerson) {
-        if (typeof person.sex == "string")
-            event.target.src = person?.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
-        else event.target.src = person?.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+        event.target.src = person?.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
     }
 
     openAnotherNamesDialog(): void {

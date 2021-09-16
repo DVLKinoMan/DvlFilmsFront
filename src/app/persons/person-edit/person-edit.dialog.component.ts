@@ -56,9 +56,7 @@ export class PersonEditDialogComponent {
     }
 
     setDefaultProfilePicture(event: any) {
-        if (typeof this.model.sex == "string")
-            event.target.src = this.model.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
-        else event.target.src = this.model.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+        event.target.src = this.model.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
     }
 
     openAlternateNamesDialog() {

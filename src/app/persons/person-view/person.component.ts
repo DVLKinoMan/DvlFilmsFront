@@ -41,7 +41,7 @@ export class PersonComponent implements OnInit {
   filmographies: Filmography[];
 
   // zodiacSigns: any[] = Object.keys(ZodiacSign).filter(e => !isNaN(+e)).map(o => { return { index: +o, name: ZodiacSign[+o] } });
-  public genders = Object.keys(Gender).filter(e => !isNaN(+e)).map(o => { return { index: +o, name: Gender[+o] } });
+  // public genders = Object.keys(Gender).filter(e => !isNaN(+e)).map(o => { return { index: +o, name: Gender[+o] } });
   // genders: string[] = Object.keys(Gender).filter(val => isNaN(Number(val)));
 
   showPhotos: number = 5;
