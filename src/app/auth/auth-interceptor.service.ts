@@ -17,11 +17,18 @@ export class AuthInterceptorService implements HttpInterceptor {
                 if (!user)
                     return next.handle(req);
 
+                var headers = new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + user.token
+                });
+
+                if (req.headers.has("InterceptorSkipContentType")) {
+                    headers = req.headers.delete("InterceptorSkipContentType");
+                    headers = headers.append('Authorization', "Bearer " + user.token);
+                }
+
                 const modifiedReq = req.clone({
-                    headers: new HttpHeaders({
-                        'Content-Type': 'application/json',
-                        'Authorization': "Bearer " + user.token
-                    })
+                    headers: headers
                 });
                 return next.handle(modifiedReq);
             })

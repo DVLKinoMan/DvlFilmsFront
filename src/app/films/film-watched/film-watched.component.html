@@ -10,6 +10,14 @@
         (click)="editMode=false">
             <mat-icon>pageview</mat-icon>
     </button>
+    <button mat-mini-fab *ngIf="editMode"
+        (click)="fileInput.click()"
+        title="Import from Excel File">
+            <mat-icon>import_export</mat-icon>
+    </button>
+    <input hidden (change)="onFileSelected()" #fileInput type="file" id="file"
+    accept="csv">
+    <mat-progress-bar *ngIf="showImportProgress"  [value]="importPercentage"></mat-progress-bar>
 </div>
 <div id="add-items" *ngIf="editMode">
     <div id="add-film-item">

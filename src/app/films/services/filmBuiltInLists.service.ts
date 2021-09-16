@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ListItem } from "src/app/lists/list.model";
@@ -83,5 +83,23 @@ export class FilmBuiltInListsService {
     updateWantToSeeFilms(items: ListItem[]): Observable<object> {
         var url = this.baseUrl + "/WantToSeeFilms/Update";
         return this.http.post(url, { items: items });
+    }
+
+    uploadWatchedFilms(file: Blob): Observable<HttpEvent<FilmWatch[]>> {
+        var url = this.baseUrl + "/WatchedFilms/Import"
+        const formData = new FormData();
+        formData.append('file', file);
+        var headers = new HttpHeaders();
+        // headers.append('content-type', 'multipart/form-data');
+        headers = headers.append('InterceptorSkipContentType', 'skip');
+
+        return this.http.request(new HttpRequest(
+            'POST',
+            url,
+            formData,
+            {
+                reportProgress: true,
+                headers: headers
+            }));
     }
 }

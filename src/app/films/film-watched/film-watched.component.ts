@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { HttpEventType } from "@angular/common/http";
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatDialog } from "@angular/material/dialog";
@@ -23,11 +24,15 @@ export class FilmWatchedListComponent implements OnInit {
     id: string;
     items: FilmWatch[];
     editMode: boolean = false;
+    @Output() public uploadStatus: EventEmitter<ProgressStatus>;
 
     filmsCtrl = new FormControl();
     filteredFilms: Observable<FilmItem[]>;
     showFilms = 10;
     @ViewChild('filmInput') filmInput: ElementRef<HTMLInputElement>;
+
+    importPercentage: number;
+    showImportProgress: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -37,6 +42,32 @@ export class FilmWatchedListComponent implements OnInit {
         private watchHistoryDialog: MatDialog,
         private _snackBar: MatSnackBar
     ) {
+        this.uploadStatus = new EventEmitter<ProgressStatus>();
+        this.uploadStatus.subscribe(res => {
+            switch (res.status) {
+                case ProgressStatusEnum.START:
+                    this.showImportProgress = true;
+                    break;
+                case ProgressStatusEnum.IN_PROGRESS:
+                    this.importPercentage = res.percentage;
+                    break;
+                case ProgressStatusEnum.COMPLETE:
+                    this.showImportProgress = false;
+                    this.importPercentage = 0;
+                    this._snackBar.open("Import Completed", "Ok", {
+                        duration: 2000
+                    });
+                    break;
+                case ProgressStatusEnum.ERROR:
+                    this.showImportProgress = false;
+                    this.importPercentage = 0;
+                    this._snackBar.open("Import Failed", "Ok", {
+                        duration: 2000
+                    });
+                    break;
+            }
+        }, error => console.log(error));
+
         this.filteredFilms = this.filmsCtrl.valueChanges.pipe(
             startWith(''),
             debounceTime(400),
@@ -80,6 +111,43 @@ export class FilmWatchedListComponent implements OnInit {
         this.router.navigate(['/film/' + item.filmId]);
     }
 
+    onFileSelected() {
+        const inputNode: any = document.querySelector('#file');
+        if (inputNode.files && inputNode.files.length > 0) {
+            this.uploadStatus.emit({ status: ProgressStatusEnum.START });
+            this.builtInFilmsListService.uploadWatchedFilms(inputNode.files[0]).subscribe(
+                data => {
+                    if (data)
+                        switch (data.type) {
+                            case HttpEventType.UploadProgress:
+                                this.uploadStatus.emit({
+                                    status: ProgressStatusEnum.IN_PROGRESS,
+                                    percentage: Math.round((data.loaded / data.total) * 100)
+                                });
+                                break;
+                            case HttpEventType.Response:
+                                // this.inputFile.nativeElement.value = '';
+                                this.uploadStatus.emit({ status: ProgressStatusEnum.COMPLETE });
+                                var count = 0
+                                data.body.forEach(it => {
+                                    if (it.filmId != 0)
+                                        this.items.push(it);
+                                    else count++;
+                                });
+                                if (count != 0)
+                                    this._snackBar.open(count + " items were not found in Database", "Ok", {
+                                        duration: 4000
+                                    });
+                                break;
+                        }
+                },
+                error => {
+                    // this.inputFile.nativeElement.value = '';
+                    this.uploadStatus.emit({ status: ProgressStatusEnum.ERROR });
+                    console.log(error);
+                });
+        }
+    }
 
     openWatchHistory(film: FilmWatch) {
         const dialogRef = this.watchHistoryDialog.open(FilmWatchHistoryDialogComponent, {
@@ -117,4 +185,16 @@ export class FilmWatchedListComponent implements OnInit {
             this.items = res;
         }, error => console.log(error));
     }
+}
+
+class ProgressStatus {
+    status: ProgressStatusEnum;
+    percentage?: number;
+}
+
+export enum ProgressStatusEnum {
+    START,
+    IN_PROGRESS,
+    COMPLETE,
+    ERROR
 }

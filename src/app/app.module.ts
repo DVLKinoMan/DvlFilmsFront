@@ -32,6 +32,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgImageFullscreenViewModule } from 'ng-image-fullscreen-view';
 import { DragDropModule } from "@angular/cdk/drag-drop";
 
@@ -140,6 +141,7 @@ import { ListFetcherService } from './lists/services/list-fetcher.service';
     MatSnackBarModule,
     MatCheckboxModule,
     MatMenuModule,
+    MatProgressBarModule,
     NgImageFullscreenViewModule,
     DragDropModule
   ],
