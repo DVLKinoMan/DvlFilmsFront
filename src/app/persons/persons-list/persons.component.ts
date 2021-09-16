@@ -15,7 +15,7 @@ import { PhotosService } from 'src/app/common/services/photos.service';
 import { FilterOperator } from 'src/app/common/filter';
 import { formatDate } from '@angular/common';
 import { PersonBuiltInListsService } from '../services/person-builtIn-lists.service';
-import { Gender2StringMapping } from 'src/app/common/helpers';
+import { Gender2StringMapping, ZodiacSign2StringMapping } from 'src/app/common/helpers';
 
 @Component({
   selector: 'app-persons',
@@ -36,7 +36,9 @@ export class PersonsComponent implements OnInit {
   ];
   filterOperators: string[] = ['And', 'Or'];
   genders: Gender[] = [Gender.Unknown, Gender.Male, Gender.Female];
-  zodiacSigns: string[] = Object.keys(ZodiacSign).filter(val => isNaN(Number(val)));
+  zodiacSigns: ZodiacSign[] = [ZodiacSign.Aquarius, ZodiacSign.Pisces, ZodiacSign.Aries, ZodiacSign.Taurus, ZodiacSign.Gemini,
+  ZodiacSign.Cancer, ZodiacSign.Leo, ZodiacSign.Virgo, ZodiacSign.Libra, ZodiacSign.Scorpio, ZodiacSign.Sagittarius, ZodiacSign.Capricorn
+  ]
   selectedFilter: string;
   idFilterForm: FormGroup;
   nameFilterForm: FormGroup;
@@ -45,6 +47,7 @@ export class PersonsComponent implements OnInit {
   zodiacSignFilterForm: FormGroup;
   filters: PersonFilter[] = [];
   gender2StringMapping = Gender2StringMapping;
+  zodiacSign2StringMapping = ZodiacSign2StringMapping;
 
   queryParams: Params;
 

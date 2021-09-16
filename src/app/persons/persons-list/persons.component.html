@@ -97,8 +97,8 @@
                 <mat-form-field >
                     <mat-label>Zodiac Sign:</mat-label><br>
                     <mat-select formControlName="sign" panelClass="example-panel-black">
-                        <mat-option *ngFor="let sign of zodiacSigns; let i=index" 
-                        [value]="i">{{sign}}</mat-option>
+                        <mat-option *ngFor="let sign of zodiacSigns" 
+                        [value]="sign">{{zodiacSign2StringMapping[sign]}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <button mat-button color="primary" type="submit">Add Filter</button>
@@ -149,7 +149,7 @@
                 <div>{{person.name}} ({{gender2StringMapping[person.sex]}})</div>
                 <hr>
                 <div *ngIf="person.birthDate" style="font-size: 9pt;"> 
-                    <span>Birth: {{formatDate(person.birthDate)}} ({{person.age}}, {{person.zodiacSign}}) 
+                    <span>Birth: {{formatDate(person.birthDate)}} ({{person.age}}, {{zodiacSign2StringMapping[person.zodiacSign]}}) 
                                 <span *ngIf="person.birthPlace">in {{person.birthPlace}}</span>
                     </span>
                 </div>

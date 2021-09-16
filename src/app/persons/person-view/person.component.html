@@ -54,7 +54,7 @@
                             </span>
                         </div> 
                         <div *ngIf="model.zodiacSign">
-                            <mat-label>Zodiac Sign: {{model.zodiacSign}}</mat-label>
+                            <mat-label>Zodiac Sign: {{zodiacSign2StringMapping[model.zodiacSign]}}</mat-label>
                         </div>
                         <div *ngIf="model.deathDate">
                             <span>Death: {{formatDate(model.deathDate)}} 
