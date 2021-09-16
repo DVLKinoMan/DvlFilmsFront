@@ -11,6 +11,7 @@ import { PersonPhotosDialogComponent } from "../person-photos/person-photos.dial
 import { PersonAlternateNamesDailogComponent } from "./person-alternate-names/person-alternate-names.dialog.component";
 import { PersonFilmographyDialogComponent } from "./person-filmography/person-filmography.dialog.component";
 import { PersonFetcherService } from "../services/person-fetcher.service";
+import { Gender2StringMapping } from "src/app/common/helpers";
 
 @Component({
     selector: 'app-person-edit',
@@ -22,7 +23,8 @@ export class PersonEditDialogComponent {
     model: Person;
     dbPerson: Person;
     alternateNames: string[];
-    genders: any[] = ["Unknown", "Male", "Female"];
+    genders: any[] = [Gender.Unknown, Gender.Male, Gender.Female];
+    gender2StringMapping = Gender2StringMapping;
 
     groupedFilmography: Map<string, Filmography[]>;
 

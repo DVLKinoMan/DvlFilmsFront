@@ -91,7 +91,7 @@
                                 <mat-select [(ngModel)]="model.sex">
                                     <mat-option *ngFor="let gender of genders" 
                                         [value]="gender">
-                                        {{gender}}
+                                        {{gender2StringMapping[model.sex]}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>

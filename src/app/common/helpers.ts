@@ -1,3 +1,4 @@
+import { Gender } from "../persons/enums";
 
 export abstract class Helpers {
     public static getBetweenString(str: string, prevString: string, afterString: string): string {
@@ -10,3 +11,10 @@ export abstract class Helpers {
         return Helpers.getBetweenString(url, "title/", "/");
     }
 }
+
+
+export const Gender2StringMapping: Record<Gender, string> = {
+    [Gender.Unknown]: "Unknown",
+    [Gender.Male]: "Male",
+    [Gender.Female]: "Female"
+};

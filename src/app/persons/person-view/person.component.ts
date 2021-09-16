@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UserRole } from 'src/app/auth/user.model';
 import { PersonBuiltInListsService } from '../services/person-builtIn-lists.service';
+import { Gender2StringMapping } from 'src/app/common/helpers';
 
 @Component({
   selector: 'app-person',
@@ -28,6 +29,7 @@ export class PersonComponent implements OnInit {
   id: number;
   selectedZodiacSign: string;
   editMode: boolean = false;
+  gender2StringMapping = Gender2StringMapping;
 
   selectedFilmographyCatName: string = "";
   filmographyCategoryNames: string[] = [];

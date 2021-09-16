@@ -15,6 +15,7 @@ import { PhotosService } from 'src/app/common/services/photos.service';
 import { FilterOperator } from 'src/app/common/filter';
 import { formatDate } from '@angular/common';
 import { PersonBuiltInListsService } from '../services/person-builtIn-lists.service';
+import { Gender2StringMapping } from 'src/app/common/helpers';
 
 @Component({
   selector: 'app-persons',
@@ -34,7 +35,7 @@ export class PersonsComponent implements OnInit {
     'Id', 'Name', 'Age', 'Gender', 'ZodiacSign'
   ];
   filterOperators: string[] = ['And', 'Or'];
-  genders: string[] = Object.keys(Gender).filter(val => isNaN(Number(val)));
+  genders: Gender[] = [Gender.Unknown, Gender.Male, Gender.Female];
   zodiacSigns: string[] = Object.keys(ZodiacSign).filter(val => isNaN(Number(val)));
   selectedFilter: string;
   idFilterForm: FormGroup;
@@ -43,6 +44,7 @@ export class PersonsComponent implements OnInit {
   genderFilterForm: FormGroup;
   zodiacSignFilterForm: FormGroup;
   filters: PersonFilter[] = [];
+  gender2StringMapping = Gender2StringMapping;
 
   queryParams: Params;
 
@@ -261,9 +263,7 @@ export class PersonsComponent implements OnInit {
   }
 
   setDefaultProfilePicture(event: any, person: Person) {
-    if (typeof person.sex == "string")
-      event.target.src = person.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
-    else event.target.src = person.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+    event.target.src = person.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
   }
 
   getPersonFilter(str: string): PersonFilter {

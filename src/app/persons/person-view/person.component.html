@@ -46,7 +46,7 @@
                         <br>
                         <div *ngIf="model.sex">
                             <mat-label>Sex: </mat-label>
-                            <mat-label>{{model.sex}}</mat-label>
+                            <mat-label>{{gender2StringMapping[model.sex]}}</mat-label>
                         </div>
                         <div *ngIf="model.birthDate">
                             <span>Birth: {{formatDate(model.birthDate)}} (Age {{model.age}}) 
