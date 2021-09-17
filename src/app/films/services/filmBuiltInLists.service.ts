@@ -70,9 +70,19 @@ export class FilmBuiltInListsService {
         return this.http.get<ListItem[]>(url);
     }
 
-    listWatchedFilms(): Observable<FilmWatch[]> {
+    listWatchedFilms(curPage: number, itemsPerPage: number): Observable<FilmWatch[]> {
         var url = this.baseUrl + "/WatchedFilms/List/All";
-        return this.http.get<FilmWatch[]>(url);
+        return this.http.get<FilmWatch[]>(url, {
+            params: {
+                curPage: curPage,
+                itemsPerPage: itemsPerPage
+            }
+        });
+    }
+
+    getWatchedFilmsCount(): Observable<number> {
+        var url = this.baseUrl + "/WatchedFilms/Count";
+        return this.http.get<number>(url);
     }
 
     updateFavorites(items: ListItem[]): Observable<object> {

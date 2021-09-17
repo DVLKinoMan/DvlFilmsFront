@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { Observable } from "rxjs";
@@ -33,6 +34,11 @@ export class FilmWatchedListComponent implements OnInit {
 
     importPercentage: number;
     showImportProgress: boolean = false;
+
+    pageEvent: PageEvent;
+    defaultPageIndex: number = 0;
+    defaultPageSize: number = 50;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
 
     constructor(
         private route: ActivatedRoute,
@@ -73,14 +79,18 @@ export class FilmWatchedListComponent implements OnInit {
             debounceTime(400),
             switchMap((film: string) => this.filmsService.getFilmItems(film, this.showFilms, false))
         );
-        this.loadList();
     }
 
     ngOnInit(): void {
+        this.pageEvent = new PageEvent();
+        this.pageEvent.pageIndex = this.defaultPageIndex;
+        this.pageEvent.pageSize = this.defaultPageSize;
         this.route.queryParams.subscribe(params => {
             this.queryParams = params;
             this.loadList();
+            this.setPageLength();
         });
+        this.loadList();
     }
 
     selectedFilm(event: MatAutocompleteSelectedEvent): void {
@@ -165,6 +175,14 @@ export class FilmWatchedListComponent implements OnInit {
         });
     }
 
+
+    pageChanged(event: PageEvent) {
+        this.pageEvent = event;
+        this.items = [];
+        this.loadList();
+        return event;
+    }
+
     removeItem(item: FilmWatch) {
         if (!this.items)
             return;
@@ -181,9 +199,17 @@ export class FilmWatchedListComponent implements OnInit {
     }
 
     loadList() {
-        this.builtInFilmsListService.listWatchedFilms().subscribe(res => {
-            this.items = res;
-        }, error => console.log(error));
+        this.builtInFilmsListService.listWatchedFilms(
+            this.pageEvent.pageIndex + 1,
+            this.pageEvent.pageSize).subscribe(res => {
+                this.items = res;
+            }, error => console.log(error));
+    }
+
+    setPageLength() {
+        this.builtInFilmsListService.getWatchedFilmsCount().subscribe(result => {
+            this.paginator.length = result;
+        }, error => console.error(error));
     }
 }
 
