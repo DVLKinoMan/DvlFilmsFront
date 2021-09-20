@@ -21,7 +21,6 @@ import { FilmWatch } from "../film-watch.model";
     styleUrls: ['./film-watched.component.css']
 })
 export class FilmWatchedListComponent implements OnInit {
-    queryParams: Params;
     id: string;
     items: FilmWatch[];
     editMode: boolean = false;
@@ -83,10 +82,9 @@ export class FilmWatchedListComponent implements OnInit {
 
     ngOnInit(): void {
         this.pageEvent = new PageEvent();
-        this.pageEvent.pageIndex = this.defaultPageIndex;
-        this.pageEvent.pageSize = this.defaultPageSize;
         this.route.queryParams.subscribe(params => {
-            this.queryParams = params;
+            this.pageEvent.pageIndex = params["pageIndex"] ?? this.defaultPageIndex;
+            this.pageEvent.pageSize = params["pageSize"] ?? this.defaultPageSize;
             this.loadList();
             this.setPageLength();
         });
@@ -179,6 +177,17 @@ export class FilmWatchedListComponent implements OnInit {
     pageChanged(event: PageEvent) {
         this.pageEvent = event;
         this.items = [];
+        var queryParams: Params = {
+            pageIndex: this.pageEvent.pageIndex,
+            pageSize: this.pageEvent.pageSize
+        };
+        this.router.navigate(
+            [],
+            {
+                relativeTo: this.route,
+                queryParams: queryParams,
+                queryParamsHandling: 'merge', // remove to replace all query params by provided
+            });
         this.loadList();
         return event;
     }
