@@ -127,3 +127,5 @@
         </mat-grid-tile>
     </mat-grid-list>
 </div>
+<mat-paginator [hidden]="!items" [pageSize]="50" (page)="pageEvent = pageChanged($event)"
+    [pageSizeOptions]="[50, 100, 125, 150]" showFirstLastButtons></mat-paginator>

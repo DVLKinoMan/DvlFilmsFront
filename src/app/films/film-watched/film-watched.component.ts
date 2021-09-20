@@ -88,7 +88,6 @@ export class FilmWatchedListComponent implements OnInit {
             this.loadList();
             this.setPageLength();
         });
-        this.loadList();
     }
 
     selectedFilm(event: MatAutocompleteSelectedEvent): void {

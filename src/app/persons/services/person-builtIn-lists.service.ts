@@ -24,9 +24,19 @@ export class PersonBuiltInListsService {
         return this.http.post(url, null);
     }
 
-    listFavorites(): Observable<ListItem[]> {
+    listFavorites(curPage: number, itemsPerPage: number): Observable<ListItem[]> {
         var url = this.baseUrl + "/Favorites/List/Persons";
-        return this.http.get<ListItem[]>(url);
+        return this.http.get<ListItem[]>(url, {
+            params: {
+                curPage: curPage,
+                itemsPerPage: itemsPerPage
+            }
+        });
+    }
+
+    listFavoritesCount(): Observable<number> {
+        var url = this.baseUrl + "/Favorites/List/Persons/Count";
+        return this.http.get<number>(url);
     }
 
     updateFavorites(items: ListItem[]): Observable<object> {

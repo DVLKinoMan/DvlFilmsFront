@@ -60,14 +60,34 @@ export class FilmBuiltInListsService {
         return this.http.post(url, { watches: watches });
     }
 
-    listFavorites(): Observable<ListItem[]> {
+    listFavorites(curPage: number, itemsPerPage: number): Observable<ListItem[]> {
         var url = this.baseUrl + "/Favorites/List/Films";
-        return this.http.get<ListItem[]>(url);
+        return this.http.get<ListItem[]>(url, {
+            params: {
+                curPage: curPage,
+                itemsPerPage: itemsPerPage
+            }
+        });
     }
 
-    listWantToSeeFilms(): Observable<ListItem[]> {
+    listFavoritesCount(): Observable<number> {
+        var url = this.baseUrl + "/Favorites/List/Films/Count";
+        return this.http.get<number>(url);
+    }
+
+    listWantToSeeFilms(curPage: number, itemsPerPage: number): Observable<ListItem[]> {
         var url = this.baseUrl + "/WantToSeeFilms/List/";
-        return this.http.get<ListItem[]>(url);
+        return this.http.get<ListItem[]>(url, {
+            params: {
+                curPage: curPage,
+                itemsPerPage: itemsPerPage
+            }
+        });
+    }
+
+    listWantToSeeFilmsCount(): Observable<number> {
+        var url = this.baseUrl + "/WantToSeeFilms/List/Count";
+        return this.http.get<number>(url);
     }
 
     listWatchedFilms(curPage: number, itemsPerPage: number): Observable<FilmWatch[]> {

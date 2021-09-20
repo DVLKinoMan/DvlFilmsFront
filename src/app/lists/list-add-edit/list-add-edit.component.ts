@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { Observable, throwError } from "rxjs";
@@ -50,6 +51,11 @@ export class ListAddEditComponent implements OnInit {
 
     listType2StringMapping = ListType2StringMapping;
 
+    pageEvent: PageEvent;
+    defaultPageIndex: number = 0;
+    defaultPageSize: number = 50;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -75,34 +81,32 @@ export class ListAddEditComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.pageEvent = new PageEvent();
         this.route.queryParams.subscribe(params => {
             this.queryParams = params;
-            this.id = params['id'];
-            var builtInList = params['builtInList'];
-            if (builtInList) {
-                this.builtInListMode = true;
-                this.builtInList = builtInList;
-                switch (this.builtInList) {
-                    case "FavoritePersons":
-                        this.loadFavoritePersons();
-                        break;
-                    case "FavoriteFilms":
-                        this.loadFavoriteFilms();
-                        break;
-                    case "WantToSeeFilms":
-                        this.loadWantToSeeFilms();
-                        break;
-                    default:
-                        throwError("not implemented");
-                }
-            }
-            else if (this.id)
-                this.loadList();
-            else {
-                this.editMode = true;
-                this.canEdit = true;
-            }
+            this.pageEvent.pageIndex = params["pageIndex"] ?? this.defaultPageIndex;
+            this.pageEvent.pageSize = params["pageSize"] ?? this.defaultPageSize;
+            this.loadList();
         });
+    }
+
+    pageChanged(event: PageEvent) {
+        this.pageEvent = event;
+        this.items = [];
+        var queryParams: Params = {
+            pageIndex: this.pageEvent.pageIndex,
+            pageSize: this.pageEvent.pageSize,
+            id: this.id
+        };
+        this.router.navigate(
+            [],
+            {
+                relativeTo: this.route,
+                queryParams: queryParams,
+                queryParamsHandling: 'merge', // remove to replace all query params by provided
+            });
+        this.loadList();
+        return event;
     }
 
     selectedPerson(event: MatAutocompleteSelectedEvent): void {
@@ -338,9 +342,60 @@ export class ListAddEditComponent implements OnInit {
             this.items.splice(index, 1);
     }
 
+    setListPageLength() {
+        this.service.getListItemsCount(this.id).subscribe(result => {
+            this.paginator.length = result;
+        }, error => console.error(error));
+    }
+
+    setFavoritePersonsPageLength() {
+        this.builtInPersonsListService.listFavoritesCount().subscribe(result => {
+            this.paginator.length = result;
+        }, error => console.error(error));
+    }
+
+    setFavoriteFilmsPageLength() {
+        this.builtInFilmsListService.listFavoritesCount().subscribe(result => {
+            this.paginator.length = result;
+        }, error => console.error(error));
+    }
+
+    setWantToSeePageLength() {
+        this.builtInFilmsListService.listWantToSeeFilmsCount().subscribe(result => {
+            this.paginator.length = result;
+        }, error => console.error(error));
+    }
+
     loadList() {
+        this.id = this.queryParams['id'];
+        var builtInList = this.queryParams['builtInList'];
+        if (builtInList) {
+            this.builtInListMode = true;
+            this.builtInList = builtInList;
+            switch (this.builtInList) {
+                case "FavoritePersons":
+                    this.loadFavoritePersons();
+                    this.setFavoritePersonsPageLength();
+                    break;
+                case "FavoriteFilms":
+                    this.loadFavoriteFilms();
+                    this.setFavoriteFilmsPageLength();
+                    break;
+                case "WantToSeeFilms":
+                    this.loadWantToSeeFilms();
+                    this.setWantToSeePageLength();
+                    break;
+                default:
+                    throwError("not implemented");
+            }
+        }
+        else if (!this.id) {
+            this.editMode = true;
+            this.canEdit = true;
+        }
+
         this.loading = true;
-        this.service.getById(this.id).subscribe(res => {
+        this.service.getById(this.id, this.pageEvent.pageIndex + 1, this.pageEvent.pageSize).subscribe(res => {
             this.loading = false;
             this.model = res;
             this.listType = this.model.type;
@@ -352,6 +407,8 @@ export class ListAddEditComponent implements OnInit {
             console.log(error)
         });
 
+        this.setListPageLength();
+
         this.service.canEdit(this.id).subscribe(res => {
             this.canEdit = res;
         }, error => console.log(error));
@@ -359,7 +416,7 @@ export class ListAddEditComponent implements OnInit {
 
     loadFavoritePersons() {
         this.loading = true;
-        this.builtInPersonsListService.listFavorites().subscribe(res => {
+        this.builtInPersonsListService.listFavorites(this.pageEvent.pageIndex + 1, this.pageEvent.pageSize).subscribe(res => {
             this.loading = false;
             this.listType = ListType.Persons;
             this.listName = "Favorite Persons";
@@ -374,7 +431,7 @@ export class ListAddEditComponent implements OnInit {
 
     loadFavoriteFilms() {
         this.loading = true;
-        this.builtInFilmsListService.listFavorites().subscribe(res => {
+        this.builtInFilmsListService.listFavorites(this.pageEvent.pageIndex + 1, this.pageEvent.pageSize).subscribe(res => {
             this.loading = false;
             this.listType = ListType.Films;
             this.listName = "Favorite Films";
@@ -389,7 +446,7 @@ export class ListAddEditComponent implements OnInit {
 
     loadWantToSeeFilms() {
         this.loading = true;
-        this.builtInFilmsListService.listWantToSeeFilms().subscribe(res => {
+        this.builtInFilmsListService.listWantToSeeFilms(this.pageEvent.pageIndex + 1, this.pageEvent.pageSize).subscribe(res => {
             this.loading = false;
             this.listType = ListType.Films;
             this.listName = "Want to See Films";

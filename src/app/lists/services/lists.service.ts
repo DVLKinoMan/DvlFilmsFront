@@ -61,10 +61,21 @@ export class ListsService {
         });
     }
 
-    getById(id: string): Observable<List> {
+    getById(id: string, curPage: number, itemsPerPage: number): Observable<List> {
         var url = this.baseUrl + "/Lists/Get/" + id;
 
-        return this.http.get<List>(url);
+        return this.http.get<List>(url, {
+            params: {
+                pageIndex: curPage - 1,
+                pageSize: itemsPerPage
+            }
+        });
+    }
+
+    getListItemsCount(id: string): Observable<number> {
+        var url = this.baseUrl + "/Lists/Get/" + id + "/Count";
+
+        return this.http.get<number>(url);
     }
 
     update(list: List): Observable<List> {
