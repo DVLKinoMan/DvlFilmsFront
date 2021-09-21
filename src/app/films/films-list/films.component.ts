@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
     FilmOrderBy,
-    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery
+    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession
 } from './film-query';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
@@ -15,6 +15,9 @@ import { FilmsService } from '../services/films.service';
 import { FilmBuiltInListsService } from '../services/filmBuiltInLists.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FilmWatchHistoryDialogComponent } from '../film-edit/film-watch-history/film-watch-history.dialog.component';
+import { Gender2StringMapping, Profession2StringMapping } from 'src/app/common/helpers';
+import { Gender } from 'src/app/persons/enums';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
     selector: 'app-films',
@@ -30,16 +33,21 @@ export class FilmsComponent implements OnInit {
     filmOrderBy: FilmOrderBy = FilmOrderBy.Id;
     orderAscending: boolean = true;
 
-    filterNames: string[] = [
-        'Id', 'Name'
-    ];
+    filterNames: string[];
     filterOperators: string[] = ['And', 'Or'];
     selectedFilter: string;
     idFilterForm: FormGroup;
     nameFilterForm: FormGroup;
+    favoritePersonsFilterForm: FormGroup;
     filters: FilmFilter[] = [];
 
     queryParams: Params;
+
+    isAuthenticated = false;
+    profession2StringMapping = Profession2StringMapping;
+    gender2StringMapping = Gender2StringMapping;
+    genders: Gender[] = [Gender.Unknown, Gender.Male, Gender.Female];
+    professions: Profession[] = [Profession.Act, Profession.Director, Profession.Writer];
 
     constructor(private service: FilmsService,
         private formBuilder: FormBuilder,
@@ -47,9 +55,11 @@ export class FilmsComponent implements OnInit {
         private builtInListsService: FilmBuiltInListsService,
         private watchHistoryDialog: MatDialog,
         private route: ActivatedRoute,
+        private authService: AuthService,
         private router: Router) { }
 
     ngOnInit(): void {
+        this.filterNames = ['Id', 'Name'];
         this.pageEvent = new PageEvent();
         this.pageEvent.pageIndex = this.defaultPageIndex;
         this.pageEvent.pageSize = this.defaultPageSize;
@@ -69,12 +79,22 @@ export class FilmsComponent implements OnInit {
             value: '',
             pattern: ''
         });
+        this.favoritePersonsFilterForm = this.formBuilder.group({
+            filterOperator: [0, Validators.required],
+            gender: '',
+            profession: 0
+        });
+        this.authService.user.subscribe(user => {
+            this.isAuthenticated = !!user;
+            if (this.isAuthenticated)
+                this.filterNames.push("FavPersons");
+        });
     }
 
     public getYear(date: Date) {
         if (typeof date == "string")
-            return new Date(date).getFullYear();
-        return date.getFullYear();
+            return date ? new Date(date).getFullYear() : null;
+        return date ? date.getFullYear() : null;
     }
 
     ngAfterViewInit() {
@@ -166,8 +186,10 @@ export class FilmsComponent implements OnInit {
     }
 
     filterChanged(filterName: string) {
+        var form = this.getFilterForm(filterName);
+        if (form == this.favoritePersonsFilterForm)
+            form.get('profession')?.setValue(0);
         if (this.filters.length != 0) {
-            var form = this.getFilterForm(filterName);
             form.addControl('filterOperator', new FormControl());
             form.get('filterOperator')?.setValue(1);
         }
@@ -177,6 +199,7 @@ export class FilmsComponent implements OnInit {
         switch (filterName) {
             case 'Id': return this.idFilterForm;
             case 'Name': return this.nameFilterForm;
+            case 'FavPersons': return this.favoritePersonsFilterForm;
             default: throw new Error('filterName not implemented');
         }
     }
@@ -188,6 +211,10 @@ export class FilmsComponent implements OnInit {
             case 'Name': return new NameFilter(this.nameFilterForm.controls['value']?.value,
                 this.nameFilterForm.controls['pattern']?.value,
                 this.nameFilterForm.controls['filterOperator']?.value);
+            case 'FavPersons': return new FavoritePersonsFilter(0,
+                this.favoritePersonsFilterForm.controls['gender']?.value,
+                this.favoritePersonsFilterForm.controls['profession']?.value,
+                this.favoritePersonsFilterForm.controls['filterOperator']?.value);
             default: return new IdFilter(1);
         }
     }
@@ -286,6 +313,8 @@ export class FilmsComponent implements OnInit {
                     case 0: return new IdFilter(json['id'], json['filterOperator']);
                     case 1: return new NameFilter(json['value'], json['pattern'],
                         json['filterOperator']);
+                    case 2: return new FavoritePersonsFilter(json['userId'], json['gender'], json['profession'],
+                        json['filterOperator']);
                     default: throw console.error('not implemented');
                 }
         }
@@ -293,6 +322,7 @@ export class FilmsComponent implements OnInit {
     }
 
     loadData(notFromRoute: boolean = false) {
+        this.films = [];
         var [query, fromRoute] = this.getFilmsQuery(notFromRoute);
         if (!fromRoute) {
             var params = new HttpParams();

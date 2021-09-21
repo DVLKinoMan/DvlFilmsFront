@@ -1,3 +1,4 @@
+import { Profession } from "../films/films-list/film-query";
 import { Gender, ZodiacSign } from "../persons/enums";
 
 export abstract class Helpers {
@@ -32,4 +33,10 @@ export const ZodiacSign2StringMapping: Record<ZodiacSign, string> = {
     [ZodiacSign.Scorpio]: "Scorpio",
     [ZodiacSign.Taurus]: "Taurus",
     [ZodiacSign.Virgo]: "Virgo"
+};
+
+export const Profession2StringMapping: Record<Profession, string> = {
+    [Profession.Act]: "Act",
+    [Profession.Director]: "Director",
+    [Profession.Writer]: "Writer"
 };

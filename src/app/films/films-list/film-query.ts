@@ -1,5 +1,7 @@
 import { Filter, FilterOperator } from "src/app/common/filter";
+import { Gender2StringMapping, Profession2StringMapping } from "src/app/common/helpers";
 import { Query } from "src/app/common/query";
+import { Gender } from "src/app/persons/enums";
 import { FilmFilterType } from "../enums";
 
 export class FilmsQuery extends Query {
@@ -30,6 +32,12 @@ export enum FilmOrderBy {
     IMDBRating,
     DurationInMinutes,
     ImdbUserRatingsCount
+}
+
+export enum Profession {
+    Act,
+    Director,
+    Writer
 }
 
 export abstract class FilmFilter extends Filter {
@@ -66,5 +74,18 @@ export class NameFilter extends FilmFilter {
         super(FilmFilterType.Name, filterOperator);
         this.value = value;
         this.pattern = pattern;
+    }
+}
+
+export class FavoritePersonsFilter extends FilmFilter {
+    public ToString(): string {
+        return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+            (this.gender ? "Fav Person Gender == '" + Gender2StringMapping[this.gender] + "'" : "") +
+            (this.profession ? " Fav Person Profession '" + Profession2StringMapping[this.profession] + "'" : '') +
+            (!this.gender && !this.profession ? "Fav Persons Filter" : "");
+    }
+    constructor(public userId: number, public gender?: Gender, public profession?: Profession,
+        filterOperator: FilterOperator = FilterOperator.None) {
+        super(FilmFilterType.FavoritePersons, filterOperator);
     }
 }
