@@ -17,7 +17,7 @@
     <div style="display: flex;">
         <mat-form-field appearance="outline" class="mat-form">
                 <mat-label>List Type</mat-label>
-                <mat-select [(ngModel)]="model.type" [disabled]="!editMode || model.items.length > 0">
+                <mat-select [(ngModel)]="model.type" (selectionChange)="setListType()" [disabled]="!editMode || model.items.length > 0">
                     <mat-option *ngFor="let type of listTypes" 
                         [value]="type">
                         {{listType2StringMapping[type]}}

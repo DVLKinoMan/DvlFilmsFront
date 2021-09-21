@@ -257,6 +257,10 @@ export class ListAddEditComponent implements OnInit {
         }
     }
 
+    setListType() {
+        this.listType = this.model.type;
+    }
+
     onSortClick() {
         const dialogRef = this.sortListDialog.open(ListSortDialogComponent, {
             width: '500px',

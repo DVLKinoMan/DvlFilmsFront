@@ -106,3 +106,16 @@ export class WatchedFilmFilter extends FilmFilter {
         super(FilmFilterType.WatchedFilms, filterOperator);
     }
 }
+
+export class FilmPersonListsFilter extends FilmFilter {
+    public ToString(): string {
+        return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+            (this.gender ? "Person List Gender == '" + Gender2StringMapping[this.gender] + "'" : "") +
+            (this.profession ? " Person List Profession '" + Profession2StringMapping[this.profession] + "'" : '') +
+            (!this.gender && !this.profession ? "Person List Filter" : "");
+    }
+    constructor(public listId: string, public userId: number, public gender?: Gender, public profession?: Profession,
+        filterOperator: FilterOperator = FilterOperator.None) {
+        super(FilmFilterType.PersonLists, filterOperator);
+    }
+}

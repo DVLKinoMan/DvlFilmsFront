@@ -61,6 +61,11 @@ export class ListsService {
         });
     }
 
+    getMyPersonLists(): Observable<List[]> {
+        var url = this.baseUrl + "/Lists/ListPersons";
+        return this.http.get<List[]>(url);
+    }
+
     getById(id: string, curPage: number, itemsPerPage: number): Observable<List> {
         var url = this.baseUrl + "/Lists/Get/" + id;
 
