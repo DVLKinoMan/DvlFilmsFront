@@ -2,5 +2,6 @@
 export enum FilmFilterType {
     Id,
     Name,
-    FavoritePersons
+    FavoritePersons,
+    WatchedFilms,
 }

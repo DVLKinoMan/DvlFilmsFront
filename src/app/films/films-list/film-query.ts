@@ -89,3 +89,20 @@ export class FavoritePersonsFilter extends FilmFilter {
         super(FilmFilterType.FavoritePersons, filterOperator);
     }
 }
+
+export class WatchedFilmFilter extends FilmFilter {
+    //todo includingEnds not implemented
+    public ToString(): string {
+        return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+            (this.value ? "Have Watched " : "Have Not Watched") +
+            (this.start && this.end ? " And My Rating Between [ " + this.start + ", " + this.end + " ]" :
+                this.start ? " And My Rating >= " + this.start : this.end ? " And My Rating <= " + this.end : "");
+    }
+    constructor(public value: boolean,
+        public start?: number,
+        public end?: number,
+        public includingEnds: boolean = true,
+        filterOperator: FilterOperator = FilterOperator.None) {
+        super(FilmFilterType.WatchedFilms, filterOperator);
+    }
+}

@@ -71,6 +71,26 @@
                 </mat-form-field>
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
+            
+            <form [formGroup]="watchedFilmsFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'WatchedFilms'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                     <mat-checkbox id="value" formControlName="value">Have Watched</mat-checkbox>
+                <mat-form-field >
+                    <mat-label for="start">My Rating Start:</mat-label>
+                    <input id="start" formControlName="start" type="number" matInput placeholder="My Rating Start">
+                </mat-form-field>
+                <mat-form-field >
+                    <mat-label for="end">My Rating End:</mat-label>
+                    <input id="end" formControlName="end" type="number" matInput placeholder="My Rating End">
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
         </td>
         <td style="float: right;">
             <button mat-flat-button color="primary" (click)="searchButtonClick()">Search</button><br><br>

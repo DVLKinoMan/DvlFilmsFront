@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
     FilmOrderBy,
-    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession
+    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession, WatchedFilmFilter
 } from './film-query';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
@@ -39,6 +39,7 @@ export class FilmsComponent implements OnInit {
     idFilterForm: FormGroup;
     nameFilterForm: FormGroup;
     favoritePersonsFilterForm: FormGroup;
+    watchedFilmsFilterForm: FormGroup;
     filters: FilmFilter[] = [];
 
     queryParams: Params;
@@ -84,10 +85,18 @@ export class FilmsComponent implements OnInit {
             gender: '',
             profession: 0
         });
+        this.watchedFilmsFilterForm = this.formBuilder.group({
+            filterOperator: [0, Validators.required],
+            value: '',
+            start: '',
+            end: ''
+        })
         this.authService.user.subscribe(user => {
             this.isAuthenticated = !!user;
-            if (this.isAuthenticated)
+            if (this.isAuthenticated) {
                 this.filterNames.push("FavPersons");
+                this.filterNames.push("WatchedFilms");
+            }
         });
     }
 
@@ -200,6 +209,7 @@ export class FilmsComponent implements OnInit {
             case 'Id': return this.idFilterForm;
             case 'Name': return this.nameFilterForm;
             case 'FavPersons': return this.favoritePersonsFilterForm;
+            case 'WatchedFilms': return this.watchedFilmsFilterForm;
             default: throw new Error('filterName not implemented');
         }
     }
@@ -215,6 +225,12 @@ export class FilmsComponent implements OnInit {
                 this.favoritePersonsFilterForm.controls['gender']?.value,
                 this.favoritePersonsFilterForm.controls['profession']?.value,
                 this.favoritePersonsFilterForm.controls['filterOperator']?.value);
+            case 'WatchedFilms': return new WatchedFilmFilter(this.watchedFilmsFilterForm['value']?.value ||
+                this.watchedFilmsFilterForm.controls['start']?.value != undefined || this.watchedFilmsFilterForm.controls['end']?.value != undefined,
+                this.watchedFilmsFilterForm.controls['start']?.value,
+                this.watchedFilmsFilterForm.controls['end']?.value,
+                true,
+                this.watchedFilmsFilterForm.controls['filterOperator']?.value);
             default: return new IdFilter(1);
         }
     }
@@ -314,6 +330,8 @@ export class FilmsComponent implements OnInit {
                     case 1: return new NameFilter(json['value'], json['pattern'],
                         json['filterOperator']);
                     case 2: return new FavoritePersonsFilter(json['userId'], json['gender'], json['profession'],
+                        json['filterOperator']);
+                    case 3: return new WatchedFilmFilter(json['value'], json['start'], json['end'], json['includingEnds'],
                         json['filterOperator']);
                     default: throw console.error('not implemented');
                 }
