@@ -5,4 +5,5 @@ export enum FilmFilterType {
     FavoritePersons,
     WatchedFilms,
     PersonLists,
+    Genres,
 }

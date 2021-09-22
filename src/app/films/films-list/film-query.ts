@@ -119,3 +119,15 @@ export class FilmPersonListsFilter extends FilmFilter {
         super(FilmFilterType.PersonLists, filterOperator);
     }
 }
+
+export class FilmGenresFilter extends FilmFilter {
+    public ToString(): string {
+        return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+            ("Genres in (" + this.genreNames.join(", ") + ")");
+    }
+    constructor(public genreIds: number[],
+        public genreNames: string[],
+        filterOperator: FilterOperator = FilterOperator.None) {
+        super(FilmFilterType.Genres, filterOperator);
+    }
+}
