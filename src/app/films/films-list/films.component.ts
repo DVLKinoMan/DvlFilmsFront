@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
     FilmOrderBy,
-    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession, WatchedFilmFilter, FilmPersonListsFilter, FilmGenresFilter, ImdbRatingFilter
+    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession, WatchedFilmFilter, FilmPersonListsFilter, FilmGenresFilter, ImdbRatingFilter, ImdbRatingsCountFilter
 } from './film-query';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
@@ -47,6 +47,7 @@ export class FilmsComponent implements OnInit {
     personsListFilterForm: FormGroup;
     genresFilterForm: FormGroup;
     imdbRatingsFilterForm: FormGroup;
+    imdbRatingsCountFilterForm: FormGroup;
     filters: FilmFilter[] = [];
 
     queryParams: Params;
@@ -72,7 +73,7 @@ export class FilmsComponent implements OnInit {
         private router: Router) { }
 
     ngOnInit(): void {
-        this.filterNames = ['Id', 'Name', 'Genres', 'ImdbRating'];
+        this.filterNames = ['Id', 'Name', 'Genres', 'ImdbRating', 'ImdbRatingsCount'];
         this.loadGenres();
         this.pageEvent = new PageEvent();
         this.pageEvent.pageIndex = this.defaultPageIndex;
@@ -105,6 +106,12 @@ export class FilmsComponent implements OnInit {
             end: ''
         });
         this.imdbRatingsFilterForm = this.formBuilder.group({
+            filterOperator: [0, Validators.required],
+            exactValue: '',
+            start: '',
+            end: ''
+        });
+        this.imdbRatingsCountFilterForm = this.formBuilder.group({
             filterOperator: [0, Validators.required],
             exactValue: '',
             start: '',
@@ -258,6 +265,7 @@ export class FilmsComponent implements OnInit {
             case 'PersonLists': return this.personsListFilterForm;
             case 'Genres': return this.genresFilterForm;
             case 'ImdbRating': return this.imdbRatingsFilterForm;
+            case 'ImdbRatingsCount': return this.imdbRatingsCountFilterForm;
             default: throw new Error('filterName not implemented');
         }
     }
@@ -292,6 +300,11 @@ export class FilmsComponent implements OnInit {
                 this.imdbRatingsFilterForm.controls['end']?.value,
                 true,
                 this.imdbRatingsFilterForm.controls['filterOperator']?.value);
+            case 'ImdbRatingsCount': return new ImdbRatingsCountFilter(this.imdbRatingsCountFilterForm.controls['exactValue']?.value,
+                this.imdbRatingsCountFilterForm.controls['start']?.value,
+                this.imdbRatingsCountFilterForm.controls['end']?.value,
+                true,
+                this.imdbRatingsCountFilterForm.controls['filterOperator']?.value);
             default: return new IdFilter(1);
         }
     }
@@ -398,6 +411,8 @@ export class FilmsComponent implements OnInit {
                         json['filterOperator']);
                     case 5: return new FilmGenresFilter(json['genreIds'], json['genreNames'], json['filterOperator']);
                     case 6: return new ImdbRatingFilter(json['exactValue'], json['start'], json['end'], json['includingEnds'],
+                        json['filterOperator']);
+                    case 7: return new ImdbRatingsCountFilter(json['exactValue'], json['start'], json['end'], json['includingEnds'],
                         json['filterOperator']);
                     default: throw console.error('not implemented');
                 }

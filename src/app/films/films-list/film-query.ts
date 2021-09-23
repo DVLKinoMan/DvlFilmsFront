@@ -148,3 +148,20 @@ export class ImdbRatingFilter extends FilmFilter {
         super(FilmFilterType.ImdbRating, filterOperator);
     }
 }
+
+export class ImdbRatingsCountFilter extends FilmFilter {
+    //todo includingEnds not implemented
+    public ToString(): string {
+        return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+            (this.exactValue ? "Imdb Ratings Count == " + this.exactValue :
+                (this.start && this.end ? "Imdb Ratings Count Between [ " + this.start + ", " + this.end + " ]" :
+                    this.start ? "Imdb Ratings Count >= " + this.start : this.end ? "Imdb Ratings Count <= " + this.end : ""));
+    }
+    constructor(public exactValue: number,
+        public start?: number,
+        public end?: number,
+        public includingEnds: boolean = true,
+        filterOperator: FilterOperator = FilterOperator.None) {
+        super(FilmFilterType.ImdbRatingsCount, filterOperator);
+    }
+}

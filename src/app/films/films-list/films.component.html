@@ -156,6 +156,28 @@
                 </mat-form-field>
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
+            <form [formGroup]="imdbRatingsCountFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'ImdbRatingsCount'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field >
+                    <mat-label for="exactValue">Exact Value:</mat-label>
+                    <input id="exactValue" formControlName="exactValue" type="number" matInput placeholder="Exact Value">
+                </mat-form-field>
+                <mat-form-field >
+                    <mat-label for="start">Ratings Count Start:</mat-label>
+                    <input id="start" formControlName="start" type="number" matInput placeholder="Ratings Count Start">
+                </mat-form-field>
+                <mat-form-field >
+                    <mat-label for="end">Ratings Count End:</mat-label>
+                    <input id="end" formControlName="end" type="number" matInput placeholder="Ratings Count End">
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
         </td>
         <td style="float: right;">
             <button mat-flat-button color="primary" (click)="searchButtonClick()">Search</button><br><br>
