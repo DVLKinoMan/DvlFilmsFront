@@ -26,12 +26,12 @@ export enum FilmSelectControlFlags {
 }
 
 export enum FilmOrderBy {
-    Id,
-    Name,
     ReleaseDate,
     IMDBRating,
+    Name,
+    ImdbUserRatingsCount,
     DurationInMinutes,
-    ImdbUserRatingsCount
+    Id
 }
 
 export enum Profession {
@@ -94,7 +94,7 @@ export class WatchedFilmFilter extends FilmFilter {
     //todo includingEnds not implemented
     public ToString(): string {
         return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
-            (this.value ? "Have Watched " : "Have Not Watched") +
+            (!this.value ? "Have Not Watched " : "Have Watched") +
             (this.start && this.end ? " And My Rating Between [ " + this.start + ", " + this.end + " ]" :
                 this.start ? " And My Rating >= " + this.start : this.end ? " And My Rating <= " + this.end : "");
     }

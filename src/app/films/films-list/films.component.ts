@@ -22,6 +22,7 @@ import { List } from 'src/app/lists/list.model';
 import { ListsService } from 'src/app/lists/services/lists.service';
 import { FilmGenre } from '../filmGenre';
 import { GenresService } from 'src/app/common/services/genres.service';
+import { FilmOrderBy2StringMapping } from '../helpers';
 
 @Component({
     selector: 'app-films',
@@ -58,6 +59,9 @@ export class FilmsComponent implements OnInit {
     gender2StringMapping = Gender2StringMapping;
     genders: Gender[] = [Gender.Unknown, Gender.Male, Gender.Female];
     professions: Profession[] = [Profession.Act, Profession.Director, Profession.Writer];
+    orderBys: FilmOrderBy[] = [FilmOrderBy.ReleaseDate, FilmOrderBy.IMDBRating, FilmOrderBy.Name,
+    FilmOrderBy.ImdbUserRatingsCount, FilmOrderBy.DurationInMinutes, FilmOrderBy.Id];
+    filmOrderBy2StringMapping = FilmOrderBy2StringMapping;
     myLists: List[] = [];
 
     allGenres: FilmGenre[] = [];
@@ -239,18 +243,6 @@ export class FilmsComponent implements OnInit {
         }, error => console.error(error));
     }
 
-    getOrderBy<FilmOrderBy>(sort: Sort) {
-        switch (sort.active) {
-            case 'id': return FilmOrderBy.Id;
-            case 'name': return FilmOrderBy.Name;
-            case 'releaseDate': return FilmOrderBy.ReleaseDate;
-            case 'imdbRating': return FilmOrderBy.IMDBRating;
-            case 'durationInMinutes': return FilmOrderBy.DurationInMinutes;
-            case 'imdbUserRatingsCount': return FilmOrderBy.ImdbUserRatingsCount;
-            default: return FilmOrderBy.Id;
-        }
-    }
-
     filterChanged(filterName: string) {
         var form = this.getFilterForm(filterName);
         if (form == this.favoritePersonsFilterForm)
@@ -329,12 +321,6 @@ export class FilmsComponent implements OnInit {
             form.removeControl('filterOperator');
     }
 
-    sortChanged(sort: Sort) {
-        this.filmOrderBy = this.getOrderBy(sort);
-        this.orderAscending = sort.direction == 'asc';
-        this.loadData(true);
-    }
-
     pageChanged(event: PageEvent) {
         this.pageEvent = event;
         this.films = [];
@@ -375,8 +361,8 @@ export class FilmsComponent implements OnInit {
             var controlFlags = this.queryParams['selectControlFlags'];
             var currPage = this.queryParams['currentPage'];
             var pageSize = this.queryParams['pageSize'];
-            var orderBy = this.queryParams['orderBy'];
-            var orderByAscending = this.queryParams['orderByAscending'];
+            var orderBy = this.queryParams['orderBy'] ? this.orderBys[this.queryParams['orderBy']] : FilmOrderBy.Id;
+            var orderByAscending = this.queryParams['orderByAscending'] === "true" ? true : false;;
 
             if (controlFlags && currPage && pageSize && orderBy && orderByAscending)
                 return [new FilmsQuery(
@@ -460,6 +446,8 @@ export class FilmsComponent implements OnInit {
             return;
         }
         this.filters = query.filmFilters;
+        this.orderAscending = query.orderByAscending;
+        this.filmOrderBy = query.orderBy;
         this.films = [];
 
         this.service.getList(query).subscribe(result => {

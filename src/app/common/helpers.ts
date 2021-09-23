@@ -40,3 +40,4 @@ export const Profession2StringMapping: Record<Profession, string> = {
     [Profession.Director]: "Director",
     [Profession.Writer]: "Writer"
 };
+

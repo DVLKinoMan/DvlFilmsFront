@@ -1,10 +1,7 @@
 <h1>Films</h1>
-<p>Here's a list of Films: feel free to play with it.</p>
-<p *ngIf="!films"><em>Loading...</em></p>
-<h4>Filter</h4>
 <table>
     <tr>
-        <td style="width: 200px;">
+        <td style="width: 200px; display: flex;">
             <mat-form-field appearance="fill" color="accent">
                 <mat-label>Filter</mat-label><br>
                 <mat-select [(value)]="selectedFilter" 
@@ -13,6 +10,16 @@
                     <mat-option *ngFor="let filter of filterNames" [value]="filter">{{filter}}</mat-option>
                 </mat-select>
             </mat-form-field>
+                <img [src] = "orderAscending ? 'assets/AscendingIcon.png' : 'assets/DescendingIcon.png'"
+                (click) = "orderAscending=!orderAscending; loadData(true)" style="margin-left:20px; width: 25px; height: 25px;">
+            <mat-form-field appearance="fill" color="accent">
+                <mat-label>Order By</mat-label><br>
+                <mat-select [(value)]="filmOrderBy" 
+                    (selectionChange)="loadData(true)" panelClass="example-panel-black">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let orderBy of orderBys" [value]="orderBy">{{filmOrderBy2StringMapping[orderBy]}}</mat-option>
+                </mat-select>
+            </mat-form-field> 
         </td>
         <td>
             <form [formGroup]="idFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Id'">
