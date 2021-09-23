@@ -7,5 +7,6 @@ export enum FilmFilterType {
     PersonLists,
     Genres,
     ImdbRating,
-    ImdbRatingsCount
+    ImdbRatingsCount,
+    ReleaseDate
 }

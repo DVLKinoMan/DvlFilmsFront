@@ -80,7 +80,7 @@ export class NameFilter extends FilmFilter {
 export class FavoritePersonsFilter extends FilmFilter {
     public ToString(): string {
         return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
-            (this.gender ? "Fav Person Gender == '" + Gender2StringMapping[this.gender] + "'" : "") +
+            (this.gender ? "Fav Person Gender = '" + Gender2StringMapping[this.gender] + "'" : "") +
             (this.profession ? " Fav Person Profession '" + Profession2StringMapping[this.profession] + "'" : '') +
             (!this.gender && !this.profession ? "Fav Persons Filter" : "");
     }
@@ -110,7 +110,7 @@ export class WatchedFilmFilter extends FilmFilter {
 export class FilmPersonListsFilter extends FilmFilter {
     public ToString(): string {
         return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
-            (this.gender ? "Person List Gender == '" + Gender2StringMapping[this.gender] + "'" : "") +
+            (this.gender ? "Person List Gender = '" + Gender2StringMapping[this.gender] + "'" : "") +
             (this.profession ? " Person List Profession '" + Profession2StringMapping[this.profession] + "'" : '') +
             (!this.gender && !this.profession ? "Person List Filter" : "");
     }
@@ -136,7 +136,7 @@ export class ImdbRatingFilter extends FilmFilter {
     //todo includingEnds not implemented
     public ToString(): string {
         return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
-            (this.exactValue ? "Imdb Rating == " + this.exactValue :
+            (this.exactValue ? "Imdb Rating = " + this.exactValue :
                 (this.start && this.end ? "Imdb Rating Between [ " + this.start + ", " + this.end + " ]" :
                     this.start ? "Imdb Rating >= " + this.start : this.end ? "Imdb Rating <= " + this.end : ""));
     }
@@ -153,7 +153,7 @@ export class ImdbRatingsCountFilter extends FilmFilter {
     //todo includingEnds not implemented
     public ToString(): string {
         return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
-            (this.exactValue ? "Imdb Ratings Count == " + this.exactValue :
+            (this.exactValue ? "Imdb Ratings Count = " + this.exactValue :
                 (this.start && this.end ? "Imdb Ratings Count Between [ " + this.start + ", " + this.end + " ]" :
                     this.start ? "Imdb Ratings Count >= " + this.start : this.end ? "Imdb Ratings Count <= " + this.end : ""));
     }
@@ -163,5 +163,22 @@ export class ImdbRatingsCountFilter extends FilmFilter {
         public includingEnds: boolean = true,
         filterOperator: FilterOperator = FilterOperator.None) {
         super(FilmFilterType.ImdbRatingsCount, filterOperator);
+    }
+}
+
+export class ReleaseDateFilter extends FilmFilter {
+    //todo includingEnds not implemented
+    public ToString(): string {
+        return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+            (this.exactValue ? "Release Date = " + this.exactValue :
+                (this.start && this.end ? "Release Date Between [ " + this.start + ", " + this.end + " ]" :
+                    this.start ? "Release Date  >= " + this.start : this.end ? "Release Date <= " + this.end : ""));
+    }
+    constructor(public exactValue: Date,
+        public start?: Date,
+        public end?: Date,
+        public includingEnds: boolean = true,
+        filterOperator: FilterOperator = FilterOperator.None) {
+        super(FilmFilterType.ReleaseDate, filterOperator);
     }
 }
