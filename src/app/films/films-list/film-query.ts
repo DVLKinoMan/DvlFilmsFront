@@ -131,3 +131,20 @@ export class FilmGenresFilter extends FilmFilter {
         super(FilmFilterType.Genres, filterOperator);
     }
 }
+
+export class ImdbRatingFilter extends FilmFilter {
+    //todo includingEnds not implemented
+    public ToString(): string {
+        return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+            (this.exactValue ? "Imdb Rating == " + this.exactValue :
+                (this.start && this.end ? "Imdb Rating Between [ " + this.start + ", " + this.end + " ]" :
+                    this.start ? "Imdb Rating >= " + this.start : this.end ? "Imdb Rating <= " + this.end : ""));
+    }
+    constructor(public exactValue: number,
+        public start?: number,
+        public end?: number,
+        public includingEnds: boolean = true,
+        filterOperator: FilterOperator = FilterOperator.None) {
+        super(FilmFilterType.ImdbRating, filterOperator);
+    }
+}
