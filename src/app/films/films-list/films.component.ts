@@ -364,7 +364,7 @@ export class FilmsComponent implements OnInit {
             var orderBy = this.queryParams['orderBy'] ? this.orderBys[this.queryParams['orderBy']] : FilmOrderBy.Id;
             var orderByAscending = this.queryParams['orderByAscending'] === "true" ? true : false;;
 
-            if (controlFlags && currPage && pageSize && orderBy && orderByAscending)
+            if (controlFlags && currPage && pageSize)
                 return [new FilmsQuery(
                     filtersString ? this.getFilmFilters(filtersString) : this.filters,
                     currPage,
