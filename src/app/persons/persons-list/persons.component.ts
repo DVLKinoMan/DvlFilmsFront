@@ -16,6 +16,7 @@ import { FilterOperator } from 'src/app/common/filter';
 import { formatDate } from '@angular/common';
 import { PersonBuiltInListsService } from '../services/person-builtIn-lists.service';
 import { Gender2StringMapping, ZodiacSign2StringMapping } from 'src/app/common/helpers';
+import { PersonOrderBy2StringMapping } from 'src/app/films/helpers';
 
 @Component({
   selector: 'app-persons',
@@ -28,7 +29,6 @@ export class PersonsComponent implements OnInit {
   defaultPageSize: number = 50;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageEvent: PageEvent;
-  personOrderBy: PersonOrderBy = PersonOrderBy.Id;
   orderAscending: boolean = true;
 
   filterNames: string[] = [
@@ -48,6 +48,11 @@ export class PersonsComponent implements OnInit {
   filters: PersonFilter[] = [];
   gender2StringMapping = Gender2StringMapping;
   zodiacSign2StringMapping = ZodiacSign2StringMapping;
+
+  personOrderBy: PersonOrderBy = PersonOrderBy.Id;
+  orderBys: PersonOrderBy[] = [PersonOrderBy.Name, PersonOrderBy.Age, PersonOrderBy.BirthDate,
+  PersonOrderBy.Id, PersonOrderBy.HeightInMeters];
+  personOrderBy2StringMapping = PersonOrderBy2StringMapping;
 
   queryParams: Params;
 
@@ -129,17 +134,6 @@ export class PersonsComponent implements OnInit {
     }, error => console.error(error));
   }
 
-  getOrderBy<PersonOrderBy>(sort: Sort) {
-    switch (sort.active) {
-      case 'id': return PersonOrderBy.Id;
-      case 'name': return PersonOrderBy.Name;
-      case 'birthDate': return PersonOrderBy.BirthDate;
-      case 'heightInMeters': return PersonOrderBy.HeightInMeters;
-      case 'age': return PersonOrderBy.Age;
-      default: return PersonOrderBy.Id;
-    }
-  }
-
   filterChanged(filterName: string) {
     if (this.filters.length != 0) {
       var form = this.getFilterForm(filterName);
@@ -186,12 +180,6 @@ export class PersonsComponent implements OnInit {
       form.removeControl('filterOperator');
   }
 
-  sortChanged(sort: Sort) {
-    this.personOrderBy = this.getOrderBy(sort);
-    this.orderAscending = sort.direction == 'asc';
-    this.loadData(true);
-  }
-
   pageChanged(event: PageEvent) {
     this.pageEvent = event;
     this.persons = [];
@@ -232,10 +220,10 @@ export class PersonsComponent implements OnInit {
       var controlFlags = this.queryParams['selectControlFlags'];
       var currPage = this.queryParams['currentPage'];
       var pageSize = this.queryParams['pageSize'];
-      var orderBy = this.queryParams['orderBy'];
-      var orderByAscending = this.queryParams['orderByAscending'];
+      var orderBy = this.queryParams['orderBy'] ? this.orderBys[this.queryParams['orderBy']] : PersonOrderBy.Id;
+      var orderByAscending = this.queryParams['orderByAscending'] === "true" ? true : false;
 
-      if (controlFlags && currPage && pageSize && orderBy && orderByAscending)
+      if (controlFlags && currPage && pageSize)
         return [new PersonsQuery(
           filtersString ? this.getPersonFilters(filtersString) : this.filters,
           currPage,
@@ -312,6 +300,9 @@ export class PersonsComponent implements OnInit {
       return;
     }
     this.filters = query.personFilters;
+    this.orderAscending = query.orderByAscending;
+    this.personOrderBy = query.orderBy;
+    this.persons = [];
 
     this.service.getList(query).subscribe(result => {
       this.persons = result;

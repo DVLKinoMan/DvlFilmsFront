@@ -4,7 +4,7 @@
 <h4>Filter</h4>
 <table>
     <tr>
-        <td style="width: 200px;">
+        <td style="width: 200px; display: flex">
             <mat-form-field appearance="fill" >
                 <mat-label>Filter</mat-label><br>
                 <mat-select [(value)]="selectedFilter" 
@@ -12,7 +12,17 @@
                     <mat-option>None</mat-option>
                     <mat-option *ngFor="let filter of filterNames" [value]="filter">{{filter}}</mat-option>
                 </mat-select>
-            </mat-form-field>
+            </mat-form-field> 
+            <img [src] = "orderAscending ? 'assets/AscendingIcon.png' : 'assets/DescendingIcon.png'"
+                (click) = "orderAscending=!orderAscending; loadData(true)" style="margin-left:20px; width: 25px; height: 25px;">
+            <mat-form-field appearance="fill" color="accent">
+                <mat-label>Order By</mat-label><br>
+                <mat-select [(value)]="personOrderBy" 
+                    (selectionChange)="loadData(true)" panelClass="example-panel-black">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let orderBy of orderBys" [value]="orderBy">{{personOrderBy2StringMapping[orderBy]}}</mat-option>
+                </mat-select>
+            </mat-form-field> 
         </td>
         <td>
             <form [formGroup]="idFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Id'">

@@ -362,7 +362,7 @@ export class FilmsComponent implements OnInit {
             var currPage = this.queryParams['currentPage'];
             var pageSize = this.queryParams['pageSize'];
             var orderBy = this.queryParams['orderBy'] ? this.orderBys[this.queryParams['orderBy']] : FilmOrderBy.Id;
-            var orderByAscending = this.queryParams['orderByAscending'] === "true" ? true : false;;
+            var orderByAscending = this.queryParams['orderByAscending'] === "true" ? true : false;
 
             if (controlFlags && currPage && pageSize)
                 return [new FilmsQuery(

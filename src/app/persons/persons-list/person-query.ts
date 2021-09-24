@@ -31,11 +31,11 @@ export enum PersonSelectControlFlags {
 }
 
 export enum PersonOrderBy {
-    Id,
     Name,
+    Age,
     BirthDate,
+    Id,
     HeightInMeters,
-    Age
 }
 
 export abstract class PersonFilter extends Filter {
