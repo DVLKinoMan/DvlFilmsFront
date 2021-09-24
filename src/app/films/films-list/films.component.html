@@ -133,6 +133,13 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="genresFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Genres'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>Genres</mat-label>
                     <mat-select formControlName="genres" panelClass="example-panel-black" multiple>
