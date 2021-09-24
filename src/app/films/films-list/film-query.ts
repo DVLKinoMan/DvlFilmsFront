@@ -123,7 +123,7 @@ export class FilmPersonListsFilter extends FilmFilter {
 export class FilmGenresFilter extends FilmFilter {
     public ToString(): string {
         return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
-            ("Genres in (" + this.genreNames.join(", ") + ")");
+            ("Genres: " + this.genreNames.join(", "));
     }
     constructor(public genreIds: number[],
         public genreNames: string[],
