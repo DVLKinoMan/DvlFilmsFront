@@ -71,6 +71,7 @@
                                             <mat-icon>edit</mat-icon>
                                 </button>
                             </h1>
+                            <h3 *ngIf="model.tvDescription">{{model.tvDescription}}</h3>
                         </div>
                         <div *ngIf="model.genres">
                             <button class="film-genre" *ngFor="let genre of model.genres" 

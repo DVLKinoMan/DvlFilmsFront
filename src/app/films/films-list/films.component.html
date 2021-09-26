@@ -223,6 +223,25 @@
                 </mat-form-field>
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
+            <form [formGroup]="tvFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'TvDescription'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                     <mat-checkbox id="hasTvDescription" formControlName="hasTvDescription">Has Tv Description</mat-checkbox>
+                <mat-form-field >
+                    <mat-label for="value">Exact Desription:</mat-label>
+                    <input id="value" formControlName="value" matInput>
+                </mat-form-field>
+                <mat-form-field >
+                    <mat-label for="pattern">Description Contains:</mat-label>
+                    <input id="pattern" formControlName="pattern" matInput>
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
         </td>
         <td style="float: right;">
             <button mat-flat-button color="primary" (click)="searchButtonClick()">Search</button><br><br>

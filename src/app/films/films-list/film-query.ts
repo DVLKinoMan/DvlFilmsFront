@@ -182,3 +182,15 @@ export class ReleaseDateFilter extends FilmFilter {
         super(FilmFilterType.ReleaseDate, filterOperator);
     }
 }
+
+export class TvFilter extends FilmFilter {
+    public ToString(): string {
+        return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+            (this.value ? "TvDescription = '" + this.value + "'" : this.pattern ? "TvDesription Contains '" + this.pattern + "'" :
+                this.hasTvDescription ? "Has Tv Description" : "Hasn't Tv Description");
+    }
+    constructor(public hasTvDescription: boolean, public value?: string, public pattern?: string,
+        filterOperator: FilterOperator = FilterOperator.None) {
+        super(FilmFilterType.TvDescription, filterOperator);
+    }
+}

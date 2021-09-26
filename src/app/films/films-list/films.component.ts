@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
     FilmOrderBy,
-    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession, WatchedFilmFilter, FilmPersonListsFilter, FilmGenresFilter, ImdbRatingFilter, ImdbRatingsCountFilter, ReleaseDateFilter
+    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession, WatchedFilmFilter, FilmPersonListsFilter, FilmGenresFilter, ImdbRatingFilter, ImdbRatingsCountFilter, ReleaseDateFilter, TvFilter
 } from './film-query';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
@@ -50,6 +50,7 @@ export class FilmsComponent implements OnInit {
     imdbRatingsFilterForm: FormGroup;
     imdbRatingsCountFilterForm: FormGroup;
     releaseDateFilterForm: FormGroup;
+    tvFilterForm: FormGroup;
     filters: FilmFilter[] = [];
 
     queryParams: Params;
@@ -78,7 +79,7 @@ export class FilmsComponent implements OnInit {
         private router: Router) { }
 
     ngOnInit(): void {
-        this.filterNames = ['Id', 'Name', 'Genres', 'ImdbRating', 'ImdbRatingsCount', 'ReleaseDate'];
+        this.filterNames = ['Id', 'Name', 'Genres', 'ImdbRating', 'ImdbRatingsCount', 'ReleaseDate', 'TvDescription'];
         this.loadGenres();
         this.pageEvent = new PageEvent();
         this.pageEvent.pageIndex = this.defaultPageIndex;
@@ -106,7 +107,7 @@ export class FilmsComponent implements OnInit {
         });
         this.watchedFilmsFilterForm = this.formBuilder.group({
             filterOperator: [0, Validators.required],
-            value: '',
+            value: false,
             start: '',
             end: ''
         });
@@ -138,6 +139,12 @@ export class FilmsComponent implements OnInit {
             filterOperator: [0, Validators.required],
             genres: '',
         })
+        this.tvFilterForm = this.formBuilder.group({
+            filterOperator: 0,
+            hasTvDescription: false,
+            value: '',
+            pattern: ''
+        });
         this.authService.user.subscribe(user => {
             this.isAuthenticated = !!user;
             if (this.isAuthenticated) {
@@ -266,6 +273,7 @@ export class FilmsComponent implements OnInit {
             case 'ImdbRating': return this.imdbRatingsFilterForm;
             case 'ImdbRatingsCount': return this.imdbRatingsCountFilterForm;
             case 'ReleaseDate': return this.releaseDateFilterForm;
+            case 'TvDescription': return this.tvFilterForm;
             default: throw new Error('filterName not implemented');
         }
     }
@@ -310,6 +318,11 @@ export class FilmsComponent implements OnInit {
                 this.releaseDateFilterForm.controls['end']?.value,
                 true,
                 this.releaseDateFilterForm.controls['filterOperator']?.value);
+            case 'TvDescription': return new TvFilter(this.tvFilterForm.controls['hasTvDescrption']?.value == 'true' ||
+                this.tvFilterForm.controls['value']?.value != undefined || this.tvFilterForm.controls['pattern']?.value != undefined,
+                this.tvFilterForm.controls['value']?.value,
+                this.tvFilterForm.controls['pattern']?.value,
+                this.tvFilterForm.controls['filterOperator']?.value);
             default: return new IdFilter(1);
         }
     }
@@ -414,6 +427,8 @@ export class FilmsComponent implements OnInit {
                     case 7: return new ImdbRatingsCountFilter(json['exactValue'], json['start'], json['end'], json['includingEnds'],
                         json['filterOperator']);
                     case 8: return new ReleaseDateFilter(json['exactValue'], json['start'], json['end'], json['includingEnds'],
+                        json['filterOperator']);
+                    case 9: return new TvFilter(json['hasTvDescription'], json['value'], json['pattern'],
                         json['filterOperator']);
                     default: throw console.error('not implemented');
                 }

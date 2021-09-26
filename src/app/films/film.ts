@@ -22,6 +22,7 @@ export interface Film {
     imdbUserRatingsCount?: number;
     releaseDate?: Date;
     tagline: string;
+    tvDescription?: string;
 
     imdbpageTechnicalSpecsUrl: string;
     imdbpageSoundtracksUrl: string;
