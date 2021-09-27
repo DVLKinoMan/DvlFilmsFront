@@ -22,3 +22,7 @@ table {
 .person-image {
     max-width: 20px;
 }
+
+.filterOperator {
+  max-width: 100px;
+}

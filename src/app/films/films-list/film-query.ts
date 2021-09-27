@@ -206,3 +206,17 @@ export class ShowEverythingFilter extends FilmFilter {
         super(FilmFilterType.ShowEverything, filterOperator);
     }
 }
+
+export class FilmPersonFilter extends FilmFilter {
+    public ToString(): string {
+        return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+            (this.value ? "Person Name = '" + this.value + "' " :
+                this.pattern ? "Person Pattern = '" + this.pattern + "' " : "") +
+            (!this.personId && this.gender ? "And Person Gender = '" + Gender2StringMapping[this.gender] + "' " : "") +
+            (this.profession ? "And Person Profession '" + Profession2StringMapping[this.profession] + "' " : '');
+    }
+    constructor(public personId?: number, public value?: string, public pattern?: string, public gender?: Gender, public profession?: Profession,
+        filterOperator: FilterOperator = FilterOperator.None) {
+        super(FilmFilterType.Person, filterOperator);
+    }
+}

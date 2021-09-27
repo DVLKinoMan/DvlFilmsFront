@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
     FilmOrderBy,
-    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession, WatchedFilmFilter, FilmPersonListsFilter, FilmGenresFilter, ImdbRatingFilter, ImdbRatingsCountFilter, ReleaseDateFilter, TvFilter, ShowEverythingFilter
+    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession, WatchedFilmFilter, FilmPersonListsFilter, FilmGenresFilter, ImdbRatingFilter, ImdbRatingsCountFilter, ReleaseDateFilter, TvFilter, ShowEverythingFilter, FilmPersonFilter
 } from './film-query';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { Sort } from '@angular/material/sort';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
@@ -24,6 +23,11 @@ import { FilmGenre } from '../filmGenre';
 import { GenresService } from 'src/app/common/services/genres.service';
 import { FilmOrderBy2StringMapping } from '../helpers';
 import { FilmFilterType } from '../enums';
+import { Person } from 'src/app/persons/person';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { Observable } from 'rxjs';
+import { debounceTime, startWith, switchMap } from 'rxjs/operators';
+import { PersonsService } from 'src/app/persons/services/persons.service';
 
 @Component({
     selector: 'app-films',
@@ -52,6 +56,7 @@ export class FilmsComponent implements OnInit {
     imdbRatingsCountFilterForm: FormGroup;
     releaseDateFilterForm: FormGroup;
     tvFilterForm: FormGroup;
+    personFilterForm: FormGroup;
     filters: FilmFilter[] = [];
 
     queryParams: Params;
@@ -70,19 +75,31 @@ export class FilmsComponent implements OnInit {
     allGenres: FilmGenre[] = [];
     tvDescriptions: string[] = [];
 
+    filteredPersons: Observable<Person[]>;
+    personsCtrl = new FormControl();
+    showPersons = 10;
+    @ViewChild('personInput') personInput: ElementRef<HTMLInputElement>;
+
     constructor(private service: FilmsService,
         private formBuilder: FormBuilder,
         private photosService: PhotosService,
+        private personsService: PersonsService,
         private builtInListsService: FilmBuiltInListsService,
         private listsService: ListsService,
         private genresService: GenresService,
         private watchHistoryDialog: MatDialog,
         private route: ActivatedRoute,
         private authService: AuthService,
-        private router: Router) { }
+        private router: Router) {
+        this.filteredPersons = this.personsCtrl.valueChanges.pipe(
+            startWith(''),
+            debounceTime(400),
+            switchMap((person: string) => this.personsService.getPersons(person, this.showPersons, false))
+        );
+    }
 
     ngOnInit(): void {
-        this.filterNames = ['Name', 'Type', 'Genres', 'ImdbRating', 'ImdbRatingsCount', 'ReleaseDate', 'Id',];
+        this.filterNames = ['Name', 'Type', 'Genres', 'Person', 'ImdbRating', 'ImdbRatingsCount', 'ReleaseDate', 'Id',];
         this.loadGenres();
         this.loadTvDescriptions();
         this.pageEvent = new PageEvent();
@@ -147,6 +164,14 @@ export class FilmsComponent implements OnInit {
             filterOperator: 0,
             hasTvDescription: false,
             value: ''
+        });
+        this.personFilterForm = this.formBuilder.group({
+            filterOperator: [0, Validators.required],
+            personId: '',
+            value: '',
+            pattern: '',
+            gender: '',
+            profession: 0
         });
         this.authService.user.subscribe(user => {
             this.isAuthenticated = !!user;
@@ -283,6 +308,7 @@ export class FilmsComponent implements OnInit {
             case 'ImdbRatingsCount': return this.imdbRatingsCountFilterForm;
             case 'ReleaseDate': return this.releaseDateFilterForm;
             case 'Type': return this.tvFilterForm;
+            case 'Person': return this.personFilterForm;
             default: throw new Error('filterName not implemented');
         }
     }
@@ -309,6 +335,12 @@ export class FilmsComponent implements OnInit {
                 this.personsListFilterForm.controls['gender']?.value,
                 this.personsListFilterForm.controls['profession']?.value,
                 this.personsListFilterForm.controls['filterOperator']?.value);
+            case 'Person': return new FilmPersonFilter(this.personFilterForm.controls['personId']?.value,
+                this.personFilterForm.controls['value']?.value,
+                this.personFilterForm.controls['pattern']?.value,
+                this.personFilterForm.controls['gender']?.value,
+                this.personFilterForm.controls['profession']?.value,
+                this.personFilterForm.controls['filterOperator']?.value);
             case 'Genres': return new FilmGenresFilter(this.genresFilterForm.controls['genres']?.value.map((g: FilmGenre) => g.id),
                 this.genresFilterForm.controls['genres']?.value.map((g: FilmGenre) => g.name),
                 this.genresFilterForm.controls['filterOperator']?.value);
@@ -347,6 +379,20 @@ export class FilmsComponent implements OnInit {
         this.films = [];
         this.loadData(true);
         return event;
+    }
+
+    setDefaultProfilePicture(event: any, person: Person) {
+        if (typeof person.sex == "string")
+            event.target.src = person.sex == "Female" ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+        else event.target.src = person.sex == Gender.Female ? 'assets/DefaultPersonFemale.png' : 'assets/DefaultPersonMale.png'
+    }
+
+    selectedPerson(event: MatAutocompleteSelectedEvent): void {
+        this.personInput.nativeElement.value = '';
+        this.personsCtrl.setValue(null);
+        this.personFilterForm.controls["personId"].setValue(event.option.value.id);
+        this.personFilterForm.controls["value"].setValue(event.option.value.name);
+        this.personFilterForm.controls["pattern"].setValue(event.option.value.name);
     }
 
     addFilter() {
@@ -460,6 +506,8 @@ export class FilmsComponent implements OnInit {
                         json['filterOperator']);
                     case 9: return new TvFilter(json['hasTvDescription'], json['value'], json['filterOperator']);
                     case 10: return new ShowEverythingFilter(json['show'], json['filterOperator']);
+                    case 11: return new FilmPersonFilter(json['personId'], json['value'], json['pattern'], json['gender'], json['profession'],
+                        json['filterOperator']);
                     default: throw console.error('not implemented');
                 }
         }

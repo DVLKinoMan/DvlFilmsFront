@@ -23,7 +23,7 @@
         </td>
         <td>
             <form [formGroup]="idFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Id'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="filterOperator">
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
@@ -37,7 +37,7 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="nameFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Name'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill"  class="filterOperator">
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
@@ -55,7 +55,7 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="favoritePersonsFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'FavPersons'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="filterOperator" >
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
@@ -79,7 +79,7 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="watchedFilmsFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'WatchedFilms'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill"  class="filterOperator">
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
@@ -98,7 +98,7 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="personsListFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'PersonLists'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="filterOperator" >
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
@@ -133,7 +133,7 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="genresFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Genres'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="filterOperator" >
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
@@ -149,7 +149,7 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="imdbRatingsFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'ImdbRating'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill"  class="filterOperator">
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
@@ -171,7 +171,7 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="imdbRatingsCountFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'ImdbRatingsCount'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill"  class="filterOperator">
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
@@ -193,7 +193,7 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="releaseDateFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'ReleaseDate'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill"  class="filterOperator">
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
@@ -224,7 +224,7 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
             <form [formGroup]="tvFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Type'">
-                <mat-form-field *ngIf="filters.length!=0" appearance="fill" >
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill"  class="filterOperator">
                     <mat-label>FilterOperator</mat-label><br>
                     <mat-select formControlName="filterOperator" panelClass="example-panel-black">
                         <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
@@ -236,6 +236,56 @@
                     <mat-label>Description</mat-label>
                     <mat-select formControlName="value" panelClass="example-panel-black">
                         <mat-option *ngFor="let tvDescription of tvDescriptions" [value]="tvDescription">{{tvDescription}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-button color="primary" type="submit">Add Filter</button>
+            </form>
+             <form [formGroup]="personFilterForm" (ngSubmit)="addFilter()" *ngIf="selectedFilter == 'Person'">
+                <mat-form-field *ngIf="filters.length!=0" appearance="fill" class="filterOperator">
+                    <mat-label>FilterOperator</mat-label><br>
+                    <mat-select formControlName="filterOperator" panelClass="example-panel-black">
+                        <mat-option *ngFor="let filterOperator of filterOperators; let i=index" 
+                        [value]="i+1">{{filterOperator}}</mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                <mat-form-field>
+                    <input matInput
+                    #personInput 
+                    placeholder="Choose Existed Person"
+                    [formControl]="personsCtrl"
+                    [matAutocomplete]="autoForPersons">
+                    <mat-icon>search</mat-icon>
+                </mat-form-field>
+                <mat-autocomplete #autoForPersons="matAutocomplete" (optionSelected)="selectedPerson($event)">
+                    <mat-option *ngFor="let person of filteredPersons | async" 
+                        [value]="person">
+                        <img class="person-image" 
+                        [src]="'data:image/png;base64,' + person.profilePicture?.image" 
+                        [alt]="person.profilePicture?.title" 
+                        (error)="setDefaultProfilePicture($event, person)">
+                        {{person.name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-form-field *ngIf="false" >
+                    <mat-label for="value">Exact Name:</mat-label>
+                    <input id="value" formControlName="value" matInput>
+                </mat-form-field>
+                <mat-form-field >
+                    <mat-label for="pattern">Name Contains:</mat-label>
+                    <input id="pattern" formControlName="pattern" matInput>
+                </mat-form-field>
+                <mat-form-field class="filterOperator" >
+                    <mat-label>Gender:</mat-label><br>
+                    <mat-select formControlName="gender" panelClass="example-panel-black">
+                        <mat-option *ngFor="let gender of genders" 
+                        [value]="gender">{{gender2StringMapping[gender]}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="filterOperator" >
+                    <mat-label>Profession:</mat-label><br>
+                    <mat-select formControlName="profession" panelClass="example-panel-black" >
+                        <mat-option *ngFor="let profession of professions" 
+                        [value]="profession">{{profession2StringMapping[profession]}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <button mat-button color="primary" type="submit">Add Filter</button>

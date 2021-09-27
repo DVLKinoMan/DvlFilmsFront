@@ -10,5 +10,6 @@ export enum FilmFilterType {
     ImdbRatingsCount,
     ReleaseDate,
     TvDescription,
-    ShowEverything
+    ShowEverything,
+    Person
 }
