@@ -327,7 +327,7 @@ export class FilmsComponent implements OnInit {
                 this.releaseDateFilterForm.controls['end']?.value,
                 true,
                 this.releaseDateFilterForm.controls['filterOperator']?.value);
-            case 'Type': return new TvFilter(this.tvFilterForm.controls['hasTvDescrption']?.value == 'true' ||
+            case 'Type': return new TvFilter(this.tvFilterForm.controls['hasTvDescrption']?.value ||
                 this.tvFilterForm.controls['value']?.value != undefined,
                 this.tvFilterForm.controls['value']?.value,
                 this.tvFilterForm.controls['filterOperator']?.value);
