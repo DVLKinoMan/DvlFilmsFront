@@ -194,3 +194,15 @@ export class TvFilter extends FilmFilter {
         super(FilmFilterType.TvDescription, filterOperator);
     }
 }
+
+export class ShowEverythingFilter extends FilmFilter {
+
+    public ToString(): string {
+        return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+            (this.show == true ? "Show Everything" : "Do not show Eveyrthing");
+    }
+    constructor(public show: boolean,
+        filterOperator: FilterOperator = FilterOperator.None) {
+        super(FilmFilterType.ShowEverything, filterOperator);
+    }
+}

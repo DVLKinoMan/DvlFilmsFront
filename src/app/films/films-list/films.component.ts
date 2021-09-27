@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
     FilmOrderBy,
-    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession, WatchedFilmFilter, FilmPersonListsFilter, FilmGenresFilter, ImdbRatingFilter, ImdbRatingsCountFilter, ReleaseDateFilter, TvFilter
+    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession, WatchedFilmFilter, FilmPersonListsFilter, FilmGenresFilter, ImdbRatingFilter, ImdbRatingsCountFilter, ReleaseDateFilter, TvFilter, ShowEverythingFilter
 } from './film-query';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
@@ -23,6 +23,7 @@ import { ListsService } from 'src/app/lists/services/lists.service';
 import { FilmGenre } from '../filmGenre';
 import { GenresService } from 'src/app/common/services/genres.service';
 import { FilmOrderBy2StringMapping } from '../helpers';
+import { FilmFilterType } from '../enums';
 
 @Component({
     selector: 'app-films',
@@ -56,6 +57,7 @@ export class FilmsComponent implements OnInit {
     queryParams: Params;
 
     isAuthenticated = false;
+    showEverything = false;
     profession2StringMapping = Profession2StringMapping;
     gender2StringMapping = Gender2StringMapping;
     genders: Gender[] = [Gender.Unknown, Gender.Male, Gender.Female];
@@ -352,9 +354,28 @@ export class FilmsComponent implements OnInit {
 
     clearFilters() {
         this.filters = [];
+        this.showEverything = false;
+        this.onChangeShowEverything();
+    }
+
+    onChangeShowEverything() {
+        // this.showEverything = !this.showEverything;
+        if (this.showEverything) {
+            var index = this.filters.findIndex(filter => filter.filterType == FilmFilterType.ShowEverything);
+            if (index >= 0)
+                this.filters.splice(index, 1);
+        }
+        else {
+            this.filters.push(new ShowEverythingFilter(false, this.filters.length == 0 ? FilterOperator.None : FilterOperator.And));
+        }
     }
 
     deleteFilter(index: number) {
+        if (this.filters[index].filterType == FilmFilterType.ShowEverything) {
+            this.showEverything = true;
+            this.onChangeShowEverything();
+            return;
+        }
         this.filters.splice(index, 1);
         if (index == 0 && this.filters.length > 0)
             this.filters[0].filterOperator = FilterOperator.None;
@@ -430,6 +451,7 @@ export class FilmsComponent implements OnInit {
                         json['filterOperator']);
                     case 9: return new TvFilter(json['hasTvDescription'], json['value'], json['pattern'],
                         json['filterOperator']);
+                    case 10: return new ShowEverythingFilter(json['show'], json['filterOperator']);
                     default: throw console.error('not implemented');
                 }
         }
@@ -461,6 +483,11 @@ export class FilmsComponent implements OnInit {
             return;
         }
         this.filters = query.filmFilters;
+        var showFilter = this.filters.find(filter => filter.filterType == FilmFilterType.ShowEverything);
+        if (showFilter)
+            this.showEverything = true;
+        else
+            this.filters.push(new ShowEverythingFilter(false, this.filters.length == 0 ? FilterOperator.None : FilterOperator.And));
         this.orderAscending = query.orderByAscending;
         this.filmOrderBy = query.orderBy;
         this.films = [];
