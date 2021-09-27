@@ -108,4 +108,10 @@ export class FilmsService {
             params: params
         })
     }
+
+    getTvDescriptions(): Observable<string[]> {
+        var url = this.baseUrl + "/Films/Get/TvDescriptions";
+
+        return this.http.get<string[]>(url);
+    }
 }

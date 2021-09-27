@@ -68,6 +68,7 @@ export class FilmsComponent implements OnInit {
     myLists: List[] = [];
 
     allGenres: FilmGenre[] = [];
+    tvDescriptions: string[] = [];
 
     constructor(private service: FilmsService,
         private formBuilder: FormBuilder,
@@ -81,8 +82,9 @@ export class FilmsComponent implements OnInit {
         private router: Router) { }
 
     ngOnInit(): void {
-        this.filterNames = ['Id', 'Name', 'Genres', 'ImdbRating', 'ImdbRatingsCount', 'ReleaseDate', 'TvDescription'];
+        this.filterNames = ['Name', 'Type', 'Genres', 'ImdbRating', 'ImdbRatingsCount', 'ReleaseDate', 'Id',];
         this.loadGenres();
+        this.loadTvDescriptions();
         this.pageEvent = new PageEvent();
         this.pageEvent.pageIndex = this.defaultPageIndex;
         this.pageEvent.pageSize = this.defaultPageSize;
@@ -144,8 +146,7 @@ export class FilmsComponent implements OnInit {
         this.tvFilterForm = this.formBuilder.group({
             filterOperator: 0,
             hasTvDescription: false,
-            value: '',
-            pattern: ''
+            value: ''
         });
         this.authService.user.subscribe(user => {
             this.isAuthenticated = !!user;
@@ -177,6 +178,12 @@ export class FilmsComponent implements OnInit {
     loadGenres() {
         this.genresService.getAllGenres().subscribe(res => {
             this.allGenres = res;
+        }, error => console.log(error));
+    }
+
+    loadTvDescriptions() {
+        this.service.getTvDescriptions().subscribe(res => {
+            this.tvDescriptions = res;
         }, error => console.log(error));
     }
 
@@ -275,7 +282,7 @@ export class FilmsComponent implements OnInit {
             case 'ImdbRating': return this.imdbRatingsFilterForm;
             case 'ImdbRatingsCount': return this.imdbRatingsCountFilterForm;
             case 'ReleaseDate': return this.releaseDateFilterForm;
-            case 'TvDescription': return this.tvFilterForm;
+            case 'Type': return this.tvFilterForm;
             default: throw new Error('filterName not implemented');
         }
     }
@@ -320,10 +327,9 @@ export class FilmsComponent implements OnInit {
                 this.releaseDateFilterForm.controls['end']?.value,
                 true,
                 this.releaseDateFilterForm.controls['filterOperator']?.value);
-            case 'TvDescription': return new TvFilter(this.tvFilterForm.controls['hasTvDescrption']?.value == 'true' ||
-                this.tvFilterForm.controls['value']?.value != undefined || this.tvFilterForm.controls['pattern']?.value != undefined,
+            case 'Type': return new TvFilter(this.tvFilterForm.controls['hasTvDescrption']?.value == 'true' ||
+                this.tvFilterForm.controls['value']?.value != undefined,
                 this.tvFilterForm.controls['value']?.value,
-                this.tvFilterForm.controls['pattern']?.value,
                 this.tvFilterForm.controls['filterOperator']?.value);
             default: return new IdFilter(1);
         }
@@ -347,7 +353,12 @@ export class FilmsComponent implements OnInit {
         if (!this.selectedFilter)
             return;
 
-        this.filters.push(this.getFilter(this.selectedFilter));
+        var filter = this.getFilter(this.selectedFilter);
+        if (filter.filterType == FilmFilterType.TvDescription) {
+            this.showEverything = true;
+            this.onChangeShowEverything();
+        }
+        this.filters.push(filter);
         this.clearForm(this.selectedFilter);
         this.selectedFilter = 'none';
     }
@@ -360,19 +371,17 @@ export class FilmsComponent implements OnInit {
 
     onChangeShowEverything() {
         // this.showEverything = !this.showEverything;
-        if (this.showEverything) {
-            var index = this.filters.findIndex(filter => filter.filterType == FilmFilterType.ShowEverything);
-            if (index >= 0)
-                this.filters.splice(index, 1);
+        var filter = this.filters.find(filter => filter.filterType == FilmFilterType.ShowEverything);
+        if (filter) {
+            var k = filter as ShowEverythingFilter;
+            k.show = this.showEverything;
         }
-        else {
-            this.filters.push(new ShowEverythingFilter(false, this.filters.length == 0 ? FilterOperator.None : FilterOperator.And));
-        }
+        else this.filters.push(new ShowEverythingFilter(this.showEverything, this.filters.length == 0 ? FilterOperator.None : FilterOperator.And));
     }
 
     deleteFilter(index: number) {
         if (this.filters[index].filterType == FilmFilterType.ShowEverything) {
-            this.showEverything = true;
+            this.showEverything = false;
             this.onChangeShowEverything();
             return;
         }
@@ -449,8 +458,7 @@ export class FilmsComponent implements OnInit {
                         json['filterOperator']);
                     case 8: return new ReleaseDateFilter(json['exactValue'], json['start'], json['end'], json['includingEnds'],
                         json['filterOperator']);
-                    case 9: return new TvFilter(json['hasTvDescription'], json['value'], json['pattern'],
-                        json['filterOperator']);
+                    case 9: return new TvFilter(json['hasTvDescription'], json['value'], json['filterOperator']);
                     case 10: return new ShowEverythingFilter(json['show'], json['filterOperator']);
                     default: throw console.error('not implemented');
                 }
@@ -484,10 +492,11 @@ export class FilmsComponent implements OnInit {
         }
         this.filters = query.filmFilters;
         var showFilter = this.filters.find(filter => filter.filterType == FilmFilterType.ShowEverything);
-        if (showFilter)
-            this.showEverything = true;
-        else
-            this.filters.push(new ShowEverythingFilter(false, this.filters.length == 0 ? FilterOperator.None : FilterOperator.And));
+        if (showFilter) {
+            var k = showFilter as ShowEverythingFilter;
+            this.showEverything = k.show;
+        }
+        this.onChangeShowEverything();
         this.orderAscending = query.orderByAscending;
         this.filmOrderBy = query.orderBy;
         this.films = [];
