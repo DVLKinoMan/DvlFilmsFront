@@ -213,7 +213,7 @@ export class PersonEditDialogComponent {
     setModel(person: Person) {
         this.data.personName = person.name;
         this.model = person;
-        this.alternateNames = [...new Set(person.alternateNames.map(item => item.name))];
+        this.alternateNames = [...new Set(person.alternateNames?.map(item => item.name))];
     }
 
     fetchPerson() {
