@@ -23,14 +23,6 @@ export class Person {
     photos?: Photo[];
     alternateNames?: AlternateName[];
 
-    imdbpageMoreAwardsUrl?: string;
-    imdbpageMoreBiographyUrl?: string;
-    imdbpageRelatedNewsArticlesUrl?: string;
-    imdbpageMorePhotosUrl?: string;
-    imdbpageMoreOfficialSitesUrl?: string;
-    imdbpageMoreOtherWorksUrl?: string;
-    imdbpageMorePublicityListingsUrl?: string;
-
     isFavorite: boolean;
 }
 

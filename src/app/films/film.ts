@@ -24,26 +24,6 @@ export interface Film {
     tagline: string;
     tvDescription?: string;
 
-    imdbpageTechnicalSpecsUrl: string;
-    imdbpageSoundtracksUrl: string;
-    imdbpageParentGuidesUrl: string;
-    imdbpageConnectionsUrl: string;
-    imdbpageQuotesUrl: string;
-    imdbpageGoofsUrl: string;
-    imdbpageTriviasUrl: string;
-    imdbpageFaqsUrl: string;
-    imdbpagePlotSummaryUrl: string;
-    imdbpageMoreAwardsUrl: string;
-    imdbpageRatingsUrl: string;
-    imdbpageMoreReleaseDatesAndAlsoKnownAsUrl: string;
-    imdbpageMoreTaglinesUrl: string;
-    imdbpageCompaniesUrl: string;
-    imdbpageFullCastAndCrewUrl: string;
-    imdbpageMoreFilmingLocatoinsUrl: string;
-    imdbpageMorePhotosUrl: string;
-    imdbpageMoreOfficialSitesUrl: string;
-    imdbpageMorePlotKeywordsUrl: string;
-
     photo?: Photo;
     boxOffice?: BoxOffice;
     genres?: FilmGenre[];
