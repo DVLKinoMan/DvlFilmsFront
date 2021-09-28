@@ -23,7 +23,7 @@ export class PersonEditDialogComponent {
     model: Person;
     dbPerson: Person;
     alternateNames: string[];
-    genders: any[] = [Gender.Unknown, Gender.Male, Gender.Female];
+    genders: Gender[] = [Gender.Unknown, Gender.Male, Gender.Female];
     gender2StringMapping = Gender2StringMapping;
 
     groupedFilmography: Map<string, Filmography[]>;
