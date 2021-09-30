@@ -25,6 +25,8 @@ import { FilmCastMember } from "./film-cast-crew/filmCastMember";
 import { FilmCrewMember } from "./film-cast-crew/filmCrewMember";
 import { FilmPersonDialogComponent } from "./film-person/film-person.dialog.component";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { FilmFetcherService } from "../services/film-fetcher.service";
+import { MovieIncludingProperty } from "../enums";
 
 @Component({
     selector: 'app-film-edit',
@@ -71,6 +73,7 @@ export class FilmEditDialogComponent {
     constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData,
         public dialogRef: MatDialogRef<FilmEditDialogComponent>,
         private filmService: FilmsService,
+        private filmFetcherService: FilmFetcherService,
         private photosService: PhotosService,
         private companiesService: CompaniesService,
         private genresService: GenresService,
@@ -241,6 +244,22 @@ export class FilmEditDialogComponent {
         this.model.directors.forEach((dr, ind) => {
             dr.index = ind + 1;
         });
+    }
+
+    fetchFilm() {
+        this.loading = true;
+        this.filmFetcherService.getByUrl(this.model.imdbPageUrl,
+            MovieIncludingProperty.DetAkasAndReleaseDates | MovieIncludingProperty.DetFullCastAndCrew).subscribe(res => {
+                this.loading = false;
+                this.model = res;
+            }, error => {
+                console.log(error);
+                this.loading = false;
+            });
+    }
+
+    restoreFilm() {
+
     }
 
     onFileSelected() {

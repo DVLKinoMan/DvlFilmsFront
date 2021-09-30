@@ -1,7 +1,18 @@
 <h1 mat-dialog-title>{{data.filmName}} Edit</h1>
 <mat-dialog-content>
     <mat-tab-group>
-        <mat-tab label="Main">
+        <mat-tab label="Main"> 
+        <span>Fetch Film from Imdb </span>
+        <button mat-mini-fab 
+            (click)="fetchFilm()"
+            title="Fetch from Imdb">
+                <mat-icon>get_app</mat-icon>
+        </button>
+        <button mat-mini-fab
+            [title]="'Restore'"
+            (click)="restoreFilm()">
+                <mat-icon>restore</mat-icon>
+        </button>
             <mat-spinner *ngIf="loading"></mat-spinner>
                 <div class="little-stats">
                     <div id="poster">
