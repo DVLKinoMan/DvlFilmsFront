@@ -128,6 +128,7 @@ export class FilmEditDialogComponent {
             console.log('The dialog was closed');
             if (result) {
                 this.allCast = result.cast;
+                this.allCast.sort((c1, c2) => c1.index - c2.index);
                 this.model.cast = result.cast;
                 this.crew = result.crew;
                 this.model.crew = result.crew;
@@ -261,6 +262,11 @@ export class FilmEditDialogComponent {
                 this.loading = false;
                 this.dbFilm = this.model;
                 this.model = res;
+                this.model.id = this.dbFilm.id;
+                this.model.sourceId = this.dbFilm.sourceId;
+                this.model.photos = this.dbFilm.photos;
+                if (this.model.boxOffice)
+                    this.model.boxOffice.id = this.dbFilm.boxOffice?.id;
                 this.mergeCast();
                 this.mergeCrew();
                 this.mergeDirectors();
@@ -487,6 +493,7 @@ export class FilmEditDialogComponent {
         if (!this.dbFilm)
             return;
 
+        var notExistedComps: Company[] = [];
         this.model.companies.forEach(company => {
             company.filmId = this.dbFilm.id;
             var dbC = this.dbFilm.companies?.find(c => c.name == company.name);
@@ -498,8 +505,14 @@ export class FilmEditDialogComponent {
                 var g1 = this.companies?.find(g2 => company.name == g2.name);
                 if (g1)
                     company.id = g1.id;
+                else notExistedComps.push(company);
             }
-        })
+        });
+
+        notExistedComps.forEach(comp => {
+            var index = this.model.companies.indexOf(comp);
+            this.model.companies.splice(index, 1);
+        });
     }
 
     mergeCountries() {
@@ -559,6 +572,8 @@ export class FilmEditDialogComponent {
             else newWriters.push(wr.imdbName);
         });
 
+        this.model.writers.sort((d1, d2) => d1.index - d2.index);
+
         if (newWriters.length != 0) {
             var chunks = 50;
             for (var i = 0; i < newWriters.length; i += chunks + 1) {
@@ -604,6 +619,8 @@ export class FilmEditDialogComponent {
             }
             else newDirectors.push(wr.imdbName);
         });
+
+        this.model.directors.sort((d1, d2) => d1.index - d2.index);
 
         if (newDirectors.length != 0) {
             var chunks = 50;
@@ -661,6 +678,7 @@ export class FilmEditDialogComponent {
         });
 
         this.allCast = this.model.cast;
+        this.allCast.sort((c1, c2) => c1.index - c2.index);
 
         if (newCast.length != 0) {
             var chunks = 50;
@@ -702,21 +720,29 @@ export class FilmEditDialogComponent {
             return;
 
         var newCrew: string[] = [];
-        this.model.crew.forEach(c => {
+        var crewNotExistedProfessions: FilmCrewMember[] = [];
+        this.model.crew?.forEach(c => {
             c.filmId = this.dbFilm.id;
             var dbCrew = this.dbFilm.crew?.find(c1 => c1.imdbName == c.imdbName);
-            var prof = this.professions.find(p => p.name == c.name);
-            if (prof)
+            var prof = this.professions.find(p => p.name == c.profession);
+            if (prof) {
                 c.proffessionId = prof.id;
-            if (dbCrew) {
-                c.id = dbCrew.id;
-                c.filmCrewMemberId = dbCrew.filmCrewMemberId;
-                if (c.profession == dbCrew.profession)
-                    c.proffessionId = dbCrew.proffessionId;
+                if (dbCrew) {
+                    c.id = dbCrew.id;
+                    c.filmCrewMemberId = dbCrew.filmCrewMemberId;
+                    if (c.profession == dbCrew.profession)
+                        c.proffessionId = dbCrew.proffessionId;
+                }
+                else newCrew.push(c.imdbName);
             }
-            else newCrew.push(c.imdbName);
+            else
+                crewNotExistedProfessions.push(c);
         });
 
+        crewNotExistedProfessions.forEach(c => {
+            var index = this.model.crew.indexOf(c);
+            this.model.crew.splice(index, 1);
+        });
         this.crew = this.model.crew;
 
         if (newCrew.length != 0) {
@@ -727,6 +753,7 @@ export class FilmEditDialogComponent {
     loadCast() {
         this.filmService.getCast(this.model.id).subscribe(result => {
             this.allCast = result;
+            this.allCast.sort((c1, c2) => c1.index - c2.index);
             this.model.cast = result;
             this.loadCastPage();
         }, error => console.log(error));
