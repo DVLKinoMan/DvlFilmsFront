@@ -27,6 +27,7 @@ import { FilmPersonDialogComponent } from "./film-person/film-person.dialog.comp
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { FilmFetcherService } from "../services/film-fetcher.service";
 import { MovieIncludingProperty } from "../enums";
+import { PersonsService } from "src/app/persons/services/persons.service";
 
 @Component({
     selector: 'app-film-edit',
@@ -36,6 +37,7 @@ import { MovieIncludingProperty } from "../enums";
 
 export class FilmEditDialogComponent {
     model: Film;
+    dbFilm: Film;
     anotherNames: string[];
 
     crew: FilmCrewMember[];
@@ -73,6 +75,7 @@ export class FilmEditDialogComponent {
     constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData,
         public dialogRef: MatDialogRef<FilmEditDialogComponent>,
         private filmService: FilmsService,
+        private personService: PersonsService,
         private filmFetcherService: FilmFetcherService,
         private photosService: PhotosService,
         private companiesService: CompaniesService,
@@ -196,6 +199,7 @@ export class FilmEditDialogComponent {
                     name: result.name,
                     filmId: this.model.id,
                     imdbPageUrl: result.imdbPageUrl,
+                    imdbName: result.imdbName,
                     profilePicture: result.profilePicture,
                     sex: result.sex,
                     index: this.model.directors.length
@@ -221,6 +225,7 @@ export class FilmEditDialogComponent {
                     name: result.name,
                     filmId: this.model.id,
                     imdbPageUrl: result.imdbPageUrl,
+                    imdbName: result.imdbName,
                     profilePicture: result.profilePicture,
                     sex: result.sex,
                     index: this.model.writers.length
@@ -251,7 +256,15 @@ export class FilmEditDialogComponent {
         this.filmFetcherService.getByUrl(this.model.imdbPageUrl,
             MovieIncludingProperty.DetAkasAndReleaseDates | MovieIncludingProperty.DetFullCastAndCrew).subscribe(res => {
                 this.loading = false;
+                this.dbFilm = this.model;
                 this.model = res;
+                this.mergeCast();
+                this.mergeDirectors();
+                this.mergeWriters();
+                this.mergeCountries();
+                this.mergeCompanies();
+                this.mergeGenres();
+                this.mergeAnotherNames();
             }, error => {
                 console.log(error);
                 this.loading = false;
@@ -259,7 +272,10 @@ export class FilmEditDialogComponent {
     }
 
     restoreFilm() {
-
+        this.model = this.dbFilm;
+        this.allCast = this.model.cast;
+        this.loadCastPage();
+        this.crew = this.model.crew;
     }
 
     onFileSelected() {
@@ -442,6 +458,263 @@ export class FilmEditDialogComponent {
                         this.model.photos = result;
                     }, error => console.log(error));
             }, error => console.log(error));
+    }
+
+    mergeGenres() {
+        if (!this.dbFilm)
+            return;
+
+        this.model.genres.forEach(g => {
+            g.filmId = this.dbFilm.id;
+            var dbG = this.dbFilm.genres?.find(g1 => g1.name == g.name);
+            if (dbG) {
+                g.id = dbG.id;
+                g.filmGenreId = dbG.filmGenreId;
+            }
+            else {
+                var g1 = this.genres?.find(g2 => g.name == g2.name);
+                if (g1)
+                    g.id = g1.id;
+            }
+        })
+    }
+
+    mergeCompanies() {
+        if (!this.dbFilm)
+            return;
+
+        this.model.companies.forEach(company => {
+            company.filmId = this.dbFilm.id;
+            var dbC = this.dbFilm.companies?.find(c => c.name == company.name);
+            if (dbC) {
+                company.id = dbC.id;
+                company.filmCompanyId = dbC.filmCompanyId;
+            }
+            else {
+                var g1 = this.companies?.find(g2 => company.name == g2.name);
+                if (g1)
+                    company.id = g1.id;
+            }
+        })
+    }
+
+    mergeCountries() {
+        if (!this.dbFilm)
+            return;
+
+        this.model.countries.forEach(country => {
+            country.filmId = this.dbFilm.id;
+            var dbC = this.dbFilm.countries?.find(c => c.name == country.name);
+            if (dbC) {
+                country.id = dbC.id;
+                country.filmCountryId = dbC.filmCountryId;
+            }
+            else {
+                var g1 = this.countries?.find(g2 => country.name == g2.name);
+                if (g1)
+                    country.id = g1.id;
+            }
+        });
+    }
+
+    mergeAnotherNames() {
+        if (!this.dbFilm)
+            return;
+
+        this.anotherNames = [...new Set(this.model.anotherNames.map(item => item.name))];
+        this.model.anotherNames.forEach(anotherName => {
+            anotherName.filmId = this.dbFilm.id;
+            var dbAnotherName = this.dbFilm.anotherNames?.find(c => c.name == anotherName.name && c.country.name == anotherName.country.name);
+            if (dbAnotherName) {
+                anotherName.id = dbAnotherName.id;
+                anotherName.country.id = dbAnotherName.country.id;
+            }
+            else {
+                var c1 = this.countries?.find(c => anotherName.country.name == c.name);
+                if (c1)
+                    anotherName.country.id = c1.id;
+            }
+        });
+    }
+
+    mergeWriters() {
+        if (!this.dbFilm)
+            return;
+
+        var newWriters: string[] = [];
+        this.model.writers.forEach(wr => {
+            var dbWr = this.dbFilm.writers?.find(w => w.imdbName == wr.imdbName);
+            wr.filmId = this.dbFilm.id;
+            if (dbWr) {
+                wr.id = dbWr.id;
+                wr.filmPersonId = dbWr.filmPersonId;
+                wr.personItemWithNameAndUrlId = dbWr.personItemWithNameAndUrlId;
+                wr.profilePicture = dbWr.profilePicture;
+                wr.sex = dbWr.sex;
+            }
+            else newWriters.push(wr.imdbName);
+        });
+
+        if (newWriters.length != 0) {
+            var chunks = 50;
+            for (var i = 0; i < newWriters.length; i += chunks + 1) {
+                var chunkedNames = newWriters.slice(i, i + chunks);
+                this.personService.getPersonsWithImdbNames(chunkedNames).subscribe(res => {
+                    res.forEach(r => {
+                        var c1 = this.model.writers.find(c => c.imdbName == r.imdbname);
+                        if (c1) {
+                            c1.sex = r.sex;
+                            c1.profilePicture = r.profilePicture;
+                            c1.name = r.name;
+                        }
+                    });
+                }, error => console.log(error));
+            }
+            for (var i = 0; i < newWriters.length; i += chunks + 1) {
+                var chunkedNames = newWriters.slice(i, i + chunks);
+                this.personService.getPersonItemsWithNameAndUrlsWithImdbNames(chunkedNames).subscribe(res => {
+                    res.forEach(r => {
+                        var c1 = this.model.writers?.find(c => c.imdbName == r.imdbName);
+                        if (c1)
+                            c1.personItemWithNameAndUrlId = r.id;
+                    });
+                }, error => console.log(error));
+            }
+        }
+    }
+
+    mergeDirectors() {
+        if (!this.dbFilm)
+            return;
+
+        var newDirectors: string[] = [];
+        this.model.directors.forEach(wr => {
+            var dbWr = this.dbFilm.directors?.find(w => w.imdbName == wr.imdbName);
+            wr.filmId = this.dbFilm.id;
+            if (dbWr) {
+                wr.id = dbWr.id;
+                wr.filmPersonId = dbWr.filmPersonId;
+                wr.personItemWithNameAndUrlId = dbWr.personItemWithNameAndUrlId;
+                wr.profilePicture = dbWr.profilePicture;
+                wr.sex = dbWr.sex;
+            }
+            else newDirectors.push(wr.imdbName);
+        });
+
+        if (newDirectors.length != 0) {
+            var chunks = 50;
+            for (var i = 0; i < newDirectors.length; i += chunks + 1) {
+                var chunkedNames = newDirectors.slice(i, i + chunks);
+                this.personService.getPersonsWithImdbNames(chunkedNames).subscribe(res => {
+                    res.forEach(r => {
+                        var c1 = this.model.directors?.find(c => c.imdbName == r.imdbname);
+                        if (c1) {
+                            c1.sex = r.sex;
+                            c1.profilePicture = r.profilePicture;
+                            c1.name = r.name;
+                        }
+                    });
+                }, error => console.log(error));
+            }
+            for (var i = 0; i < newDirectors.length; i += chunks + 1) {
+                var chunkedNames = newDirectors.slice(i, i + chunks);
+                this.personService.getPersonItemsWithNameAndUrlsWithImdbNames(chunkedNames).subscribe(res => {
+                    res.forEach(r => {
+                        var c1 = this.model.writers?.find(c => c.imdbName == r.imdbName);
+                        if (c1)
+                            c1.personItemWithNameAndUrlId = r.id;
+                    });
+                }, error => console.log(error));
+            }
+        }
+    }
+
+    mergeCast() {
+        if (!this.dbFilm)
+            return;
+
+        var newCast: string[] = [];
+        this.model.cast.forEach(c => {
+            c.filmId = this.dbFilm.id;
+            var dbCast = this.dbFilm.cast?.find(c1 => c1.imdbName == c.imdbName);
+            if (dbCast) {
+                c.gender = dbCast.gender;
+                c.id = dbCast.id;
+                c.personId = dbCast.personId;
+                c.personItemWithNameAndUrlId = dbCast.personItemWithNameAndUrlId;
+                c.profilePicture = dbCast.profilePicture;
+                c.characters.forEach(ch => {
+                    ch.filmCastMemberId = dbCast.id;
+                    var dbCh = dbCast.characters?.find(ch1 => ch1.name == ch.name);
+                    if (dbCh) {
+                        ch.id = dbCh.id;
+                        ch.filmCharacterId = dbCh.filmCharacterId;
+                        ch.personFilmogbraphyId = dbCh.personFilmogbraphyId;
+                    }
+                });
+            }
+            else newCast.push(c.imdbName);
+        });
+
+        this.allCast = this.model.cast;
+
+        if (newCast.length != 0) {
+            var chunks = 50;
+            for (var i = 0; i < newCast.length; i += chunks + 1) {
+                var chunkedNames = newCast.slice(i, i + chunks);
+                this.personService.getPersonsWithImdbNames(chunkedNames).subscribe(res => {
+                    res.forEach(r => {
+                        var c1 = this.model.cast?.find(c => c.imdbName == r.imdbname);
+                        if (c1) {
+                            c1.personId = r.id;
+                            c1.gender = r.sex;
+                            c1.profilePicture = r.profilePicture;
+                            c1.name = r.name;
+                        }
+                    });
+                    // if (i + chunks + 1 >= newCast.length) {
+                    //     this.allCast = this.model.cast;
+                    // }
+                    this.loadCastPage();
+                }, error => console.log(error));
+            }
+            //todo: if casts where found it is not necessary to fetch this
+            for (var i = 0; i < newCast.length; i += chunks + 1) {
+                var chunkedNames = newCast.slice(i, i + chunks);
+                this.personService.getPersonItemsWithNameAndUrlsWithImdbNames(chunkedNames).subscribe(res => {
+                    res.forEach(r => {
+                        var c1 = this.model.cast?.find(c => c.imdbName == r.imdbName);
+                        if (c1)
+                            c1.personItemWithNameAndUrlId = r.id;
+                    });
+                    this.loadCastPage();
+                }, error => console.log(error));
+            }
+        }
+    }
+
+    mergeCrew() {
+        if (!this.dbFilm)
+            return;
+
+        var newCrew: string[] = [];
+        this.model.crew.forEach(c => {
+            c.filmId = this.dbFilm.id;
+            var dbCrew = this.dbFilm.crew?.find(c1 => c1.imdbName == c.imdbName);
+            if (dbCrew) {
+                c.id = dbCrew.id;
+                c.filmCrewMemberId = dbCrew.filmCrewMemberId;
+                if (c.profession == dbCrew.profession)
+                    c.proffessionId = dbCrew.proffessionId;
+            }
+            else newCrew.push(c.imdbName);
+        });
+
+        this.crew = this.model.crew;
+
+        if (newCrew.length != 0) {
+            //todo
+        }
     }
 
     loadCast() {

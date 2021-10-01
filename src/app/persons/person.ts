@@ -63,6 +63,11 @@ export class Character {
     description?: string;
 }
 
+export class PersonItem {
+    id: string;
+    imdbName: string;
+}
+
 // export class PersonItem {
 //     id?: number;
 //     name: string;

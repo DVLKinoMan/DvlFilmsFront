@@ -1,10 +1,11 @@
 import { Inject, Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { FilmItem, Filmography, Person } from "../person";
+import { FilmItem, Filmography, Person, PersonItem } from "../person";
 import { Observable } from "rxjs";
 import { PersonsQuery } from "../persons-list/person-query";
 import { PersonAwardResult } from "../person-edit/person-awards/personAwardResult";
 import { Helpers } from "src/app/common/helpers";
+import { FilmPerson } from "src/app/films/film";
 
 @Injectable({
     providedIn: 'root',
@@ -109,5 +110,23 @@ export class PersonsService {
         return this.http.get<Person[]>(url, {
             params: params
         })
+    }
+
+    getPersonsWithImdbNames(imdbNames: string[]): Observable<Person[]> {
+        var url = this.baseUrl + "/Persons/Get/PersonsWithImdbNames";
+        let params = new HttpParams();
+        imdbNames.forEach(function (name) {
+            params = params.append("imdbNames", name);
+        })
+        return this.http.get<Person[]>(url, { params: params });
+    }
+
+    getPersonItemsWithNameAndUrlsWithImdbNames(imdbNames: string[]): Observable<PersonItem[]> {
+        var url = this.baseUrl + "/Persons/Get/PersonItemWithNameAndUrls";
+        let params = new HttpParams();
+        imdbNames.forEach(function (name) {
+            params = params.append("imdbNames", name);
+        })
+        return this.http.get<PersonItem[]>(url, { params: params });
     }
 }

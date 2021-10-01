@@ -50,11 +50,12 @@ export interface BoxOffice {
 }
 
 export class FilmPerson {
-    id?: number;
-    filmPersonId?: string;
+    id?: string;
+    filmPersonId?: number;
     filmId: number;
     name: string;
     imdbPageUrl: string;
+    imdbName: string;
     profilePicture: Photo;
     sex?: Gender;
     personItemWithNameAndUrlId?: string;

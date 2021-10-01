@@ -10,6 +10,7 @@ export class FilmCastMember {
     episodesNumberInformation?: string;
     name: string;
     imdbPageUrl: string;
+    imdbName: string;
     profilePicture: Photo;
     characters: Character[];
     gender: Gender;
