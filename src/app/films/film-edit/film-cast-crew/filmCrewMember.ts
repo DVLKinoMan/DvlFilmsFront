@@ -9,3 +9,8 @@ export interface FilmCrewMember {
     filmId: number;
     proffessionId: number;
 }
+
+export interface Profession {
+    id: number;
+    name: string;
+}

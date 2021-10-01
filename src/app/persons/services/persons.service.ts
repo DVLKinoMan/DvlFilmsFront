@@ -6,6 +6,7 @@ import { PersonsQuery } from "../persons-list/person-query";
 import { PersonAwardResult } from "../person-edit/person-awards/personAwardResult";
 import { Helpers } from "src/app/common/helpers";
 import { FilmPerson } from "src/app/films/film";
+import { Profession } from "src/app/films/film-edit/film-cast-crew/filmCrewMember";
 
 @Injectable({
     providedIn: 'root',
@@ -128,5 +129,11 @@ export class PersonsService {
             params = params.append("imdbNames", name);
         })
         return this.http.get<PersonItem[]>(url, { params: params });
+    }
+
+    getProfessions(): Observable<Profession[]> {
+        var url = this.baseUrl + "/Persons/Get/Professions";
+
+        return this.http.get<Profession[]>(url);
     }
 }

@@ -22,7 +22,7 @@ import { FilmPhotosDialogComponent } from "../film-photos/film-photos.dialog.com
 import { Gender } from "src/app/persons/enums";
 import { FilmCastAndCrewDialogComponent } from "./film-cast-crew/film-cast-crew.dialog.component";
 import { FilmCastMember } from "./film-cast-crew/filmCastMember";
-import { FilmCrewMember } from "./film-cast-crew/filmCrewMember";
+import { FilmCrewMember, Profession } from "./film-cast-crew/filmCrewMember";
 import { FilmPersonDialogComponent } from "./film-person/film-person.dialog.component";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { FilmFetcherService } from "../services/film-fetcher.service";
@@ -54,6 +54,8 @@ export class FilmEditDialogComponent {
     showPhotos: number = 5;
 
     separatorKeysCodes: number[] = [ENTER, COMMA];
+
+    professions: Profession[];
 
     companies: Company[];
     companyCtrl = new FormControl();
@@ -97,6 +99,7 @@ export class FilmEditDialogComponent {
         this.loadCompanies();
         this.loadCountries();
         this.loadGenres();
+        this.loadProfessions();
     }
 
     setDefaultPersonPhoto(event: any, person: FilmPerson) {
@@ -702,6 +705,9 @@ export class FilmEditDialogComponent {
         this.model.crew.forEach(c => {
             c.filmId = this.dbFilm.id;
             var dbCrew = this.dbFilm.crew?.find(c1 => c1.imdbName == c.imdbName);
+            var prof = this.professions.find(p => p.name == c.name);
+            if (prof)
+                c.proffessionId = prof.id;
             if (dbCrew) {
                 c.id = dbCrew.id;
                 c.filmCrewMemberId = dbCrew.filmCrewMemberId;
@@ -777,6 +783,12 @@ export class FilmEditDialogComponent {
                 map((genre: string | null) => genre ? this._filterGenres(genre)
                     : this.genres.slice()));
         });
+    }
+
+    loadProfessions() {
+        this.personService.getProfessions().subscribe(res => {
+            this.professions = res;
+        }, error => console.log(error));
     }
 }
 
