@@ -259,6 +259,7 @@ export class FilmEditDialogComponent {
                 this.dbFilm = this.model;
                 this.model = res;
                 this.mergeCast();
+                this.mergeCrew();
                 this.mergeDirectors();
                 this.mergeWriters();
                 this.mergeCountries();
