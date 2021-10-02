@@ -51,7 +51,8 @@ export class AuthService {
         if (!us)
             return;
 
-        if (us.token) {
+        //todo call property Token. is not working
+        if (us._token) {
             this.user.next(us);
             this.autoLogout(new Date(us.TokenExpirationDate).getTime() -
                 new Date().getTime());
