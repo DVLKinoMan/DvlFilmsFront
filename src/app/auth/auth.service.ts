@@ -47,12 +47,27 @@ export class AuthService {
     }
 
     autoLogin() {
-        const us: User = JSON.parse(localStorage.getItem('userData'));
+        const userData: {
+            userName: string;
+            photo: string;
+            id: string;
+            _token: string;
+            TokenExpirationDate: string;
+            _userRoleId: number
+        } = JSON.parse(localStorage.getItem('userData'));
+
+        const us = new User(
+            userData.userName,
+            userData.photo,
+            userData._token,
+            new Date(userData.TokenExpirationDate),
+            userData._userRoleId
+        );
+
         if (!us)
             return;
 
-        //todo call property Token. is not working
-        if (us._token) {
+        if (us.token) {
             this.user.next(us);
             this.autoLogout(new Date(us.TokenExpirationDate).getTime() -
                 new Date().getTime());
