@@ -28,6 +28,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { PersonsService } from 'src/app/persons/services/persons.service';
+import { FilmEditDialogComponent } from '../film-edit/film-edit.dialog.component';
 
 @Component({
     selector: 'app-films',
@@ -88,6 +89,7 @@ export class FilmsComponent implements OnInit {
         private listsService: ListsService,
         private genresService: GenresService,
         private watchHistoryDialog: MatDialog,
+        private addDialog: MatDialog,
         private route: ActivatedRoute,
         private authService: AuthService,
         private router: Router) {
@@ -441,6 +443,20 @@ export class FilmsComponent implements OnInit {
         this.paginator.pageIndex = 0;
         this.loadData(true);
         this.setPageLength();
+    }
+
+    addNewFilmClick() {
+        const dialogRef = this.addDialog.open(FilmEditDialogComponent, {
+            width: '1000px',
+            data: {}
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+
+            }
+            console.log('The dialog was closed');
+        });
     }
 
     getFilmsQuery(notFromRoute: boolean = false): [FilmsQuery, boolean] {

@@ -7,7 +7,7 @@ import { CompaniesService } from "src/app/common/services/companies.service";
 import { CountriesService } from "src/app/common/services/countries.service";
 import { GenresService } from "src/app/common/services/genres.service";
 import { PhotosService } from "src/app/common/services/photos.service";
-import { Film, FilmPerson } from "../film";
+import { BoxOffice, Film, FilmPerson } from "../film";
 import { FilmGenre } from "../filmGenre";
 import { FilmsService } from "../services/films.service";
 
@@ -468,6 +468,12 @@ export class FilmEditDialogComponent {
                         this.model.photos = result;
                     }, error => console.log(error));
             }, error => console.log(error));
+        else {
+            this.model = new Film;
+            this.model.photo = new Photo;
+            this.model.boxOffice = new BoxOffice;
+            this.loading = false;
+        }
     }
 
     mergeGenres() {

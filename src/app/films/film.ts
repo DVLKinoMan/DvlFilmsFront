@@ -8,7 +8,7 @@ import { FilmCastMember } from "./film-edit/film-cast-crew/filmCastMember";
 import { FilmCrewMember } from "./film-edit/film-cast-crew/filmCrewMember";
 import { Gender } from "../persons/enums";
 
-export interface Film {
+export class Film {
     id: number;
     sourceId?: number;
     imdbPageUrl: string;
@@ -41,7 +41,7 @@ export interface Film {
     isFavorite: boolean;
 }
 
-export interface BoxOffice {
+export class BoxOffice {
     id: string;
     budget?: number;
     gross?: number;
