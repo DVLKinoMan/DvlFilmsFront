@@ -519,6 +519,7 @@ export class FilmEditDialogComponent {
         if (!this.dbFilm)
             return;
 
+        var notExistedCountries: Country[] = [];
         this.model.countries.forEach(country => {
             country.filmId = this.dbFilm.id;
             var dbC = this.dbFilm.countries?.find(c => c.name == country.name);
@@ -530,7 +531,13 @@ export class FilmEditDialogComponent {
                 var g1 = this.countries?.find(g2 => country.name == g2.name);
                 if (g1)
                     country.id = g1.id;
+                else notExistedCountries.push(g1);
             }
+        });
+
+        notExistedCountries.forEach(c => {
+            var index = this.model.countries.indexOf(c);
+            this.model.countries.splice(index, 1);
         });
     }
 
