@@ -474,7 +474,7 @@ export class FilmEditDialogComponent {
         if (!this.dbFilm)
             return;
 
-        this.model.genres.forEach(g => {
+        this.model.genres?.forEach(g => {
             g.filmId = this.dbFilm.id;
             var dbG = this.dbFilm.genres?.find(g1 => g1.name == g.name);
             if (dbG) {
@@ -494,7 +494,7 @@ export class FilmEditDialogComponent {
             return;
 
         var notExistedComps: Company[] = [];
-        this.model.companies.forEach(company => {
+        this.model.companies?.forEach(company => {
             company.filmId = this.dbFilm.id;
             var dbC = this.dbFilm.companies?.find(c => c.name == company.name);
             if (dbC) {
@@ -509,7 +509,7 @@ export class FilmEditDialogComponent {
             }
         });
 
-        notExistedComps.forEach(comp => {
+        notExistedComps?.forEach(comp => {
             var index = this.model.companies.indexOf(comp);
             this.model.companies.splice(index, 1);
         });
@@ -520,7 +520,7 @@ export class FilmEditDialogComponent {
             return;
 
         var notExistedCountries: Country[] = [];
-        this.model.countries.forEach(country => {
+        this.model.countries?.forEach(country => {
             country.filmId = this.dbFilm.id;
             var dbC = this.dbFilm.countries?.find(c => c.name == country.name);
             if (dbC) {
@@ -535,7 +535,7 @@ export class FilmEditDialogComponent {
             }
         });
 
-        notExistedCountries.forEach(c => {
+        notExistedCountries?.forEach(c => {
             var index = this.model.countries.indexOf(c);
             this.model.countries.splice(index, 1);
         });
@@ -546,7 +546,7 @@ export class FilmEditDialogComponent {
             return;
 
         this.anotherNames = [...new Set(this.model.anotherNames.map(item => item.name))];
-        this.model.anotherNames.forEach(anotherName => {
+        this.model.anotherNames?.forEach(anotherName => {
             anotherName.filmId = this.dbFilm.id;
             var dbAnotherName = this.dbFilm.anotherNames?.find(c => c.name == anotherName.name && c.country.name == anotherName.country.name);
             if (dbAnotherName) {
@@ -566,7 +566,7 @@ export class FilmEditDialogComponent {
             return;
 
         var newWriters: string[] = [];
-        this.model.writers.forEach(wr => {
+        this.model.writers?.forEach(wr => {
             var dbWr = this.dbFilm.writers?.find(w => w.imdbName == wr.imdbName);
             wr.filmId = this.dbFilm.id;
             if (dbWr) {
@@ -579,7 +579,7 @@ export class FilmEditDialogComponent {
             else newWriters.push(wr.imdbName);
         });
 
-        this.model.writers.sort((d1, d2) => d1.index - d2.index);
+        this.model.writers?.sort((d1, d2) => d1.index - d2.index);
 
         if (newWriters.length != 0) {
             var chunks = 50;
@@ -614,7 +614,7 @@ export class FilmEditDialogComponent {
             return;
 
         var newDirectors: string[] = [];
-        this.model.directors.forEach(wr => {
+        this.model.directors?.forEach(wr => {
             var dbWr = this.dbFilm.directors?.find(w => w.imdbName == wr.imdbName);
             wr.filmId = this.dbFilm.id;
             if (dbWr) {
@@ -627,7 +627,7 @@ export class FilmEditDialogComponent {
             else newDirectors.push(wr.imdbName);
         });
 
-        this.model.directors.sort((d1, d2) => d1.index - d2.index);
+        this.model.directors?.sort((d1, d2) => d1.index - d2.index);
 
         if (newDirectors.length != 0) {
             var chunks = 50;
@@ -662,7 +662,7 @@ export class FilmEditDialogComponent {
             return;
 
         var newCast: string[] = [];
-        this.model.cast.forEach(c => {
+        this.model.cast?.forEach(c => {
             c.filmId = this.dbFilm.id;
             var dbCast = this.dbFilm.cast?.find(c1 => c1.imdbName == c.imdbName);
             if (dbCast) {
@@ -685,7 +685,7 @@ export class FilmEditDialogComponent {
         });
 
         this.allCast = this.model.cast;
-        this.allCast.sort((c1, c2) => c1.index - c2.index);
+        this.allCast?.sort((c1, c2) => c1.index - c2.index);
 
         if (newCast.length != 0) {
             var chunks = 50;
@@ -746,7 +746,7 @@ export class FilmEditDialogComponent {
                 crewNotExistedProfessions.push(c);
         });
 
-        crewNotExistedProfessions.forEach(c => {
+        crewNotExistedProfessions?.forEach(c => {
             var index = this.model.crew.indexOf(c);
             this.model.crew.splice(index, 1);
         });
