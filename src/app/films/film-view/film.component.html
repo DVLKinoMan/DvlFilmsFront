@@ -142,7 +142,7 @@
                 <mat-card 
                 class="cast-card"
                 *ngFor="let director of model.directors"
-                [routerLink]="director.id ? ['/person/'+director.id] : []"
+                [routerLink]="director.filmPersonId ? ['/person/'+director.filmPersonId] : []"
                 [queryParams]="{flmCatName: 'director'}">
                     <img   
                     class="cast-image"
@@ -160,7 +160,7 @@
             <div class="cast">
                     <mat-card *ngFor="let writer of model.writers"
                     class="cast-card" 
-                    [routerLink]="writer.id ? ['/person/'+writer.id] : []"
+                    [routerLink]="writer.filmPersonId ? ['/person/'+writer.filmPersonId] : []"
                     [queryParams]="{flmCatName: 'writer'}">
                         <img  
                             class="cast-image"
