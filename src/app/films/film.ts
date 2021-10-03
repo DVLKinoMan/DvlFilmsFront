@@ -23,6 +23,8 @@ export class Film {
     releaseDate?: Date;
     tagline: string;
     tvDescription?: string;
+    addedDate?: Date;
+    lastUpdatedDate?: Date;
 
     photo?: Photo;
     boxOffice?: BoxOffice;

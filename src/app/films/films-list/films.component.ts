@@ -25,10 +25,11 @@ import { FilmOrderBy2StringMapping } from '../helpers';
 import { FilmFilterType } from '../enums';
 import { Person } from 'src/app/persons/person';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { PersonsService } from 'src/app/persons/services/persons.service';
 import { FilmEditDialogComponent } from '../film-edit/film-edit.dialog.component';
+import { UserRole } from 'src/app/auth/user.model';
 
 @Component({
     selector: 'app-films',
@@ -63,6 +64,7 @@ export class FilmsComponent implements OnInit {
     queryParams: Params;
 
     isAuthenticated = false;
+    canEdit = false;
     showEverything = false;
     profession2StringMapping = Profession2StringMapping;
     gender2StringMapping = Gender2StringMapping;
@@ -183,6 +185,7 @@ export class FilmsComponent implements OnInit {
                 this.filterNames.push("WatchedFilms");
                 this.filterNames.push("PersonLists");
             }
+            this.canEdit = user.role == UserRole.Admin
         });
     }
 
