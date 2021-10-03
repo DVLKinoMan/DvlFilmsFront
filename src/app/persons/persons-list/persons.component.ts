@@ -17,6 +17,10 @@ import { formatDate } from '@angular/common';
 import { PersonBuiltInListsService } from '../services/person-builtIn-lists.service';
 import { Gender2StringMapping, ZodiacSign2StringMapping } from 'src/app/common/helpers';
 import { PersonOrderBy2StringMapping } from 'src/app/films/helpers';
+import { AuthService } from 'src/app/auth/auth.service';
+import { UserRole } from 'src/app/auth/user.model';
+import { MatDialog } from '@angular/material/dialog';
+import { PersonEditDialogComponent } from '../person-edit/person-edit.dialog.component';
 
 @Component({
   selector: 'app-persons',
@@ -55,11 +59,15 @@ export class PersonsComponent implements OnInit {
   personOrderBy2StringMapping = PersonOrderBy2StringMapping;
 
   queryParams: Params;
+  isAuthenticated = false;
+  canEdit = false;
 
   constructor(private service: PersonsService,
     private formBuilder: FormBuilder,
     private photosService: PhotosService,
+    private authService: AuthService,
     private builtInListsService: PersonBuiltInListsService,
+    private addDialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router) { }
 
@@ -97,10 +105,28 @@ export class PersonsComponent implements OnInit {
       filterOperator: 0,
       sign: ''
     });
+    this.authService.user.subscribe(user => {
+      this.isAuthenticated = !!user;
+      this.canEdit = user && user.role == UserRole.Admin
+    });
   }
 
   ngAfterViewInit() {
 
+  }
+
+  addNewPersonClick() {
+    const dialogRef = this.addDialog.open(PersonEditDialogComponent, {
+      width: '1000px',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+      }
+      console.log('The dialog was closed');
+    });
   }
 
   formatDate(dateTime: Date | undefined): string | undefined {

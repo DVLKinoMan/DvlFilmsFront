@@ -31,6 +31,7 @@ export class PersonEditDialogComponent {
     allFilmography: Filmography[];
 
     loading: boolean = true;
+    loadingFilmography: boolean = false;
     showPhotos: number = 5;
 
     separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -168,7 +169,7 @@ export class PersonEditDialogComponent {
 
     setGroupedFilmography() {
         var map = new Map<string, Filmography[]>();
-        this.allFilmography.forEach(function (member) {
+        this.allFilmography?.forEach(function (member) {
             var arr = map.get(member.categoryName);
             if (arr)
                 arr.push(member);
@@ -178,6 +179,7 @@ export class PersonEditDialogComponent {
             element.sort((a, b) => b.year - a.year);
         });
         this.groupedFilmography = map;
+        this.loadingFilmography = false;
     }
 
     onCloseClick() {
@@ -208,6 +210,11 @@ export class PersonEditDialogComponent {
                         this.model.photos = result;
                     }, error => console.log(error));
             }, error => console.log(error));
+        else {
+            this.model = new Person;
+            this.model.profilePicture = new Photo;
+            this.loading = false;
+        }
     }
 
     setModel(person: Person) {
@@ -218,6 +225,7 @@ export class PersonEditDialogComponent {
 
     fetchPerson() {
         this.loading = true;
+        this.loadingFilmography = true;
         this.personFetcherSerivce.getByUrl(this.model.imdbPageUrl).subscribe(result => {
             this.loading = false;
             if (!this.dbPerson)
@@ -234,14 +242,15 @@ export class PersonEditDialogComponent {
             this.mergeFilmographies();
         }, error => {
             this.loading = false;
+            this.loadingFilmography = false;
             console.log(error);
         });
     }
 
     mergeFilmographies() {
         var titles: string[] = [];
-        this.model.filmographies.forEach(flm => {
-            var dbflm = this.dbPerson.filmographies.find(d => d.filmItem.imdbTitle ==
+        this.model.filmographies?.forEach(flm => {
+            var dbflm = this.dbPerson.filmographies?.find(d => d.filmItem.imdbTitle ==
                 flm.filmItem.imdbTitle);
             flm.personId = this.model.id
             if (dbflm) {
@@ -296,11 +305,16 @@ export class PersonEditDialogComponent {
     }
 
     loadFilmography() {
+        this.loadingFilmography = true;
         this.personService.getFilmographies(this.data.personId).subscribe(result => {
+            this.loadingFilmography = false;
             this.allFilmography = JSON.parse(JSON.stringify(result));
             this.model.filmographies = result;
             this.setGroupedFilmography();
-        }, error => console.log(error));
+        }, error => {
+            this.loadingFilmography = false;
+            console.log(error);
+        });
     }
 }
 

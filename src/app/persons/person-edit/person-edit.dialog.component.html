@@ -17,7 +17,7 @@
                 <div class="little-stats">
                     <div id="poster">
                         <img class="profilePicture"
-                                [src]="model.profilePicture.image.indexOf('data:image/') !== -1 ? model.profilePicture.image : 'data:image/png;base64,' + model.profilePicture.image" 
+                                [src]="model.profilePicture.image && model.profilePicture.image.indexOf('data:image/') !== -1 ? model.profilePicture.image : 'data:image/png;base64,' + model.profilePicture.image" 
                                 *ngIf="model.profilePicture" 
                                 [title]="model.profilePicture.title"
                                 (error)="setDefaultProfilePicture($event)">
@@ -152,7 +152,7 @@
                 (click)="resetFilmography()">
                     <mat-icon>restore</mat-icon>
             </button>
-            <div *ngIf="groupedFilmography; else loadingSpinner" style="margin-top: 25px;">
+            <div *ngIf="groupedFilmography" style="margin-top: 25px;">
                 <div *ngFor="let grFilm of groupedFilmography | keyvalue">
                         <mat-expansion-panel>
                         <mat-expansion-panel-header>
@@ -204,9 +204,7 @@
                     </mat-expansion-panel>
                 </div>
             </div>
-            <ng-template #loadingSpinner>
-                <mat-spinner #loadingSpinner></mat-spinner>
-            </ng-template>
+            <mat-spinner *ngIf="loadingFilmography"></mat-spinner>
         </mat-tab>
     </mat-tab-group>
 </mat-dialog-content>

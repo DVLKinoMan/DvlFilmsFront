@@ -60,7 +60,7 @@ export class PersonComponent implements OnInit {
 
   ngOnInit(): void {
     this.userSub = this.authService.user.subscribe(user => {
-      if (user.role == UserRole.Admin)
+      if (user?.role == UserRole.Admin)
         this.editMode = true;
       else this.editMode = false;
     });

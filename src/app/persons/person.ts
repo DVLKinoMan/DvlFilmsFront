@@ -24,6 +24,8 @@ export class Person {
     alternateNames?: AlternateName[];
 
     isFavorite: boolean;
+    addedDate?: Date;
+    lastUpdatedDate?: Date;
 }
 
 export class AlternateName {

@@ -1,6 +1,5 @@
 <h1>Persons</h1>
-<p>Here's a list of persons: feel free to play with it.</p>
-<p *ngIf="!persons"><em>Loading...</em></p>
+<button mat-raised-button *ngIf="canEdit" color="primary" (click)="addNewPersonClick()">Add New Person</button>
 <h4>Filter</h4>
 <table>
     <tr>
