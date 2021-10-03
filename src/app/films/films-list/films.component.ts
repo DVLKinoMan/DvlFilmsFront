@@ -185,7 +185,7 @@ export class FilmsComponent implements OnInit {
                 this.filterNames.push("WatchedFilms");
                 this.filterNames.push("PersonLists");
             }
-            this.canEdit = user.role == UserRole.Admin
+            this.canEdit = user && user.role == UserRole.Admin
         });
     }
 
