@@ -1,4 +1,18 @@
-
+<vg-player *ngIf="model.videoRelativePath" style="height: 80%;">
+    <!-- <video [vgMedia]="$any(media)" #media 
+           id="singleVideo"
+           controls
+           crossorigin>
+        <source src="http://static.videogular.com/assets/videos/videogular.mp4" type="video/mp4">
+    </video> -->
+     <video #myMedia
+           [vgDash]="'https://localhost:44338/Films/Get/'+model.id+'/Video'"
+      
+           id="my-video"
+           type="video/mp4"
+           controls>
+    </video>
+</vg-player>
 <div style="width: 100%;">
     <mat-spinner *ngIf="loading"></mat-spinner>
     <div id = "little-bios" style="display: flex;">

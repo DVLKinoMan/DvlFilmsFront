@@ -307,6 +307,12 @@ export class FilmEditDialogComponent {
         }
     }
 
+    onVideoSelected(event: any) {
+        if (event.target.files && event.target.files[0]) {
+            this.model.videoRelativePath = event.target.files[0].name;
+        }
+    }
+
     onCloseClick(res: boolean) {
         this.dialogRef.close(res);
     }

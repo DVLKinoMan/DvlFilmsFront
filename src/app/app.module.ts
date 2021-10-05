@@ -71,6 +71,12 @@ import { FilmWatchHistoryDialogComponent } from './films/film-edit/film-watch-hi
 import { FilmWatchedListComponent } from './films/film-watched/film-watched.component';
 import { ListFetcherService } from './lists/services/list-fetcher.service';
 import { FilmFetcherService } from './films/services/film-fetcher.service';
+import { VgCoreModule } from '@videogular/ngx-videogular/core';
+import { VgControlsModule } from '@videogular/ngx-videogular/controls';
+import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
+import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
+import { VgStreamingModule } from '@videogular/ngx-videogular/streaming';
+// import { SingleMediaPlayer } from './single-media-player';
 
 @NgModule({
   declarations: [
@@ -144,7 +150,12 @@ import { FilmFetcherService } from './films/services/film-fetcher.service';
     MatMenuModule,
     MatProgressBarModule,
     NgImageFullscreenViewModule,
-    DragDropModule
+    DragDropModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule,
+    VgStreamingModule
   ],
   providers: [
     PersonsService,

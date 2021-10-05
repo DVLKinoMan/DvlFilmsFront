@@ -94,6 +94,19 @@
                         <input matInput type="number" [(ngModel)]="model.imdbUserRatingsCount">
                     </mat-form-field>
                 </div>
+                 <div id="video-things">
+                            <button mat-mini-fab 
+                                (click)="fileInput2.click()"
+                                title="Choose Video">
+                                    <mat-icon>edit</mat-icon>
+                            </button>
+                            <input hidden (change)="onVideoSelected($event)" #fileInput2 type="file" id="file2"
+                            accept="video/*,.mkv">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Video Path</mat-label>
+                                <input matInput [(ngModel)]="model.videoRelativePath">
+                            </mat-form-field>
+                 </div>
                 <div id="photos">
                     <span>Photos: 
                         <button mat-mini-fab 

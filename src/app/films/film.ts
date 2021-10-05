@@ -25,6 +25,7 @@ export class Film {
     tvDescription?: string;
     addedDate?: Date;
     lastUpdatedDate?: Date;
+    videoRelativePath?: string;
 
     photo?: Photo;
     boxOffice?: BoxOffice;
