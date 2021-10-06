@@ -1,19 +1,135 @@
-<vg-player *ngIf="model.videoRelativePath" style="height: 80%;">
-    <!-- <video [vgMedia]="$any(media)" #media 
-           id="singleVideo"
-           controls
-           crossorigin>
-        <source src="http://static.videogular.com/assets/videos/videogular.mp4" type="video/mp4">
-    </video> -->
-     <video #myMedia
-           [vgDash]="'https://localhost:44338/Films/Get/'+model.id+'/Video'"
-      
-           id="my-video"
-           type="video/mp4"
-           controls>
-    </video>
-</vg-player>
+
+
 <div style="width: 100%;">
+    <div style="display: flex;">
+        <div style="width: 80%; max-height: 500px;">
+                    <vg-player *ngIf="model.videoRelativePath">
+                    
+                        <vg-buffering></vg-buffering>
+
+                     
+                        <video #myMedia style="max-height: 500px;"
+                            [vgDash]="'https://localhost:44338/Films/Get/'+model.id+'/Video'"
+                            id="my-video"
+                            [vgHls]="'https://localhost:44338/Films/Get/'+model.id+'/Video'"
+                            type="video/mp4"
+                            autoplay="true"
+                            controls>
+                          
+                        </video>
+                    </vg-player>
+        </div> 
+        <!-- <div>
+        <mat-grid-list cols="2" rowHeight="1:2" gutterSize="10px" >
+            <mat-grid-tile class="cast-tile"
+                *ngFor="let castMember of cast" class="cast-card" >
+                <div>
+                    <img class="cast-image"
+                        [src]="'data:image/png;base64,' + castMember.profilePicture?.image" 
+                        [title]="castMember.name"
+                        (error)="setDefaultProfilePicture($event, castMember)">
+                    <mat-grid-tile-footer  class="cast-footer">
+                        <span  class="cast-title">{{castMember.name}}</span>
+                        <hr>
+                        <div class="cast-subtitle" *ngFor="let character of castMember.characters">
+                            <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
+                                {{character?.name}}
+                            </a>
+                            <ng-template #chOnlyName>{{character?.name}}
+                                <p *ngIf="character.description"> ({{character.description}})</p>
+                            </ng-template>
+                        </div>
+                    </mat-grid-tile-footer>
+            </div>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </div> -->
+    </div>
+   
+    <div style="display: flex;">
+        <div *ngIf="model.directors">
+            <span>Directors: </span>
+            <div class="cast"> 
+                <mat-card 
+                class="cast-card"
+                *ngFor="let director of model.directors"
+                [routerLink]="director.filmPersonId ? ['/person/'+director.filmPersonId] : []"
+                [queryParams]="{flmCatName: 'director'}">
+                    <img   
+                    class="cast-image"
+                    [src]="director.profilePicture?.imdbPageUrl" 
+                        [title]="director.name"
+                        (error)="setDefaultPersonPhoto($event, director)">
+                    <mat-card-footer class="cast-footer">
+                        <mat-card-title>{{director.name}}</mat-card-title>
+                    </mat-card-footer>
+                </mat-card>
+            </div>
+        </div>
+        <div *ngIf="model.writers">
+            <span>Writers: </span>
+            <div class="cast">
+                    <mat-card *ngFor="let writer of model.writers"
+                    class="cast-card" 
+                    [routerLink]="writer.filmPersonId ? ['/person/'+writer.filmPersonId] : []"
+                    [queryParams]="{flmCatName: 'writer'}">
+                        <img  
+                            class="cast-image"
+                            [src]="writer.profilePicture?.imdbPageUrl" 
+                            [title]="writer.name"
+                            (error)="setDefaultPersonPhoto($event, writer)">
+                        <mat-card-footer class="cast-footer">
+                            <mat-card-title>{{writer.name}}</mat-card-title>
+                        </mat-card-footer>
+                    </mat-card>
+            </div>
+        </div> 
+        <div *ngIf="cast">
+        <!-- <span style="margin-left: 45px;">Cast: </span> -->
+        <div style="display: inline-table; width: 100%;">
+            <div style="float: left">Cast 
+                <button mat-mini-fab 
+                    (click)="openCastAndCrewDialog()" 
+                    title="All Cast And Crew">
+                        <mat-icon>info</mat-icon>
+                </button>
+            </div>
+            <div class="cast-page-arrows">
+                <button mat-mini-fab [disabled]="leftCastArrowDisabled" 
+                (click)="castPageArrowClicked(false)">
+                    <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+                <span>{{castCurrPage + 1}}/{{castPagesLength}}</span>
+                <button mat-mini-fab [disabled]="rightCastArrowDisabled" 
+                (click)="castPageArrowClicked(true)">
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="cast">
+            <mat-card *ngFor="let castMember of cast" class="cast-card"
+            [routerLink]="castMember.personId ? ['/person/'+castMember.personId] : []">
+                <img class="cast-image"
+                    [src]="'data:image/png;base64,' + castMember.profilePicture?.image" 
+                    [title]="castMember.name"
+                    (error)="setDefaultProfilePicture($event, castMember)">
+                <mat-card-footer class="cast-footer">
+                    <mat-card-title class="cast-title">{{castMember.name}}</mat-card-title>
+                    <hr>
+                    <mat-card-subtitle class="cast-subtitle" *ngFor="let character of castMember.characters">
+                        <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
+                            {{character?.name}}
+                        </a>
+                        <ng-template #chOnlyName>{{character?.name}}
+                            <p *ngIf="character.description"> ({{character.description}})</p>
+                        </ng-template>
+                    </mat-card-subtitle>
+                </mat-card-footer>
+            </mat-card>
+        </div>
+    </div>
+    </div>
+    
     <mat-spinner *ngIf="loading"></mat-spinner>
     <div id = "little-bios" style="display: flex;">
         <div id="little-bio" style="display: flex">
@@ -146,92 +262,10 @@
                 </div>
                 </div>
         </div>
-        </div>
+    </div>
     <!-- <button mat-flat-button *ngIf="editMode" color="primary" type="submit">Save</button> -->
     
-    <div style="display: flex;">
-        <div *ngIf="model.directors">
-            <span>Directors: </span>
-            <div class="cast"> 
-                <mat-card 
-                class="cast-card"
-                *ngFor="let director of model.directors"
-                [routerLink]="director.filmPersonId ? ['/person/'+director.filmPersonId] : []"
-                [queryParams]="{flmCatName: 'director'}">
-                    <img   
-                    class="cast-image"
-                    [src]="director.profilePicture?.imdbPageUrl" 
-                        [title]="director.name"
-                        (error)="setDefaultPersonPhoto($event, director)">
-                    <mat-card-footer class="cast-footer">
-                        <mat-card-title>{{director.name}}</mat-card-title>
-                    </mat-card-footer>
-                </mat-card>
-            </div>
-        </div>
-        <div *ngIf="model.writers">
-            <span>Writers: </span>
-            <div class="cast">
-                    <mat-card *ngFor="let writer of model.writers"
-                    class="cast-card" 
-                    [routerLink]="writer.filmPersonId ? ['/person/'+writer.filmPersonId] : []"
-                    [queryParams]="{flmCatName: 'writer'}">
-                        <img  
-                            class="cast-image"
-                            [src]="writer.profilePicture?.imdbPageUrl" 
-                            [title]="writer.name"
-                            (error)="setDefaultPersonPhoto($event, writer)">
-                        <mat-card-footer class="cast-footer">
-                            <mat-card-title>{{writer.name}}</mat-card-title>
-                        </mat-card-footer>
-                    </mat-card>
-            </div>
-        </div> 
-        <div *ngIf="cast">
-            <!-- <span style="margin-left: 45px;">Cast: </span> -->
-            <div style="display: inline-table; width: 100%;">
-                <div style="float: left">Cast 
-                    <button mat-mini-fab 
-                        (click)="openCastAndCrewDialog()" 
-                        title="All Cast And Crew">
-                            <mat-icon>info</mat-icon>
-                    </button>
-                </div>
-                <div class="cast-page-arrows">
-                    <button mat-mini-fab [disabled]="leftCastArrowDisabled" 
-                    (click)="castPageArrowClicked(false)">
-                        <mat-icon>keyboard_arrow_left</mat-icon>
-                    </button>
-                    <span>{{castCurrPage + 1}}/{{castPagesLength}}</span>
-                    <button mat-mini-fab [disabled]="rightCastArrowDisabled" 
-                    (click)="castPageArrowClicked(true)">
-                        <mat-icon>keyboard_arrow_right</mat-icon>
-                    </button>
-                </div>
-            </div>
-            <div class="cast">
-                <mat-card *ngFor="let castMember of cast" class="cast-card"
-                [routerLink]="castMember.personId ? ['/person/'+castMember.personId] : []">
-                    <img class="cast-image"
-                        [src]="'data:image/png;base64,' + castMember.profilePicture?.image" 
-                        [title]="castMember.name"
-                        (error)="setDefaultProfilePicture($event, castMember)">
-                    <mat-card-footer class="cast-footer">
-                        <mat-card-title>{{castMember.name}}</mat-card-title>
-                        <hr>
-                        <mat-card-subtitle *ngFor="let character of castMember.characters">
-                            <a *ngIf="character.imdbPageUrl; else chOnlyName" target="_blank" href="{{character.imdbPageUrl}}">
-                                {{character?.name}}
-                            </a>
-                            <ng-template #chOnlyName>{{character?.name}}
-                                <p *ngIf="character.description"> ({{character.description}})</p>
-                            </ng-template>
-                        </mat-card-subtitle>
-                    </mat-card-footer>
-                </mat-card>
-            </div>
-        </div>
-    </div>
+   
     <div id="photos" *ngIf="model.photos" style="display: block;">
         <span>Photos: 
             <button mat-mini-fab 

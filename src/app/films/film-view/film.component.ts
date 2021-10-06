@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { PhotosService } from "src/app/common/services/photos.service";
 import { Film, FilmPerson } from "../film";
@@ -18,12 +18,19 @@ import { UserRole } from "src/app/auth/user.model";
 import { FilmBuiltInListsService } from "../services/filmBuiltInLists.service";
 import { FilmWatchHistoryDialogComponent } from "../film-edit/film-watch-history/film-watch-history.dialog.component";
 
+import { BitrateOptions, VgApiService } from '@videogular/ngx-videogular/core';
+import { VgDashDirective, VgHlsDirective } from "@videogular/ngx-videogular/streaming";
+
+export interface IMediaStream {
+    type: 'vod' | 'dash' | 'hls';
+    source: string;
+    label: string;
+}
 @Component({
     selector: 'app-film',
     templateUrl: './film.component.html',
     styleUrls: ['./film.component.css']
 })
-
 export class FilmComponent implements OnInit {
     private userSub: Subscription;
 
@@ -42,6 +49,40 @@ export class FilmComponent implements OnInit {
     rightCastArrowDisabled: boolean = false;
 
     showPhotos: number = 5;
+
+    bitrates: BitrateOptions[];
+    @ViewChild(VgDashDirective) vgDash: VgDashDirective;
+    @ViewChild(VgHlsDirective) vgHls: VgHlsDirective;
+    api: VgApiService;
+    currentStream: IMediaStream;
+
+    streams: IMediaStream[] = [
+        {
+            type: 'vod',
+            label: 'VOD',
+            source: 'http://static.videogular.com/assets/videos/videogular.mp4'
+        },
+        {
+            type: 'dash',
+            label: 'DASH: Multi rate Streaming',
+            source: 'http://dash.edgesuite.net/akamai/bbb_30fps/bbb_30fps.mpd'
+        },
+        {
+            type: 'dash',
+            label: 'DASH: Live Streaming',
+            source: 'https://24x7dash-i.akamaihd.net/dash/live/900080/dash-demo/dash.mpd'
+        },
+        {
+            type: 'dash',
+            label: 'DASH: DRM with Widevine',
+            source: 'https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine/dash.mpd'
+        },
+        {
+            type: 'hls',
+            label: 'HLS: Streaming',
+            source: 'https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8'
+        }
+    ];
 
     constructor(private service: FilmsService,
         private photosService: PhotosService,
@@ -67,6 +108,57 @@ export class FilmComponent implements OnInit {
                 this.editMode = true;
             else this.editMode = false;
         });
+    }
+
+    setBitrate(option: BitrateOptions) {
+        switch (this.currentStream.type) {
+            case 'dash':
+                this.vgDash.setBitrate(option);
+                break;
+
+            case 'hls':
+                this.vgHls.setBitrate(option);
+                break;
+        }
+    }
+
+    onClickStream(stream: IMediaStream) {
+        this.api.pause();
+        // this.bitrates = null;
+
+        // let timer: Subscription = TimerObservable.create(0, 10).subscribe(
+        //     () => {
+        //         this.currentStream = stream;
+        //         timer.unsubscribe();
+        //     }
+        // );
+    }
+
+    changeAudio() {
+        var video = document.getElementById("my-video") as HTMLMediaElement;
+
+        var audioCtx = new AudioContext();         // get access to audio context
+        var gainNode = audioCtx.createGain();
+        gainNode.gain.value = 1;                   // Change Gain Value to test
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = "allpass";                          // Change Filter type to test
+        filter.frequency.value = 48000;            // Change frequency to test
+
+        // Wait for window.onload to fire. See crbug.com/112368
+        // Our <video> element will be the audio source.
+        // window.addEventListener('load', function (e) {
+        //     // Our <video> element will be the audio source.
+        //     var source = audioCtx.createMediaElementSource(video);
+        //     source.connect(gainNode);
+        //     gainNode.connect(filter);
+        //     filter.connect(audioCtx.destination);
+
+        // }, false);
+        // video.audioTracks[0].enabled = false;
+        var source = audioCtx.createMediaElementSource(video);
+        source.connect(gainNode);
+        gainNode.connect(filter);
+        filter.connect(audioCtx.destination);
     }
 
     addToWatch() {
