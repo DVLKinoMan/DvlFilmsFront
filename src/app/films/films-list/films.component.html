@@ -292,7 +292,8 @@
                 <button mat-button color="primary" type="submit">Add Filter</button>
             </form>
 
-            <mat-checkbox id="showEverything" [(ngModel)]="showEverything" (change)="onChangeShowEverything()">Show Everything</mat-checkbox>
+            <mat-checkbox id="showEverything" [(ngModel)]="showEverything" (change)="onChangeShowEverything()">Show Everything </mat-checkbox>
+            <mat-checkbox id="hasVideo" [(ngModel)]="hasVideo" (change)="onChangeHasVideo()">Has Video</mat-checkbox>
         </td>
         <td style="float: right;">
             <button mat-flat-button color="primary" (click)="searchButtonClick()">Search</button><br><br>

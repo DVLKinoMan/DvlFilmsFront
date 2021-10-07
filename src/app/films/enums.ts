@@ -11,7 +11,8 @@ export enum FilmFilterType {
     ReleaseDate,
     TvDescription,
     ShowEverything,
-    Person
+    Person,
+    HasVideo,
 }
 
 export enum MovieIncludingProperty {

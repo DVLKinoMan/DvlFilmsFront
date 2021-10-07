@@ -220,3 +220,15 @@ export class FilmPersonFilter extends FilmFilter {
         super(FilmFilterType.Person, filterOperator);
     }
 }
+
+export class HasVideoFilter extends FilmFilter {
+    public ToString(): string {
+        return (this.filterOperator != FilterOperator.None ? FilterOperator[this.filterOperator] + ' ' : '') +
+            (this.value == true ? "Has Video" : this.value == false ? "Has Not Video" : "Has or Not Video");
+    }
+
+    constructor(public value?: boolean,
+        filterOperator: FilterOperator = FilterOperator.None) {
+        super(FilmFilterType.HasVideo, filterOperator);
+    }
+}

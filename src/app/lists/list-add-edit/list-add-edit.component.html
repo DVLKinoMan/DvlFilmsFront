@@ -108,7 +108,7 @@
                             <mat-icon>remove</mat-icon>
                         </button>
                     </mat-grid-tile-header>
-                    <img 
+                    <img class="item-image"
                     [src]="item.photo?.image?.indexOf('data:image/') !== -1 ? item.photo?.image : 'data:image/png;base64,' + item.photo?.image" 
                     [title]="item.itemName"
                     (click)="onClickItem(item)"

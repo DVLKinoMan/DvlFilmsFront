@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
     FilmOrderBy,
-    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession, WatchedFilmFilter, FilmPersonListsFilter, FilmGenresFilter, ImdbRatingFilter, ImdbRatingsCountFilter, ReleaseDateFilter, TvFilter, ShowEverythingFilter, FilmPersonFilter
+    IdFilter, NameFilter, FilmFilter, FilmSelectControlFlags, FilmsQuery, FavoritePersonsFilter, Profession, WatchedFilmFilter, FilmPersonListsFilter, FilmGenresFilter, ImdbRatingFilter, ImdbRatingsCountFilter, ReleaseDateFilter, TvFilter, ShowEverythingFilter, FilmPersonFilter, HasVideoFilter
 } from './film-query';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -66,6 +66,7 @@ export class FilmsComponent implements OnInit {
     isAuthenticated = false;
     canEdit = false;
     showEverything = false;
+    hasVideo?: boolean = true;
     profession2StringMapping = Profession2StringMapping;
     gender2StringMapping = Gender2StringMapping;
     genders: Gender[] = [Gender.Unknown, Gender.Male, Gender.Female];
@@ -407,7 +408,9 @@ export class FilmsComponent implements OnInit {
         var filter = this.getFilter(this.selectedFilter);
         if (filter.filterType == FilmFilterType.TvDescription) {
             this.showEverything = true;
+            this.hasVideo = false;
             this.onChangeShowEverything();
+            this.onChangeHasVideo();
         }
         this.filters.push(filter);
         this.clearForm(this.selectedFilter);
@@ -417,6 +420,8 @@ export class FilmsComponent implements OnInit {
     clearFilters() {
         this.filters = [];
         this.showEverything = false;
+        this.hasVideo = true;
+        this.onChangeHasVideo();
         this.onChangeShowEverything();
     }
 
@@ -430,10 +435,24 @@ export class FilmsComponent implements OnInit {
         else this.filters.push(new ShowEverythingFilter(this.showEverything, this.filters.length == 0 ? FilterOperator.None : FilterOperator.And));
     }
 
+    onChangeHasVideo() {
+        var filter = this.filters.find(filter => filter.filterType == FilmFilterType.HasVideo);
+        if (filter) {
+            var k = filter as HasVideoFilter;
+            k.value = this.hasVideo;
+        }
+        else this.filters.push(new HasVideoFilter(this.hasVideo, this.filters.length == 0 ? FilterOperator.None : FilterOperator.And));
+    }
+
     deleteFilter(index: number) {
         if (this.filters[index].filterType == FilmFilterType.ShowEverything) {
             this.showEverything = false;
             this.onChangeShowEverything();
+            return;
+        }
+        if (this.filters[index].filterType == FilmFilterType.HasVideo) {
+            this.hasVideo = null;
+            this.onChangeHasVideo();
             return;
         }
         this.filters.splice(index, 1);
@@ -527,6 +546,7 @@ export class FilmsComponent implements OnInit {
                     case 10: return new ShowEverythingFilter(json['show'], json['filterOperator']);
                     case 11: return new FilmPersonFilter(json['personId'], json['value'], json['pattern'], json['gender'], json['profession'],
                         json['filterOperator']);
+                    case 12: return new HasVideoFilter(json['value'], json['filterOperator']);
                     default: throw console.error('not implemented');
                 }
         }
@@ -564,6 +584,12 @@ export class FilmsComponent implements OnInit {
             this.showEverything = k.show;
         }
         this.onChangeShowEverything();
+        var hasVideo = this.filters.find(filter => filter.filterType == FilmFilterType.HasVideo);
+        if (hasVideo) {
+            var k2 = hasVideo as HasVideoFilter;
+            this.hasVideo = k2.value;
+        }
+        this.onChangeHasVideo();
         this.orderAscending = query.orderByAscending;
         this.filmOrderBy = query.orderBy;
         this.films = [];

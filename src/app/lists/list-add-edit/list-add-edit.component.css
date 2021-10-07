@@ -28,6 +28,11 @@
     max-width: 30px;
 }
 
+.item-image {
+  width: 150px;
+  height: 200px;
+}
+
 .drag-drop-list{
   display: flex;
 }
