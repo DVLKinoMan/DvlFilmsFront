@@ -76,6 +76,7 @@ import { VgControlsModule } from '@videogular/ngx-videogular/controls';
 import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
 import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 import { VgStreamingModule } from '@videogular/ngx-videogular/streaming';
+import { VideoService } from './films/services/video.service';
 // import { SingleMediaPlayer } from './single-media-player';
 
 @NgModule({
@@ -171,6 +172,7 @@ import { VgStreamingModule } from '@videogular/ngx-videogular/streaming';
     PersonBuiltInListsService,
     ListFetcherService,
     FilmFetcherService,
+    VideoService,
     // { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
     {

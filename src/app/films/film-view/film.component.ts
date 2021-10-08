@@ -20,6 +20,7 @@ import { FilmWatchHistoryDialogComponent } from "../film-edit/film-watch-history
 
 import { BitrateOptions, VgApiService } from '@videogular/ngx-videogular/core';
 import { VgDashDirective, VgHlsDirective } from "@videogular/ngx-videogular/streaming";
+import { VideoService } from "../services/video.service";
 
 export interface IMediaStream {
     type: 'vod' | 'dash' | 'hls';
@@ -55,6 +56,7 @@ export class FilmComponent implements OnInit {
     @ViewChild(VgHlsDirective) vgHls: VgHlsDirective;
     api: VgApiService;
     currentStream: IMediaStream;
+    videoTimeSettingInterval: number = 15000;
 
     streams: IMediaStream[] = [
         {
@@ -94,7 +96,8 @@ export class FilmComponent implements OnInit {
         public photosDialog: MatDialog,
         public editDialog: MatDialog,
         public watchHistoryDialog: MatDialog,
-        private authService: AuthService
+        private authService: AuthService,
+        private videoService: VideoService,
     ) {
         this.route.params.subscribe(item => {
             this.id = item['id'];
@@ -102,12 +105,18 @@ export class FilmComponent implements OnInit {
             this.loadCast();
         });
     }
+
     ngOnInit(): void {
         this.userSub = this.authService.user.subscribe(user => {
             if (UserRole.Admin as UserRole === user.role as UserRole)
                 this.editMode = true;
             else this.editMode = false;
         });
+    }
+
+    ngAfterViewInit() {
+        this.setVideoTime();
+        this.setVideoTimeInterval();
     }
 
     setBitrate(option: BitrateOptions) {
@@ -297,6 +306,25 @@ export class FilmComponent implements OnInit {
                 this.model.photos = result;
             }, error => console.log(error));
         }, error => console.log(error));
+    }
+
+    setVideoTime() {
+        if (!this.model.videoRelativePath)
+            return;
+
+        var time = this.videoService.getVideoTime(this.model.id);
+        var vid = document.getElementById("my-video") as HTMLMediaElement;
+        if (vid)
+            vid.currentTime = time;
+    }
+
+    setVideoTimeInterval() {
+        if (!this.model.videoRelativePath)
+            return;
+
+        var vid = document.getElementById("my-video") as HTMLMediaElement;
+        if (vid)
+            setInterval(() => this.videoService.setVideoTime(this.model.id, vid.currentTime), this.videoTimeSettingInterval);
     }
 
     castPageArrowClicked(right: boolean) {
