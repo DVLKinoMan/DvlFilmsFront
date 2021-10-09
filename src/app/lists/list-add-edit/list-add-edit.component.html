@@ -107,6 +107,11 @@
                         (click)="removeItem(item)">
                             <mat-icon>remove</mat-icon>
                         </button>
+                        <button *ngIf="i>0" mat-mini-fab
+                        [title]="'Insert with InsertionSort '+ item.itemName"
+                        (click)="onInsertionSortClick(item)">
+                            <mat-icon>sort</mat-icon>
+                        </button>
                     </mat-grid-tile-header>
                     <img class="item-image"
                     [src]="item.photo?.image?.indexOf('data:image/') !== -1 ? item.photo?.image : 'data:image/png;base64,' + item.photo?.image" 

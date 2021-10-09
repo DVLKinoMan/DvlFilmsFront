@@ -14,6 +14,7 @@ import { Gender } from "src/app/persons/enums";
 import { FilmItem, Person } from "src/app/persons/person";
 import { PersonBuiltInListsService } from "src/app/persons/services/person-builtIn-lists.service";
 import { PersonsService } from "src/app/persons/services/persons.service";
+import { ListInsertionDialogComponent } from "../list-insertion-sort/list-insertion-sort.dialog.component";
 import { ListSortDialogComponent } from "../list-sort/list-sort.dialog.component";
 import { List, ListItem, ListType } from "../list.model";
 import { ListFetcherService } from "../services/list-fetcher.service";
@@ -66,6 +67,7 @@ export class ListAddEditComponent implements OnInit {
         private builtInPersonsListService: PersonBuiltInListsService,
         private filmsService: FilmsService,
         private sortListDialog: MatDialog,
+        private insertionSortDialog: MatDialog,
         private _snackBar: MatSnackBar
     ) {
         this.filteredPersons = this.personsCtrl.valueChanges.pipe(
@@ -190,6 +192,10 @@ export class ListAddEditComponent implements OnInit {
         if (!this.editMode)
             return;
 
+        this.items.forEach((it, i) => {
+            it.index = i + 1;
+        });
+
         this.loading = true;
         if (!this.builtInListMode) {
             this.model.items = this.items;
@@ -270,6 +276,22 @@ export class ListAddEditComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             if (result)
                 this.items = result;
+            console.log('The dialog was closed');
+        });
+    }
+
+    onInsertionSortClick(item: ListItem) {
+        var index = this.items.indexOf(item);
+        const dialogRef = this.insertionSortDialog.open(ListInsertionDialogComponent, {
+            width: '500px',
+            data: { itemName: item.itemName, item: item, listItems: this.items.filter((it, ind) => ind < index) }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result >= 0) {
+                this.items.splice(index, 1);
+                this.items.splice(result, 0, item);
+            }
             console.log('The dialog was closed');
         });
     }

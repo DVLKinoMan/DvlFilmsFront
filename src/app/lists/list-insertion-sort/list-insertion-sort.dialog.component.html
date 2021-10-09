@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>Insertion {{data.itemName}} With Insertion Sort</h1>
+<mat-dialog-content>
+    <span *ngIf="!finishedInserting">Which {{data.itemName}} You Prefer?</span>
+    <div *ngIf="!finishedInserting; else finishedMessage" class="two-items">
+        <div>
+            <img class="image-item"
+                (click)="firstItemClick()"
+                [src]="'data:image/png;base64,' + item.photo?.image" 
+                [title]="item.photo?.title"
+                (error)="setDefaultPhoto($event)">
+            <span>{{item.itemName}}</span>
+        </div>
+        <h1>VS</h1>
+        <div>
+            <img class="image-item"
+                (click)="secondItemClick()"
+                [src]="'data:image/png;base64,' + list[secondItemIndex].photo?.image" 
+                [title]="list[secondItemIndex].photo?.title"
+                (error)="setDefaultPhoto($event)">
+            <span>{{list[secondItemIndex].itemName}}</span>
+        </div>
+    </div>
+    <ng-template #finishedMessage>
+        <span>You have finshed Inserting! Click save to save your insertion.(Will not be saved in Database)</span>
+    </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCloseClick()">Close</button>
+  <button mat-button *ngIf="finishedInserting" [mat-dialog-close]="currIndex" cdkFocusInitial>Save</button>
+</mat-dialog-actions>

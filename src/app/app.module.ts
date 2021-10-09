@@ -77,6 +77,7 @@ import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
 import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 import { VgStreamingModule } from '@videogular/ngx-videogular/streaming';
 import { VideoService } from './films/services/video.service';
+import { ListInsertionDialogComponent } from './lists/list-insertion-sort/list-insertion-sort.dialog.component';
 // import { SingleMediaPlayer } from './single-media-player';
 
 @NgModule({
@@ -104,7 +105,8 @@ import { VideoService } from './films/services/video.service';
     ListSortDialogComponent,
     FilmWatchHistoryDialogComponent,
     FilmWatchedListComponent,
-    AuthComponent
+    AuthComponent,
+    ListInsertionDialogComponent,
   ],
   imports: [
     BrowserModule,

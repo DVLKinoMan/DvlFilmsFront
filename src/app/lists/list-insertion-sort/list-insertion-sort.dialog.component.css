@@ -1,0 +1,10 @@
+.two-items {
+    display: flex;
+}
+
+.image-item {
+    width: 150px;
+    height: 200px;
+    cursor: pointer;
+    display: block;
+}
