@@ -8,6 +8,11 @@ import { FilmCastMember } from "./film-edit/film-cast-crew/filmCastMember";
 import { FilmCrewMember } from "./film-edit/film-cast-crew/filmCrewMember";
 import { Gender } from "../persons/enums";
 
+export class QueryListResult{
+    result: Film[];
+    totalCount: number;
+}
+
 export class Film {
     id: number;
     sourceId?: number;

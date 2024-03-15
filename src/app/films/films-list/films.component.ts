@@ -285,9 +285,9 @@ export class FilmsComponent implements OnInit {
     setPageLength() {
         var query: FilmsQuery = new FilmsQuery(this.filters);
 
-        this.service.getCount(query).subscribe(result => {
-            this.paginator.length = result;
-        }, error => console.error(error));
+        // this.service.getCount(query).subscribe(result => {
+        //     this.paginator.length = result;
+        // }, error => console.error(error));
     }
 
     filterChanged(filterName: string) {
@@ -595,7 +595,8 @@ export class FilmsComponent implements OnInit {
         this.films = [];
 
         this.service.getList(query).subscribe(result => {
-            this.films = result;
+            this.films = result.result;
+            this.paginator.length = result.totalCount;
         }, error => console.error(error));
     }
 }

@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Film } from "../film";
+import { Film, QueryListResult } from "../film";
 import { FilmCastMember } from "../film-edit/film-cast-crew/filmCastMember";
 import { FilmCrewMember } from "../film-edit/film-cast-crew/filmCrewMember";
 import { FilmAwardResult } from "../film-edit/film-awards/FilmAwardResult";
@@ -26,22 +26,7 @@ export class FilmsService {
         return this.http.get<Film>(url);
     }
 
-    getCount(query: FilmsQuery): Observable<number> {
-        var url = this.baseUrl + "/Films/Count";
-
-        let params = new HttpParams();
-        query.filmFilters.forEach(function (value) {
-            params = params.append('filmFilters', JSON.stringify(value, (key, val) => {
-                if (val === null || (typeof val === 'string' && val === ''))
-                    return undefined;
-                return val;
-            }));
-        });
-
-        return this.http.get<number>(url, { params: params });
-    }
-
-    getList(query: FilmsQuery): Observable<Film[]> {
+    getList(query: FilmsQuery): Observable<QueryListResult> {
         var url = this.baseUrl + "/Films/List";
 
         let params = new HttpParams();
@@ -61,7 +46,7 @@ export class FilmsService {
         params = params.append("orderBy", query.orderBy);
         params = params.append("orderByAscending", query.orderByAscending);
 
-        return this.http.get<Film[]>(url, {
+        return this.http.get<QueryListResult>(url, {
             params: params,
         });
     }
