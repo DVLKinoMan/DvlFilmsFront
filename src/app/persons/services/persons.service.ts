@@ -7,6 +7,7 @@ import { PersonAwardResult } from "../person-edit/person-awards/personAwardResul
 import { Helpers } from "src/app/common/helpers";
 import { FilmPerson } from "src/app/films/film";
 import { Profession } from "src/app/films/film-edit/film-cast-crew/filmCrewMember";
+import { QueryListResult } from "src/app/common/queryListResult";
 
 @Injectable({
     providedIn: 'root',
@@ -27,22 +28,7 @@ export class PersonsService {
     //     return this.http.get<Person>(url);
     // }
 
-    getCount(query: PersonsQuery): Observable<number> {
-        var url = this.baseUrl + "/Persons/Count";
-
-        let params = new HttpParams();
-        query.personFilters.forEach(function (value) {
-            params = params.append('personFilters', JSON.stringify(value, (key, val) => {
-                if (val === null || (typeof val === 'string' && val === ''))
-                    return undefined;
-                return val;
-            }));
-        });
-
-        return this.http.get<number>(url, { params: params });
-    }
-
-    getList(query: PersonsQuery): Observable<Person[]> {
+    getList(query: PersonsQuery): Observable<QueryListResult<Person>> {
         var url = this.baseUrl + "/Persons/List";
 
         let params = new HttpParams();
@@ -62,7 +48,7 @@ export class PersonsService {
         params = params.append("orderBy", query.orderBy);
         params = params.append("orderByAscending", query.orderByAscending);
 
-        return this.http.get<Person[]>(url, {
+        return this.http.get<QueryListResult<Person>>(url, {
             params: params,
         });
     }

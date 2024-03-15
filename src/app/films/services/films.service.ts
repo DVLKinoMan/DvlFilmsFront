@@ -1,13 +1,14 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Film, QueryListResult } from "../film";
+import { Film } from "../film";
 import { FilmCastMember } from "../film-edit/film-cast-crew/filmCastMember";
 import { FilmCrewMember } from "../film-edit/film-cast-crew/filmCrewMember";
 import { FilmAwardResult } from "../film-edit/film-awards/FilmAwardResult";
 import { FilmAnotherName } from "../film-edit/film-another-names/filmAnotherName";
 import { FilmsQuery } from "../films-list/film-query";
 import { FilmItem } from "src/app/persons/person";
+import { QueryListResult } from "src/app/common/queryListResult";
 
 @Injectable({
     providedIn: 'root',
@@ -26,7 +27,7 @@ export class FilmsService {
         return this.http.get<Film>(url);
     }
 
-    getList(query: FilmsQuery): Observable<QueryListResult> {
+    getList(query: FilmsQuery): Observable<QueryListResult<Film>> {
         var url = this.baseUrl + "/Films/List";
 
         let params = new HttpParams();
@@ -46,7 +47,7 @@ export class FilmsService {
         params = params.append("orderBy", query.orderBy);
         params = params.append("orderByAscending", query.orderByAscending);
 
-        return this.http.get<QueryListResult>(url, {
+        return this.http.get<QueryListResult<Film>>(url, {
             params: params,
         });
     }

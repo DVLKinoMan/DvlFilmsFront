@@ -79,7 +79,6 @@ export class PersonsComponent implements OnInit {
       params => {
         this.queryParams = params;
         this.loadData();
-        this.setPageLength();
       }
     );
     this.idFilterForm = this.formBuilder.group({
@@ -150,14 +149,6 @@ export class PersonsComponent implements OnInit {
     }, error => {
       console.log(error);
     });
-  }
-
-  setPageLength() {
-    var query: PersonsQuery = new PersonsQuery(this.filters);
-
-    this.service.getCount(query).subscribe(result => {
-      this.paginator.length = result;
-    }, error => console.error(error));
   }
 
   filterChanged(filterName: string) {
@@ -236,7 +227,6 @@ export class PersonsComponent implements OnInit {
     this.pageEvent.pageIndex = 0;
     this.paginator.pageIndex = 0;
     this.loadData(true);
-    this.setPageLength();
   }
 
   getPersonsQuery(notFromRoute: boolean = false): [PersonsQuery, boolean] {
@@ -331,7 +321,8 @@ export class PersonsComponent implements OnInit {
     this.persons = [];
 
     this.service.getList(query).subscribe(result => {
-      this.persons = result;
+      this.persons = result.result;
+      this.paginator.length = result.totalCount;
     }, error => console.error(error));
   }
 }
